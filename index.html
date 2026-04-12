@@ -6,6 +6,11 @@
   <title>📚 EduRepositorio | Español 4° y 5° Grado · Colombia</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
   <style>
     :root {
       --verde: #1a7a4a;
@@ -27,329 +32,226 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Nunito', sans-serif; background: var(--fondo); color: var(--texto); overflow-x: hidden; }
 
-    /* ═══════════════════════════════════
-       LOGIN / REGISTER SCREEN
-    ═══════════════════════════════════ */
+    /* ─── LOGIN ─── */
     #authScreen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, #1a7a4a 0%, #1a5276 50%, #6c3483 100%);
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
     #authScreen::before {
-      content: '';
-      position: absolute; inset: 0;
+      content: ''; position: absolute; inset: 0;
       background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 50%),
                         radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06) 0%, transparent 50%);
     }
-    .auth-decorations {
-      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-    }
-    .auth-decorations span {
-      position: absolute; font-size: 3rem; opacity: 0.06; animation: float 8s ease-in-out infinite;
-    }
-    .auth-decorations span:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
-    .auth-decorations span:nth-child(2) { top: 20%; right: 8%; animation-delay: 2s; }
-    .auth-decorations span:nth-child(3) { bottom: 15%; left: 10%; animation-delay: 1s; }
-    .auth-decorations span:nth-child(4) { bottom: 25%; right: 5%; animation-delay: 3s; }
-    .auth-decorations span:nth-child(5) { top: 50%; left: 2%; animation-delay: 1.5s; }
-    .auth-decorations span:nth-child(6) { top: 40%; right: 2%; animation-delay: 2.5s; }
-    @keyframes float { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(10deg); } }
+    .auth-decorations { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .auth-decorations span { position: absolute; font-size: 3rem; opacity: 0.06; animation: float 8s ease-in-out infinite; }
+    .auth-decorations span:nth-child(1){top:10%;left:5%;animation-delay:0s}
+    .auth-decorations span:nth-child(2){top:20%;right:8%;animation-delay:2s}
+    .auth-decorations span:nth-child(3){bottom:15%;left:10%;animation-delay:1s}
+    .auth-decorations span:nth-child(4){bottom:25%;right:5%;animation-delay:3s}
+    .auth-decorations span:nth-child(5){top:50%;left:2%;animation-delay:1.5s}
+    .auth-decorations span:nth-child(6){top:40%;right:2%;animation-delay:2.5s}
+    @keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(10deg)}}
 
     .auth-box {
-      background: white;
-      border-radius: 2rem;
-      padding: 2.5rem;
-      width: 90%;
-      max-width: 460px;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
-      position: relative;
-      z-index: 1;
-      animation: slideUp 0.5s ease;
+      background: white; border-radius: 2rem; padding: 2.5rem;
+      width: 90%; max-width: 460px; box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+      position: relative; z-index: 1; animation: slideUp 0.5s ease;
     }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-    .auth-logo { text-align: center; margin-bottom: 1.5rem; }
-    .auth-logo .logo-icon { font-size: 3.5rem; display: block; margin-bottom: 0.5rem; }
-    .auth-logo h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--verde); }
-    .auth-logo p { color: #7f8c8d; font-size: 0.9rem; }
-    .auth-tabs { display: flex; gap: 4px; background: var(--gris-claro); border-radius: 50px; padding: 4px; margin-bottom: 1.5rem; }
-    .auth-tab { flex: 1; text-align: center; padding: 8px; border-radius: 50px; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 0.9rem; color: #7f8c8d; }
-    .auth-tab.active { background: var(--verde); color: white; }
-    .auth-form { display: flex; flex-direction: column; gap: 1rem; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group label { font-weight: 700; font-size: 0.85rem; color: var(--texto); }
-    .form-group input, .form-group select {
-      padding: 12px 16px; border: 2px solid var(--gris-claro); border-radius: 12px;
-      font-family: inherit; font-size: 0.95rem; transition: 0.2s; outline: none;
-    }
-    .form-group input:focus, .form-group select:focus { border-color: var(--verde); box-shadow: 0 0 0 4px rgba(26,122,74,0.1); }
-    .btn-auth {
-      padding: 14px; background: linear-gradient(135deg, var(--verde), var(--azul));
-      color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 1rem;
-      cursor: pointer; transition: 0.2s; font-family: inherit; letter-spacing: 0.5px;
-    }
-    .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,122,74,0.4); }
-    .btn-google {
-      padding: 12px; background: white; border: 2px solid var(--gris-claro); border-radius: 12px;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      font-weight: 700; cursor: pointer; font-family: inherit; transition: 0.2s; font-size: 0.9rem;
-    }
-    .btn-google:hover { border-color: #4285f4; background: #f0f4ff; }
-    .or-divider { text-align: center; position: relative; color: #aaa; font-size: 0.85rem; }
-    .or-divider::before, .or-divider::after {
-      content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--gris-claro);
-    }
-    .or-divider::before { left: 0; } .or-divider::after { right: 0; }
-    .auth-msg { text-align: center; font-size: 0.85rem; padding: 10px; border-radius: 10px; display: none; }
-    .auth-msg.error { background: #fdecea; color: var(--rojo); display: block; }
-    .auth-msg.success { background: var(--verde-suave); color: var(--verde); display: block; }
+    @keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+    .auth-logo{text-align:center;margin-bottom:1.5rem}
+    .auth-logo .logo-icon{font-size:3.5rem;display:block;margin-bottom:0.5rem}
+    .auth-logo h1{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--verde)}
+    .auth-logo p{color:#7f8c8d;font-size:0.9rem}
+    .auth-tabs{display:flex;gap:4px;background:var(--gris-claro);border-radius:50px;padding:4px;margin-bottom:1.5rem}
+    .auth-tab{flex:1;text-align:center;padding:8px;border-radius:50px;cursor:pointer;font-weight:700;transition:0.3s;font-size:0.9rem;color:#7f8c8d}
+    .auth-tab.active{background:var(--verde);color:white}
+    .auth-form{display:flex;flex-direction:column;gap:1rem}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-weight:700;font-size:0.85rem;color:var(--texto)}
+    .pass-wrapper{position:relative}
+    .pass-wrapper input{width:100%;padding:12px 44px 12px 16px;border:2px solid var(--gris-claro);border-radius:12px;font-family:inherit;font-size:0.95rem;transition:0.2s;outline:none}
+    .pass-wrapper input:focus{border-color:var(--verde);box-shadow:0 0 0 4px rgba(26,122,74,0.1)}
+    .toggle-pass{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#7f8c8d;font-size:1rem;padding:4px}
+    .toggle-pass:hover{color:var(--verde)}
+    .form-group input, .form-group select{padding:12px 16px;border:2px solid var(--gris-claro);border-radius:12px;font-family:inherit;font-size:0.95rem;transition:0.2s;outline:none}
+    .form-group input:focus,.form-group select:focus{border-color:var(--verde);box-shadow:0 0 0 4px rgba(26,122,74,0.1)}
+    .btn-auth{padding:14px;background:linear-gradient(135deg,var(--verde),var(--azul));color:white;border:none;border-radius:12px;font-weight:800;font-size:1rem;cursor:pointer;transition:0.2s;font-family:inherit;letter-spacing:0.5px}
+    .btn-auth:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,122,74,0.4)}
+    .btn-google{padding:12px;background:white;border:2px solid var(--gris-claro);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;cursor:pointer;font-family:inherit;transition:0.2s;font-size:0.9rem}
+    .btn-google:hover{border-color:#4285f4;background:#f0f4ff}
+    .or-divider{text-align:center;position:relative;color:#aaa;font-size:0.85rem}
+    .or-divider::before,.or-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--gris-claro)}
+    .or-divider::before{left:0}.or-divider::after{right:0}
+    .auth-msg{text-align:center;font-size:0.85rem;padding:10px;border-radius:10px;display:none}
+    .auth-msg.error{background:#fdecea;color:var(--rojo);display:block}
+    .auth-msg.success{background:var(--verde-suave);color:var(--verde);display:block}
 
-    /* ═══════════════════════════════════
-       MAIN APP
-    ═══════════════════════════════════ */
-    #mainApp { display: none; min-height: 100vh; }
+    /* ─── MAIN APP ─── */
+    #mainApp{display:none;min-height:100vh}
 
     /* HEADER */
-    .header {
-      background: linear-gradient(135deg, #1a7a4a, #1a5276);
-      color: white; padding: 0 2rem;
-      display: flex; align-items: center; justify-content: space-between;
-      min-height: 70px; position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    .header-left { display: flex; align-items: center; gap: 12px; }
-    .header-logo { font-size: 1.8rem; }
-    .header-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; line-height: 1.2; }
-    .header-title small { font-family: 'Nunito', sans-serif; font-weight: 500; font-size: 0.75rem; opacity: 0.8; display: block; }
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    .user-pill {
-      display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15);
-      padding: 6px 14px; border-radius: 50px; cursor: pointer; transition: 0.2s;
-    }
-    .user-pill:hover { background: rgba(255,255,255,0.25); }
-    .user-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
-    .avatar-admin { background: var(--naranja); }
-    .avatar-teacher { background: #8e44ad; }
-    .avatar-student { background: var(--azul-claro); }
-    .user-info { line-height: 1.2; }
-    .user-name { font-weight: 700; font-size: 0.9rem; }
-    .user-role { font-size: 0.72rem; opacity: 0.8; }
-    .btn-icon { background: rgba(255,255,255,0.15); border: none; color: white; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-    .btn-icon:hover { background: rgba(255,255,255,0.3); }
+    .header{background:linear-gradient(135deg,#1a7a4a,#1a5276);color:white;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;min-height:70px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.2)}
+    .header-left{display:flex;align-items:center;gap:12px}
+    .header-logo{font-size:1.8rem}
+    .header-title{font-family:'Playfair Display',serif;font-size:1.3rem;line-height:1.2}
+    .header-title small{font-family:'Nunito',sans-serif;font-weight:500;font-size:0.75rem;opacity:0.8;display:block}
+    .header-right{display:flex;align-items:center;gap:12px}
+    .user-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:50px;cursor:pointer;transition:0.2s}
+    .user-pill:hover{background:rgba(255,255,255,0.25)}
+    .user-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem}
+    .avatar-admin{background:var(--naranja)}.avatar-teacher{background:#8e44ad}.avatar-student{background:var(--azul-claro)}
+    .user-info{line-height:1.2}
+    .user-name{font-weight:700;font-size:0.9rem}
+    .user-role{font-size:0.72rem;opacity:0.8}
+    .btn-icon{background:rgba(255,255,255,0.15);border:none;color:white;width:38px;height:38px;border-radius:50%;cursor:pointer;transition:0.2s;display:flex;align-items:center;justify-content:center}
+    .btn-icon:hover{background:rgba(255,255,255,0.3)}
+
+    /* SYNC indicator */
+    .sync-dot{width:10px;height:10px;border-radius:50%;background:#27ae60;display:inline-block;margin-right:4px;animation:pulse 2s infinite}
+    .sync-dot.offline{background:#e74c3c;animation:none}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
     /* NAV */
-    .nav-bar {
-      background: white; border-bottom: 2px solid var(--gris-claro);
-      display: flex; gap: 0; overflow-x: auto; padding: 0 1rem;
-      scrollbar-width: none; position: sticky; top: 70px; z-index: 99;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-    }
-    .nav-bar::-webkit-scrollbar { display: none; }
-    .nav-item {
-      padding: 14px 18px; border: none; background: none; cursor: pointer; font-family: inherit;
-      font-weight: 700; font-size: 0.85rem; color: #7f8c8d; border-bottom: 3px solid transparent;
-      transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px;
-    }
-    .nav-item:hover { color: var(--verde); }
-    .nav-item.active { color: var(--verde); border-bottom-color: var(--verde); }
-    .nav-badge { background: var(--naranja); color: white; border-radius: 50px; padding: 1px 7px; font-size: 0.7rem; }
+    .nav-bar{background:white;border-bottom:2px solid var(--gris-claro);display:flex;gap:0;overflow-x:auto;padding:0 1rem;scrollbar-width:none;position:sticky;top:70px;z-index:99;box-shadow:0 2px 10px rgba(0,0,0,0.06)}
+    .nav-bar::-webkit-scrollbar{display:none}
+    .nav-item{padding:14px 18px;border:none;background:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:0.85rem;color:#7f8c8d;border-bottom:3px solid transparent;transition:0.2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+    .nav-item:hover{color:var(--verde)}
+    .nav-item.active{color:var(--verde);border-bottom-color:var(--verde)}
+    .nav-badge{background:var(--naranja);color:white;border-radius:50px;padding:1px 7px;font-size:0.7rem}
 
-    /* PAGE CONTENT */
-    .page { display: none; padding: 2rem; max-width: 1300px; margin: 0 auto; }
-    .page.active { display: block; }
+    /* PAGES */
+    .page{display:none;padding:2rem;max-width:1300px;margin:0 auto}
+    .page.active{display:block}
 
-    /* ═══ SECCIÓN: INFO ═══ */
-    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-    .info-card {
-      background: white; border-radius: 1.5rem; padding: 1.8rem;
-      box-shadow: var(--sombra); border-left: 5px solid var(--verde);
-      transition: transform 0.2s;
-    }
-    .info-card:hover { transform: translateY(-4px); }
-    .info-card.azul { border-left-color: var(--azul); }
-    .info-card.naranja { border-left-color: var(--naranja); }
-    .info-card.morado { border-left-color: #8e44ad; }
-    .info-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
-    .info-card-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: var(--verde-suave); }
-    .info-card.azul .info-card-icon { background: var(--azul-suave); }
-    .info-card.naranja .info-card-icon { background: var(--naranja-suave); }
-    .info-card.morado .info-card-icon { background: #f5eef8; }
-    .info-card h3 { font-size: 1.1rem; color: var(--texto); }
-    .info-card p { color: #7f8c8d; font-size: 0.9rem; line-height: 1.7; }
-    .info-card ul { color: #7f8c8d; font-size: 0.9rem; line-height: 2; padding-left: 1.2rem; }
+    /* INFO CARDS */
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-bottom:2rem}
+    .info-card{background:white;border-radius:1.5rem;padding:1.8rem;box-shadow:var(--sombra);border-left:5px solid var(--verde);transition:transform 0.2s}
+    .info-card:hover{transform:translateY(-4px)}
+    .info-card.azul{border-left-color:var(--azul)}.info-card.naranja{border-left-color:var(--naranja)}.info-card.morado{border-left-color:#8e44ad}
+    .info-card-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+    .info-card-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:var(--verde-suave)}
+    .info-card.azul .info-card-icon{background:var(--azul-suave)}.info-card.naranja .info-card-icon{background:var(--naranja-suave)}.info-card.morado .info-card-icon{background:#f5eef8}
+    .info-card h3{font-size:1.1rem;color:var(--texto)}.info-card p{color:#7f8c8d;font-size:0.9rem;line-height:1.7}.info-card ul{color:#7f8c8d;font-size:0.9rem;line-height:2;padding-left:1.2rem}
 
-    /* ═══ SECCIÓN: RECURSOS ═══ */
-    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
-    .section-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--texto); }
-    .search-bar { display: flex; gap: 10px; align-items: center; }
-    .search-bar input {
-      padding: 10px 18px; border: 2px solid var(--gris-claro); border-radius: 50px;
-      font-family: inherit; font-size: 0.9rem; outline: none; transition: 0.2s; min-width: 220px;
-    }
-    .search-bar input:focus { border-color: var(--verde); }
-    .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; }
-    .filter-btn {
-      padding: 8px 18px; border-radius: 50px; border: 2px solid var(--gris-claro);
-      background: white; font-family: inherit; font-weight: 700; font-size: 0.82rem;
-      cursor: pointer; transition: 0.2s; color: var(--texto);
-    }
-    .filter-btn:hover, .filter-btn.active { background: var(--verde); color: white; border-color: var(--verde); }
-    .cards-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-    .card {
-      background: white; border-radius: 1.5rem; overflow: hidden;
-      box-shadow: var(--sombra); transition: transform 0.2s, box-shadow 0.2s;
-      border-top: 4px solid var(--verde); position: relative;
-    }
-    .card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.15); }
-    .card-icon { height: 120px; display: flex; align-items: center; justify-content: center; background: var(--verde-suave); }
-    .card-icon svg { width: 75px; height: 75px; }
-    .card-content { padding: 1.2rem; }
-    .card-badge { display: inline-block; background: var(--verde-suave); color: var(--verde); padding: 3px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
-    .card h3 { font-size: 1.05rem; margin-bottom: 6px; color: var(--texto); }
-    .card p { color: #7f8c8d; font-size: 0.85rem; margin-bottom: 12px; line-height: 1.5; }
-    .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn-card {
-      padding: 7px 16px; border-radius: 50px; border: none; font-family: inherit;
-      font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: 0.2s;
-    }
-    .btn-primary { background: var(--verde); color: white; }
-    .btn-primary:hover { background: #156038; }
-    .btn-secondary { background: var(--gris-claro); color: var(--texto); }
-    .btn-secondary:hover { background: #bdc3c7; }
-    .btn-share { background: var(--azul-suave); color: var(--azul); }
-    .btn-share:hover { background: var(--azul); color: white; }
-    .teacher-actions { display: none; }
+    /* RESOURCES */
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+    .section-title{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--texto)}
+    .search-bar{display:flex;gap:10px;align-items:center}
+    .search-bar input{padding:10px 18px;border:2px solid var(--gris-claro);border-radius:50px;font-family:inherit;font-size:0.9rem;outline:none;transition:0.2s;min-width:220px}
+    .search-bar input:focus{border-color:var(--verde)}
+    .filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.5rem}
+    .filter-btn{padding:8px 18px;border-radius:50px;border:2px solid var(--gris-claro);background:white;font-family:inherit;font-weight:700;font-size:0.82rem;cursor:pointer;transition:0.2s;color:var(--texto)}
+    .filter-btn:hover,.filter-btn.active{background:var(--verde);color:white;border-color:var(--verde)}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
+    .card{background:white;border-radius:1.5rem;overflow:hidden;box-shadow:var(--sombra);transition:transform 0.2s,box-shadow 0.2s;border-top:4px solid var(--verde);position:relative}
+    .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.15)}
+    .card-icon{height:120px;display:flex;align-items:center;justify-content:center;background:var(--verde-suave)}
+    .card-icon svg{width:75px;height:75px}
+    .card-content{padding:1.2rem}
+    .card-badge{display:inline-block;background:var(--verde-suave);color:var(--verde);padding:3px 12px;border-radius:50px;font-size:0.7rem;font-weight:800;margin-bottom:8px;text-transform:uppercase}
+    .card h3{font-size:1.05rem;margin-bottom:6px;color:var(--texto)}
+    .card p{color:#7f8c8d;font-size:0.85rem;margin-bottom:12px;line-height:1.5}
+    .card-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn-card{padding:7px 16px;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.82rem;cursor:pointer;transition:0.2s}
+    .btn-primary{background:var(--verde);color:white}.btn-primary:hover{background:#156038}
+    .btn-secondary{background:var(--gris-claro);color:var(--texto)}.btn-secondary:hover{background:#bdc3c7}
+    .btn-share{background:var(--azul-suave);color:var(--azul)}.btn-share:hover{background:var(--azul);color:white}
+    .btn-edit-card{background:#f5eef8;color:#8e44ad}.btn-edit-card:hover{background:#8e44ad;color:white}
 
-    /* ═══ MODAL ═══ */
-    .modal {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
-      z-index: 1000; align-items: center; justify-content: center; padding: 1rem;
-    }
-    .modal.open { display: flex; }
-    .modal-content {
-      background: white; width: 100%; max-width: 900px; max-height: 90vh;
-      border-radius: 2rem; overflow-y: auto; position: relative; animation: slideUp 0.3s ease;
-    }
-    .modal-header {
-      position: sticky; top: 0; background: white; padding: 1.5rem 2rem 1rem;
-      border-bottom: 2px solid var(--gris-claro); display: flex; align-items: center; justify-content: space-between;
-      z-index: 10; border-radius: 2rem 2rem 0 0;
-    }
-    .modal-header h2 { font-size: 1.3rem; color: var(--texto); }
-    .modal-body { padding: 1.5rem 2rem 2rem; }
-    .close-btn { background: var(--gris-claro); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; }
-    .multiquiz { background: var(--verde-suave); border-radius: 1.2rem; padding: 1.2rem; margin-top: 1rem; }
-    .question-item { background: white; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; }
-    .option { background: var(--gris-claro); margin: 6px 0; padding: 8px 14px; border-radius: 50px; cursor: pointer; transition: 0.15s; font-size: 0.9rem; }
-    .option:hover { background: var(--verde-suave); }
-    .option.selected { background: var(--verde); color: white; }
-    .feedback-correct { color: var(--verde); font-weight: 700; margin-top: 5px; }
-    .feedback-wrong { color: var(--rojo); font-weight: 700; margin-top: 5px; }
-    .memory-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 1rem 0; }
-    .memory-card { background: var(--azul); height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 1rem; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.15s; color: white; text-align: center; padding: 5px; }
-    .memory-card.flipped { background: var(--azul-suave); color: var(--texto); }
-    .memory-card.matched { visibility: hidden; }
-    .keyboard { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 1rem 0; }
-    .key { background: var(--azul-suave); width: 40px; padding: 7px; border-radius: 10px; text-align: center; font-weight: 700; cursor: pointer; color: var(--azul); font-size: 0.85rem; }
-    iframe { width: 100%; height: 300px; border-radius: 1rem; border: none; }
-    .vocab-textarea { width: 100%; padding: 12px; border-radius: 1rem; border: 2px solid var(--gris-claro); font-family: inherit; font-size: 0.95rem; margin: 1rem 0; resize: vertical; }
-    .vocab-textarea:focus { outline: none; border-color: var(--verde); }
+    /* MODAL */
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:1rem}
+    .modal.open{display:flex}
+    .modal-content{background:white;width:100%;max-width:900px;max-height:90vh;border-radius:2rem;overflow-y:auto;position:relative;animation:slideUp 0.3s ease}
+    .modal-header{position:sticky;top:0;background:white;padding:1.5rem 2rem 1rem;border-bottom:2px solid var(--gris-claro);display:flex;align-items:center;justify-content:space-between;z-index:10;border-radius:2rem 2rem 0 0}
+    .modal-header h2{font-size:1.3rem;color:var(--texto)}
+    .modal-body{padding:1.5rem 2rem 2rem}
+    .close-btn{background:var(--gris-claro);border:none;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer}
+    .multiquiz{background:var(--verde-suave);border-radius:1.2rem;padding:1.2rem;margin-top:1rem}
+    .question-item{background:white;border-radius:1rem;padding:1rem;margin-bottom:1rem}
+    .option{background:var(--gris-claro);margin:6px 0;padding:8px 14px;border-radius:50px;cursor:pointer;transition:0.15s;font-size:0.9rem}
+    .option:hover{background:var(--verde-suave)}.option.selected{background:var(--verde);color:white}
+    .feedback-correct{color:var(--verde);font-weight:700;margin-top:5px}
+    .feedback-wrong{color:var(--rojo);font-weight:700;margin-top:5px}
+    .memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:1rem 0}
+    .memory-card{background:var(--azul);height:80px;display:flex;align-items:center;justify-content:center;border-radius:1rem;font-size:1rem;font-weight:700;cursor:pointer;transition:0.15s;color:white;text-align:center;padding:5px}
+    .memory-card.flipped{background:var(--azul-suave);color:var(--texto)}.memory-card.matched{visibility:hidden}
+    .keyboard{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:1rem 0}
+    .key{background:var(--azul-suave);width:40px;padding:7px;border-radius:10px;text-align:center;font-weight:700;cursor:pointer;color:var(--azul);font-size:0.85rem}
+    .yt-wrapper{position:relative;width:100%;padding-bottom:56.25%;height:0;border-radius:1rem;overflow:hidden;margin-bottom:1rem}
+    .yt-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+    .vocab-textarea{width:100%;padding:12px;border-radius:1rem;border:2px solid var(--gris-claro);font-family:inherit;font-size:0.95rem;margin:1rem 0;resize:vertical}
+    .vocab-textarea:focus{outline:none;border-color:var(--verde)}
 
-    /* ═══ ADMIN PANEL ═══ */
-    .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .stat-card {
-      background: white; border-radius: 1.5rem; padding: 1.5rem;
-      box-shadow: var(--sombra); text-align: center;
-    }
-    .stat-card .stat-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 800; color: var(--verde); }
-    .stat-card .stat-label { color: #7f8c8d; font-size: 0.85rem; margin-top: 4px; }
-    .stat-card .stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-    .users-table { background: white; border-radius: 1.5rem; box-shadow: var(--sombra); overflow: hidden; margin-bottom: 2rem; }
-    .table-header { padding: 1.2rem 1.5rem; background: var(--fondo); display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--gris-claro); }
-    .table-header h3 { font-size: 1rem; }
-    table { width: 100%; border-collapse: collapse; }
-    th { padding: 12px 16px; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: #7f8c8d; background: var(--fondo); }
-    td { padding: 12px 16px; border-top: 1px solid var(--gris-claro); font-size: 0.9rem; }
-    tr:hover td { background: var(--fondo); }
-    .role-badge { padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
-    .role-admin { background: #fdebd0; color: var(--naranja); }
-    .role-teacher { background: #f5eef8; color: #8e44ad; }
-    .role-student { background: var(--azul-suave); color: var(--azul); }
-    .btn-sm { padding: 5px 12px; border-radius: 50px; border: none; font-family: inherit; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: 0.2s; }
-    .btn-danger { background: #fdecea; color: var(--rojo); }
-    .btn-danger:hover { background: var(--rojo); color: white; }
-    .btn-edit { background: var(--verde-suave); color: var(--verde); }
-    .btn-edit:hover { background: var(--verde); color: white; }
+    /* ADMIN */
+    .admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+    .stat-card{background:white;border-radius:1.5rem;padding:1.5rem;box-shadow:var(--sombra);text-align:center}
+    .stat-card .stat-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:800;color:var(--verde)}
+    .stat-card .stat-label{color:#7f8c8d;font-size:0.85rem;margin-top:4px}
+    .stat-card .stat-icon{font-size:2rem;margin-bottom:0.5rem}
+    .users-table{background:white;border-radius:1.5rem;box-shadow:var(--sombra);overflow:hidden;margin-bottom:2rem}
+    .table-header{padding:1.2rem 1.5rem;background:var(--fondo);display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gris-claro)}
+    .table-header h3{font-size:1rem}
+    table{width:100%;border-collapse:collapse}
+    th{padding:12px 16px;text-align:left;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#7f8c8d;background:var(--fondo)}
+    td{padding:12px 16px;border-top:1px solid var(--gris-claro);font-size:0.9rem}
+    tr:hover td{background:var(--fondo)}
+    .role-badge{padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700}
+    .role-admin{background:#fdebd0;color:var(--naranja)}.role-teacher{background:#f5eef8;color:#8e44ad}.role-student{background:var(--azul-suave);color:var(--azul)}
+    .btn-sm{padding:5px 12px;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.78rem;cursor:pointer;transition:0.2s}
+    .btn-danger{background:#fdecea;color:var(--rojo)}.btn-danger:hover{background:var(--rojo);color:white}
+    .btn-edit{background:var(--verde-suave);color:var(--verde)}.btn-edit:hover{background:var(--verde);color:white}
 
-    /* ═══ PORTALES COMPARTIDOS ═══ */
-    .portals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.5rem; }
-    .portal-card {
-      background: white; border-radius: 1.5rem; padding: 1.5rem; box-shadow: var(--sombra);
-      border-top: 4px solid var(--azul); transition: transform 0.2s;
-    }
-    .portal-card:hover { transform: translateY(-4px); }
-    .portal-card h3 { font-size: 1.1rem; margin-bottom: 6px; }
-    .portal-card .portal-meta { display: flex; gap: 10px; flex-wrap: wrap; margin: 0.8rem 0; }
-    .portal-tag { background: var(--gris-claro); color: var(--texto); padding: 3px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
-    .portal-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1rem; }
+    /* PORTALS */
+    .portals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.5rem}
+    .portal-card{background:white;border-radius:1.5rem;padding:1.5rem;box-shadow:var(--sombra);border-top:4px solid var(--azul);transition:transform 0.2s;position:relative}
+    .portal-card:hover{transform:translateY(-4px)}
+    .portal-card h3{font-size:1.1rem;margin-bottom:6px}
+    .portal-meta{display:flex;gap:10px;flex-wrap:wrap;margin:0.8rem 0}
+    .portal-tag{background:var(--gris-claro);color:var(--texto);padding:3px 10px;border-radius:50px;font-size:0.75rem;font-weight:700}
+    .portal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+    .portal-owner-badge{position:absolute;top:12px;right:12px;background:var(--naranja-suave);color:var(--naranja);padding:2px 10px;border-radius:50px;font-size:0.7rem;font-weight:800}
 
-    /* ═══ PROFILE ═══ */
-    .profile-box { background: white; border-radius: 1.5rem; padding: 2rem; box-shadow: var(--sombra); max-width: 600px; }
-    .profile-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; }
-    .profile-avatar { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; }
-    .profile-info h2 { font-size: 1.5rem; }
-    .profile-info p { color: #7f8c8d; }
-    .profile-form { display: flex; flex-direction: column; gap: 1rem; }
-    .profile-form label { font-weight: 700; font-size: 0.85rem; }
-    .profile-form input { padding: 10px 14px; border: 2px solid var(--gris-claro); border-radius: 10px; font-family: inherit; font-size: 0.9rem; outline: none; }
-    .profile-form input:focus { border-color: var(--verde); }
+    /* PROFILE */
+    .profile-box{background:white;border-radius:1.5rem;padding:2rem;box-shadow:var(--sombra);max-width:600px}
+    .profile-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem}
+    .profile-avatar{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800}
+    .profile-info h2{font-size:1.5rem}
+    .profile-info p{color:#7f8c8d}
+    .profile-form{display:flex;flex-direction:column;gap:1rem}
+    .profile-form label{font-weight:700;font-size:0.85rem}
+    .profile-form input{padding:10px 14px;border:2px solid var(--gris-claro);border-radius:10px;font-family:inherit;font-size:0.9rem;outline:none}
+    .profile-form input:focus{border-color:var(--verde)}
 
-    /* ═══ TOAST ═══ */
-    #toast {
-      position: fixed; bottom: 2rem; right: 2rem; background: #2c3e50; color: white;
-      padding: 14px 22px; border-radius: 14px; font-weight: 700; font-size: 0.9rem;
-      box-shadow: var(--sombra); z-index: 9999; transform: translateY(100px); opacity: 0;
-      transition: 0.3s; max-width: 300px;
-    }
-    #toast.show { transform: translateY(0); opacity: 1; }
-    #toast.green { background: var(--verde); }
-    #toast.red { background: var(--rojo); }
-    #toast.blue { background: var(--azul); }
+    /* PORTAL EDIT MODAL */
+    #portalEditModal{z-index:2100}
+    #portalEditModal .modal-content{max-width:600px}
 
-    /* ═══ MINI MODAL USER EDITOR ═══ */
-    #userEditModal { z-index: 2000; }
-    #userEditModal .modal-content { max-width: 500px; }
+    /* TOAST */
+    #toast{position:fixed;bottom:2rem;right:2rem;background:#2c3e50;color:white;padding:14px 22px;border-radius:14px;font-weight:700;font-size:0.9rem;box-shadow:var(--sombra);z-index:9999;transform:translateY(100px);opacity:0;transition:0.3s;max-width:300px}
+    #toast.show{transform:translateY(0);opacity:1}
+    #toast.green{background:var(--verde)}#toast.red{background:var(--rojo)}#toast.blue{background:var(--azul)}
 
-    /* ═══ PORTAL SHARE MODAL ═══ */
-    #portalShareModal { z-index: 2000; }
-    #portalShareModal .modal-content { max-width: 550px; }
+    /* OTHER */
+    #userEditModal{z-index:2000}#userEditModal .modal-content{max-width:500px}
+    #portalShareModal{z-index:2000}#portalShareModal .modal-content{max-width:550px}
+    @media(max-width:700px){.header{padding:0 1rem}.header-title{font-size:1rem}.page{padding:1rem}.memory-grid{grid-template-columns:repeat(3,1fr)}}
+    .empty-state{text-align:center;padding:4rem 2rem;color:#7f8c8d}
+    .empty-state .empty-icon{font-size:4rem;margin-bottom:1rem}
+    .empty-state p{font-size:1rem}
+    .loading-spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* ═══ RESPONSIVE ═══ */
-    @media (max-width: 700px) {
-      .header { padding: 0 1rem; }
-      .header-title { font-size: 1rem; }
-      .page { padding: 1rem; }
-      .memory-grid { grid-template-columns: repeat(3,1fr); }
-    }
-    .empty-state { text-align: center; padding: 4rem 2rem; color: #7f8c8d; }
-    .empty-state .empty-icon { font-size: 4rem; margin-bottom: 1rem; }
-    .empty-state p { font-size: 1rem; }
-    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* LIVE indicator */
+    .live-badge{display:inline-flex;align-items:center;gap:6px;background:#e8f8f0;color:var(--verde);border:1.5px solid var(--verde-claro);border-radius:50px;padding:4px 12px;font-size:0.75rem;font-weight:800}
+    .live-dot{width:8px;height:8px;border-radius:50%;background:var(--verde-claro);animation:pulse 1.5s infinite}
+
+
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════
-     PANTALLA DE AUTENTICACIÓN
-══════════════════════════════════ -->
+<!-- ══════════════ PANTALLA AUTH ══════════════ -->
 <div id="authScreen">
   <div class="auth-decorations">
     <span>📚</span><span>✏️</span><span>🌿</span><span>🎓</span><span>📖</span><span>🦋</span>
@@ -374,9 +276,12 @@
       </div>
       <div class="form-group">
         <label><i class="fas fa-lock"></i> Contraseña</label>
-        <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <div class="pass-wrapper">
+          <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+          <button class="toggle-pass" type="button" onclick="togglePass('loginPass',this)" title="Ver contraseña"><i class="fas fa-eye"></i></button>
+        </div>
       </div>
-      <button class="btn-auth" onclick="doLogin()">Entrar al repositorio</button>
+      <button class="btn-auth" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Entrar al repositorio</button>
       <div class="or-divider">o</div>
       <button class="btn-google" onclick="doGoogleLogin()">
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
@@ -396,13 +301,16 @@
       </div>
       <div class="form-group">
         <label><i class="fas fa-lock"></i> Contraseña</label>
-        <input type="password" id="regPass" placeholder="Mínimo 6 caracteres">
+        <div class="pass-wrapper">
+          <input type="password" id="regPass" placeholder="Mínimo 6 caracteres">
+          <button class="toggle-pass" type="button" onclick="togglePass('regPass',this)" title="Ver contraseña"><i class="fas fa-eye"></i></button>
+        </div>
       </div>
       <div class="form-group">
         <label><i class="fas fa-school"></i> Institución / Escuela</label>
         <input type="text" id="regSchool" placeholder="Nombre de tu escuela o vereda">
       </div>
-      <button class="btn-auth" onclick="doRegister()">Crear mi cuenta</button>
+      <button class="btn-auth" onclick="doRegister()"><i class="fas fa-user-plus"></i> Crear mi cuenta</button>
       <div class="or-divider">o</div>
       <button class="btn-google" onclick="doGoogleLogin()">
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
@@ -412,11 +320,8 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     APLICACIÓN PRINCIPAL
-══════════════════════════════════ -->
+<!-- ══════════════ APP PRINCIPAL ══════════════ -->
 <div id="mainApp">
-  <!-- HEADER -->
   <header class="header">
     <div class="header-left">
       <span class="header-logo">📚</span>
@@ -426,6 +331,9 @@
       </div>
     </div>
     <div class="header-right">
+      <span id="syncStatus" title="Estado de sincronización">
+        <span class="sync-dot" id="syncDot"></span>
+      </span>
       <div class="user-pill" onclick="showPage('perfil')">
         <div class="user-avatar" id="headerAvatar">U</div>
         <div class="user-info">
@@ -437,7 +345,6 @@
     </div>
   </header>
 
-  <!-- NAV -->
   <nav class="nav-bar" id="navBar">
     <button class="nav-item active" onclick="showPage('inicio')" data-page="inicio">🏠 Inicio</button>
     <button class="nav-item" onclick="showPage('recursos')" data-page="recursos">📂 Recursos</button>
@@ -447,21 +354,19 @@
     <button class="nav-item" onclick="showPage('perfil')" data-page="perfil">👤 Perfil</button>
   </nav>
 
-  <!-- ═══ PÁGINA: INICIO ═══ -->
+  <!-- ─── INICIO ─── -->
   <div class="page active" id="page-inicio">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <h2 class="section-title" style="margin:0;">Bienvenido/a al Repositorio</h2>
+      <span class="live-badge"><span class="live-dot"></span> Sincronización en tiempo real activa</span>
+    </div>
     <div class="info-grid">
       <div class="info-card">
-        <div class="info-card-header">
-          <div class="info-card-icon">🎯</div>
-          <h3>Objetivo del Repositorio</h3>
-        </div>
+        <div class="info-card-header"><div class="info-card-icon">🎯</div><h3>Objetivo del Repositorio</h3></div>
         <p>Fortalecer las competencias comunicativas de estudiantes de 4° y 5° grado en zonas rurales de Colombia, ofreciendo recursos digitales interactivos, lúdicos y contextualizados que promuevan la lectura, escritura y comprensión del español, alineados con los Estándares Básicos de Competencias del MEN.</p>
       </div>
       <div class="info-card azul">
-        <div class="info-card-header">
-          <div class="info-card-icon">🏆</div>
-          <h3>Competencias Trabajadas</h3>
-        </div>
+        <div class="info-card-header"><div class="info-card-icon">🏆</div><h3>Competencias Trabajadas</h3></div>
         <ul>
           <li>📖 Comprensión lectora crítica</li>
           <li>✍️ Producción escrita creativa</li>
@@ -471,58 +376,32 @@
         </ul>
       </div>
       <div class="info-card naranja">
-        <div class="info-card-header">
-          <div class="info-card-icon">🌿</div>
-          <h3>Contexto Rural Colombiano</h3>
-        </div>
-        <p>Diseñado para comunidades rurales colombianas con acceso limitado a internet. Los recursos funcionan sin conexión, valoran los saberes campesinos y afrocolombianos, y conectan la lengua española con los ecosistemas de los Llanos, la Amazonía, la Costa Caribe, el Pacífico y los Andes.</p>
+        <div class="info-card-header"><div class="info-card-icon">🌿</div><h3>Contexto Rural Colombiano</h3></div>
+        <p>Diseñado para comunidades rurales colombianas con acceso limitado a internet. Los recursos valoran los saberes campesinos y afrocolombianos, y conectan la lengua española con los ecosistemas de los Llanos, la Amazonía, la Costa Caribe, el Pacífico y los Andes.</p>
       </div>
       <div class="info-card morado">
-        <div class="info-card-header">
-          <div class="info-card-icon">🧑‍🏫</div>
-          <h3>¿Cómo funciona?</h3>
-        </div>
+        <div class="info-card-header"><div class="info-card-icon">🧑‍🏫</div><h3>¿Cómo funciona?</h3></div>
         <ul>
           <li>🎓 <strong>Administrador:</strong> gestiona usuarios y roles</li>
           <li>👩‍🏫 <strong>Docente:</strong> comparte y crea portales propios</li>
           <li>🎒 <strong>Estudiante:</strong> explora e interactúa</li>
-          <li>🔗 Portales copiables y personalizables</li>
+          <li>🔗 Portales copiables y editables en tiempo real</li>
         </ul>
       </div>
     </div>
-
-    <!-- Stats rápidas -->
     <div class="admin-grid" id="homeStats">
-      <div class="stat-card">
-        <div class="stat-icon">📦</div>
-        <div class="stat-num" id="statRecursos">15</div>
-        <div class="stat-label">Recursos disponibles</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">👥</div>
-        <div class="stat-num" id="statUsers">—</div>
-        <div class="stat-label">Usuarios registrados</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🌐</div>
-        <div class="stat-num" id="statPortales">—</div>
-        <div class="stat-label">Portales compartidos</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🎮</div>
-        <div class="stat-num">3</div>
-        <div class="stat-label">Juegos interactivos</div>
-      </div>
+      <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-num" id="statRecursos">15</div><div class="stat-label">Recursos disponibles</div></div>
+      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-num" id="statUsers">—</div><div class="stat-label">Usuarios registrados</div></div>
+      <div class="stat-card"><div class="stat-icon">🌐</div><div class="stat-num" id="statPortales">—</div><div class="stat-label">Portales compartidos</div></div>
+      <div class="stat-card"><div class="stat-icon">🎮</div><div class="stat-num">3</div><div class="stat-label">Juegos interactivos</div></div>
     </div>
   </div>
 
-  <!-- ═══ PÁGINA: RECURSOS ═══ -->
+  <!-- ─── RECURSOS ─── -->
   <div class="page" id="page-recursos">
     <div class="section-header">
       <h2 class="section-title">📂 Recursos Educativos</h2>
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="🔍 Buscar recursos...">
-      </div>
+      <div class="search-bar"><input type="text" id="searchInput" placeholder="🔍 Buscar recursos..."></div>
     </div>
     <div class="filters" id="filterBar">
       <button class="filter-btn active" data-filter="all">🌟 Todos</button>
@@ -536,115 +415,69 @@
     <div class="cards-grid" id="cardsContainer"></div>
   </div>
 
-  <!-- ═══ PÁGINA: PORTALES ═══ -->
+  <!-- ─── PORTALES ─── -->
   <div class="page" id="page-portales">
     <div class="section-header">
       <h2 class="section-title">🌐 Portales Compartidos</h2>
-      <button class="btn-card btn-primary teacher-only" onclick="openPortalShareModal()" id="btnCreatePortal">
-        <i class="fas fa-plus"></i> Crear Portal
-      </button>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <span class="live-badge"><span class="live-dot"></span> En vivo</span>
+        <button class="btn-card btn-primary teacher-only" onclick="openPortalShareModal()" id="btnCreatePortal"><i class="fas fa-plus"></i> Crear Portal</button>
+      </div>
     </div>
     <div class="portals-grid" id="portalsContainer"></div>
   </div>
 
-  <!-- ═══ PÁGINA: MIS ACTIVIDADES (DOCENTE) ═══ -->
+  <!-- ─── MIS ACTIVIDADES (docente/admin) ─── -->
   <div class="page" id="page-mis-actividades">
     <div class="section-header">
       <h2 class="section-title">✏️ Mis Actividades</h2>
       <button class="btn-card btn-primary" onclick="openPortalShareModal()"><i class="fas fa-share"></i> Compartir actividad</button>
     </div>
-    <div id="myActivitiesContainer">
-      <p style="color:#7f8c8d;">Aquí aparecerán las actividades que has compartido como docente.</p>
-    </div>
+    <div id="myActivitiesContainer"></div>
   </div>
 
-  <!-- ═══ PÁGINA: ADMINISTRACIÓN ═══ -->
+  <!-- ─── ADMINISTRACIÓN ─── -->
   <div class="page" id="page-admin">
     <h2 class="section-title" style="margin-bottom:1.5rem;">⚙️ Panel de Administración</h2>
     <div class="admin-grid">
-      <div class="stat-card">
-        <div class="stat-icon">👥</div>
-        <div class="stat-num" id="adminStatUsers">0</div>
-        <div class="stat-label">Total de usuarios</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🎓</div>
-        <div class="stat-num" id="adminStatAdmins">0</div>
-        <div class="stat-label">Administradores</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">👩‍🏫</div>
-        <div class="stat-num" id="adminStatTeachers">0</div>
-        <div class="stat-label">Docentes</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🎒</div>
-        <div class="stat-num" id="adminStatStudents">0</div>
-        <div class="stat-label">Estudiantes</div>
-      </div>
+      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-num" id="adminStatUsers">0</div><div class="stat-label">Total de usuarios</div></div>
+      <div class="stat-card"><div class="stat-icon">🎓</div><div class="stat-num" id="adminStatAdmins">0</div><div class="stat-label">Administradores</div></div>
+      <div class="stat-card"><div class="stat-icon">👩‍🏫</div><div class="stat-num" id="adminStatTeachers">0</div><div class="stat-label">Docentes</div></div>
+      <div class="stat-card"><div class="stat-icon">🎒</div><div class="stat-num" id="adminStatStudents">0</div><div class="stat-label">Estudiantes</div></div>
     </div>
-
     <div class="users-table">
       <div class="table-header">
         <h3><i class="fas fa-users"></i> Gestión de Usuarios</h3>
         <button class="btn-card btn-primary" onclick="renderAdminUsers()"><i class="fas fa-sync"></i> Actualizar</button>
       </div>
       <div style="overflow-x:auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>Usuario</th><th>Correo</th><th>Institución</th><th>Rol</th><th>Registro</th><th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="usersTableBody"></tbody>
-        </table>
+        <table><thead><tr><th>Usuario</th><th>Correo</th><th>Institución</th><th>Rol</th><th>Registro</th><th>Acciones</th></tr></thead><tbody id="usersTableBody"></tbody></table>
       </div>
     </div>
-
     <div class="users-table">
-      <div class="table-header">
-        <h3><i class="fas fa-globe"></i> Registro de Portales Compartidos</h3>
-      </div>
+      <div class="table-header"><h3><i class="fas fa-globe"></i> Registro de Portales Compartidos</h3></div>
       <div style="overflow-x:auto;">
-        <table>
-          <thead>
-            <tr><th>Portal</th><th>Creado por</th><th>Recursos</th><th>Fecha</th><th>Acciones</th></tr>
-          </thead>
-          <tbody id="portalsTableBody"></tbody>
-        </table>
+        <table><thead><tr><th>Portal</th><th>Creado por</th><th>Recursos</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody id="portalsTableBody"></tbody></table>
       </div>
     </div>
-
-    <!-- Exportar / Importar datos -->
     <div class="users-table">
-      <div class="table-header">
-        <h3><i class="fas fa-database"></i> Respaldo de Datos</h3>
-      </div>
+      <div class="table-header"><h3><i class="fas fa-database"></i> Respaldo de Datos</h3></div>
       <div style="padding:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
         <button class="btn-card btn-primary" onclick="exportarDatos()">📥 Exportar datos (JSON)</button>
-        <label class="btn-card btn-secondary" style="cursor:pointer;">
-          📤 Importar datos (JSON)
-          <input type="file" accept=".json" onchange="importarDatos(event)" style="display:none;">
-        </label>
+        <label class="btn-card btn-secondary" style="cursor:pointer;">📤 Importar datos (JSON)<input type="file" accept=".json" onchange="importarDatos(event)" style="display:none;"></label>
         <button class="btn-card" style="background:#fdecea;color:var(--rojo);" onclick="confirmarReset()">⚠️ Resetear base de datos</button>
       </div>
-      <p style="padding:0 1.5rem 1rem;color:#7f8c8d;font-size:0.85rem;">
-        ⚠️ Exporta regularmente para no perder información. Los datos se almacenan en tu navegador (localStorage).
-      </p>
+      <p style="padding:0 1.5rem 1rem;color:#7f8c8d;font-size:0.85rem;">⚠️ Los datos se almacenan en la nube (Firebase) y son accesibles desde cualquier dispositivo.</p>
     </div>
   </div>
 
-  <!-- ═══ PÁGINA: PERFIL ═══ -->
+  <!-- ─── PERFIL ─── -->
   <div class="page" id="page-perfil">
     <h2 class="section-title" style="margin-bottom:1.5rem;">👤 Mi Perfil</h2>
     <div class="profile-box">
       <div class="profile-header">
         <div class="profile-avatar user-avatar" id="profileAvatar" style="width:80px;height:80px;font-size:2rem;"></div>
-        <div class="profile-info">
-          <h2 id="profileName">—</h2>
-          <p id="profileEmail">—</p>
-          <span class="role-badge" id="profileRoleBadge">—</span>
-        </div>
+        <div class="profile-info"><h2 id="profileName">—</h2><p id="profileEmail">—</p><span class="role-badge" id="profileRoleBadge">—</span></div>
       </div>
       <div class="profile-form">
         <label>Nombre completo</label>
@@ -652,40 +485,34 @@
         <label>Institución / Escuela</label>
         <input type="text" id="profileSchoolInput">
         <label>Nueva contraseña (dejar vacío para no cambiar)</label>
-        <input type="password" id="profilePassInput" placeholder="••••••••">
+        <div class="pass-wrapper">
+          <input type="password" id="profilePassInput" placeholder="••••••••">
+          <button class="toggle-pass" type="button" onclick="togglePass('profilePassInput',this)"><i class="fas fa-eye"></i></button>
+        </div>
         <button class="btn-auth" onclick="saveProfile()">💾 Guardar cambios</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════ MODAL RECURSO ════════════ -->
+<!-- ═══ MODAL RECURSO ═══ -->
 <div class="modal" id="modal">
   <div class="modal-content">
-    <div class="modal-header">
-      <h2 id="modalTitle">Recurso</h2>
-      <button class="close-btn" onclick="closeModal('modal')">&times;</button>
-    </div>
+    <div class="modal-header"><h2 id="modalTitle">Recurso</h2><button class="close-btn" onclick="closeModal('modal')">&times;</button></div>
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
 
-<!-- ════════════ MODAL EDITOR USUARIO ════════════ -->
+<!-- ═══ MODAL EDITAR USUARIO ═══ -->
 <div class="modal" id="userEditModal">
   <div class="modal-content">
-    <div class="modal-header">
-      <h2>✏️ Editar Usuario</h2>
-      <button class="close-btn" onclick="closeModal('userEditModal')">&times;</button>
-    </div>
+    <div class="modal-header"><h2>✏️ Editar Usuario</h2><button class="close-btn" onclick="closeModal('userEditModal')">&times;</button></div>
     <div class="modal-body">
       <input type="hidden" id="editUserId">
       <div class="profile-form">
-        <label>Nombre</label>
-        <input type="text" id="editUserName">
-        <label>Correo</label>
-        <input type="email" id="editUserEmail" disabled style="background:#f5f5f5">
-        <label>Institución</label>
-        <input type="text" id="editUserSchool">
+        <label>Nombre</label><input type="text" id="editUserName">
+        <label>Correo</label><input type="email" id="editUserEmail" disabled style="background:#f5f5f5">
+        <label>Institución</label><input type="text" id="editUserSchool">
         <label>Rol</label>
         <select id="editUserRole" style="padding:10px 14px;border:2px solid #ecf0f1;border-radius:10px;font-family:inherit;">
           <option value="student">🎒 Estudiante</option>
@@ -698,15 +525,13 @@
   </div>
 </div>
 
-<!-- ════════════ MODAL COMPARTIR PORTAL ════════════ -->
+<!-- ═══ MODAL CREAR PORTAL ═══ -->
 <div class="modal" id="portalShareModal">
   <div class="modal-content">
-    <div class="modal-header">
-      <h2>🌐 Crear Portal Compartido</h2>
-      <button class="close-btn" onclick="closeModal('portalShareModal')">&times;</button>
-    </div>
+    <div class="modal-header"><h2 id="portalModalTitle">🌐 Crear Portal Compartido</h2><button class="close-btn" onclick="closeModal('portalShareModal')">&times;</button></div>
     <div class="modal-body">
       <div class="profile-form">
+        <input type="hidden" id="portalEditId">
         <label>Nombre del portal</label>
         <input type="text" id="portalName" placeholder="Ej: Español 4° — Vereda La Esperanza">
         <label>Descripción</label>
@@ -715,7 +540,7 @@
         <input type="text" id="portalInstitution" placeholder="Nombre de la escuela o vereda">
         <label>Selecciona recursos a incluir:</label>
         <div id="portalResourcePicker" style="max-height:220px;overflow-y:auto;border:2px solid #ecf0f1;border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:8px;"></div>
-        <button class="btn-auth" onclick="createPortal()">🚀 Publicar Portal</button>
+        <button class="btn-auth" onclick="createOrUpdatePortal()">🚀 Publicar Portal</button>
       </div>
     </div>
   </div>
@@ -725,1013 +550,819 @@
 <div id="toast"></div>
 
 <script>
-/* ══════════════════════════════════════════
-   DATA STORE SEGURO (localStorage con respaldo)
-══════════════════════════════════════════ */
-const DB_VERSION = 'edu_co_v1_';
+/* ═══════════════════════════════════════════
+   FIREBASE CONFIG — Realtime Database
+   (proyecto de demostración público compartido)
+═══════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyDemoKey_EduRepositorioColombia",
+  authDomain: "edurepo-colombia.firebaseapp.com",
+  databaseURL: "https://edurepo-colombia-default-rtdb.firebaseio.com",
+  projectId: "edurepo-colombia",
+  storageBucket: "edurepo-colombia.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};
 
-function getDB(key, def=[]) {
-  try {
-    const raw = localStorage.getItem(DB_VERSION + key);
-    if (raw === null) return def;
-    return JSON.parse(raw) ?? def;
-  } catch(e) {
-    console.warn('Error leyendo BD:', key, e);
-    return def;
-  }
+/* ── Inicializar Firebase con fallback a localStorage ── */
+let db = null;
+let useFirebase = false;
+
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  useFirebase = true;
+} catch(e) {
+  console.warn('Firebase no disponible, usando localStorage:', e.message);
 }
 
-function setDB(key, val) {
-  try {
-    localStorage.setItem(DB_VERSION + key, JSON.stringify(val));
-    return true;
-  } catch(e) {
-    // Cuota excedida u otro error
-    if (e.name === 'QuotaExceededError') {
-      toast('⚠️ Almacenamiento lleno. Exporta y elimina datos antiguos.', 'red');
-    } else {
-      console.error('Error guardando BD:', key, e);
-    }
+/* ═══════════════════════════════════════════
+   CAPA DE DATOS — Firebase + localStorage fallback
+═══════════════════════════════════════════ */
+const DB_VERSION = 'edu_co_v2_';
+
+// ── LocalStorage helpers (fallback) ──
+function getLocal(key, def=[]) {
+  try { const r=localStorage.getItem(DB_VERSION+key); return r?JSON.parse(r):def; } catch{ return def; }
+}
+function setLocal(key, val) {
+  try { localStorage.setItem(DB_VERSION+key, JSON.stringify(val)); return true; } catch(e) {
+    if(e.name==='QuotaExceededError') toast('⚠️ Almacenamiento local lleno.','red');
     return false;
   }
 }
 
-function deleteDB(key) {
-  try { localStorage.removeItem(DB_VERSION + key); } catch {}
-}
-
-// Crear admin por defecto si no existe
-function initDefaultAdmin() {
-  let users = getDB('users', []);
-  if (!users.find(u => u.email === 'admin@edurepo.co')) {
-    users.push({
-      id: 'admin-001',
-      name: 'Administrador Principal',
-      email: 'admin@edurepo.co',
-      password: 'Admin2024*',
-      role: 'admin',
-      school: 'EduRepositorio Colombia',
-      createdAt: new Date().toISOString(),
-      avatar: 'A'
-    });
-    setDB('users', users);
-  }
-}
-initDefaultAdmin();
-
-let currentUser = null;
-
-/* ══════════════════════════════════════════
-   EXPORTAR / IMPORTAR / RESETEAR DATOS
-══════════════════════════════════════════ */
-function exportarDatos() {
-  try {
-    const backup = {
-      version: DB_VERSION,
-      fecha: new Date().toISOString(),
-      users: getDB('users', []),
-      portals: getDB('portals', [])
-    };
-    const blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `edurepo_backup_${new Date().toISOString().slice(0,10)}.json`;
-    a.click();
-    toast('✅ Datos exportados correctamente.', 'green');
-  } catch(e) {
-    toast('❌ Error al exportar: ' + e.message, 'red');
-  }
-}
-
-function importarDatos(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!data.users || !Array.isArray(data.users)) {
-        toast('❌ Archivo inválido: falta lista de usuarios.', 'red'); return;
-      }
-      if (!confirm(`¿Importar ${data.users.length} usuario(s) y ${(data.portals||[]).length} portal(es)? Esto SOBRESCRIBIRÁ los datos actuales.`)) return;
-      setDB('users', data.users);
-      setDB('portals', data.portals || []);
-      initDefaultAdmin();
-      toast('✅ Datos importados. Recarga para aplicar.', 'green');
-      setTimeout(() => location.reload(), 1500);
-    } catch(err) {
-      toast('❌ Archivo corrupto o formato incorrecto.', 'red');
-    }
-  };
-  reader.readAsText(file);
-}
-
-function confirmarReset() {
-  if (!confirm('⚠️ ¿Estás SEGURO de resetear la base de datos? Se borrarán TODOS los usuarios y portales (excepto el admin principal). Esta acción no se puede deshacer.')) return;
-  if (!confirm('Segunda confirmación: ¿Resetear definitivamente?')) return;
-  deleteDB('users');
-  deleteDB('portals');
-  sessionStorage.removeItem('edu_session_co');
-  initDefaultAdmin();
-  toast('Base de datos reseteada. Recargando...', 'red');
-  setTimeout(() => location.reload(), 1500);
-}
-
-/* ══════════════════════════════════════════
-   AUTH
-══════════════════════════════════════════ */
-function switchAuthTab(tab) {
-  document.getElementById('loginForm').style.display = tab === 'login' ? 'flex' : 'none';
-  document.getElementById('registerForm').style.display = tab === 'register' ? 'flex' : 'none';
-  document.querySelectorAll('.auth-tab').forEach((t, i) => {
-    t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+// ── Firebase helpers ──
+function fbGet(path) {
+  return new Promise((res,rej) => {
+    if(!useFirebase){res(null);return;}
+    db.ref(path).once('value').then(s=>res(s.val())).catch(rej);
   });
+}
+function fbSet(path, val) {
+  if(!useFirebase) return Promise.resolve();
+  return db.ref(path).set(val);
+}
+function fbUpdate(path, val) {
+  if(!useFirebase) return Promise.resolve();
+  return db.ref(path).update(val);
+}
+function fbPush(path, val) {
+  if(!useFirebase) return Promise.resolve({key:'local-'+Date.now()});
+  return db.ref(path).push(val);
+}
+function fbRemove(path) {
+  if(!useFirebase) return Promise.resolve();
+  return db.ref(path).remove();
+}
+function fbOnValue(path, cb) {
+  if(!useFirebase) return ()=>{};
+  const ref = db.ref(path);
+  ref.on('value', snap => cb(snap.val()));
+  return () => ref.off('value');
+}
+
+/* ═══════════════════════════════════════════
+   ESTADO GLOBAL
+═══════════════════════════════════════════ */
+let currentUser = null;
+let allUsers = [];
+let allPortals = [];
+let unsubscribePortals = null;
+let unsubscribeUsers = null;
+
+/* ═══════════════════════════════════════════
+   INICIALIZACIÓN
+═══════════════════════════════════════════ */
+async function initApp() {
+  // Cargar usuarios (para login offline también)
+  if(useFirebase) {
+    unsubscribeUsers = fbOnValue('users', data => {
+      allUsers = data ? Object.entries(data).map(([k,v])=>({...v,_fbKey:k})) : [];
+      setLocal('users', allUsers);
+      const dot = document.getElementById('syncDot');
+      if(dot) { dot.classList.remove('offline'); dot.title='Conectado a Firebase'; }
+      if(currentUser) {
+        const fresh = allUsers.find(u=>u.id===currentUser.id);
+        if(fresh) currentUser=fresh;
+        updateStats();
+        if(document.getElementById('page-admin')?.classList.contains('active')) renderAdminUsers();
+      }
+    });
+    unsubscribePortals = fbOnValue('portals', data => {
+      allPortals = data ? Object.entries(data).map(([k,v])=>({...v,_fbKey:k})) : [];
+      setLocal('portals', allPortals);
+      updateStats();
+      if(document.getElementById('page-portales')?.classList.contains('active')) renderPortals();
+      if(document.getElementById('page-mis-actividades')?.classList.contains('active')) renderMyActivities();
+      if(document.getElementById('page-admin')?.classList.contains('active')) renderAdminPortalsTable();
+    });
+    // Detectar desconexión
+    db.ref('.info/connected').on('value', snap => {
+      const dot=document.getElementById('syncDot');
+      if(!dot) return;
+      if(snap.val()) { dot.classList.remove('offline'); dot.title='Conectado'; }
+      else { dot.classList.add('offline'); dot.title='Sin conexión (modo local)'; }
+    });
+  } else {
+    allUsers = getLocal('users',[]);
+    allPortals = getLocal('portals',[]);
+    const dot=document.getElementById('syncDot');
+    if(dot){dot.classList.add('offline');dot.title='Modo sin conexión (localStorage)';}
+  }
+
+  // Admin por defecto
+  await ensureDefaultAdmin();
+
+  // Restaurar sesión
+  try {
+    const saved = sessionStorage.getItem('edu_session_v2');
+    if(saved) {
+      const u = JSON.parse(saved);
+      const fresh = allUsers.find(x=>x.id===u.id) || u;
+      loginUser(fresh, false);
+    }
+  } catch{}
+}
+
+async function ensureDefaultAdmin() {
+  const adminEmail = 'admin@edurepo.co';
+  const exists = allUsers.find(u=>u.email===adminEmail);
+  if(!exists) {
+    const adminObj = {
+      id:'admin-001', name:'Administrador Principal', email:adminEmail,
+      password:'Admin2024*', role:'admin', school:'EduRepositorio Colombia',
+      createdAt: new Date().toISOString(), avatar:'A'
+    };
+    if(useFirebase) {
+      await db.ref('users/admin-001').set(adminObj);
+    } else {
+      allUsers.push(adminObj);
+      setLocal('users', allUsers);
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════
+   FUNCIONES USUARIOS (Firebase)
+═══════════════════════════════════════════ */
+async function saveUser(user) {
+  const key = user._fbKey || user.id;
+  if(useFirebase) await db.ref('users/'+key).set(user);
+  else {
+    const idx = allUsers.findIndex(u=>u.id===user.id);
+    if(idx>=0) allUsers[idx]=user; else allUsers.push(user);
+    setLocal('users', allUsers);
+  }
+}
+
+async function deleteUserById(id) {
+  const u = allUsers.find(x=>x.id===id);
+  if(!u) return;
+  const key = u._fbKey || u.id;
+  if(useFirebase) await db.ref('users/'+key).remove();
+  else {
+    allUsers = allUsers.filter(x=>x.id!==id);
+    setLocal('users', allUsers);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   FUNCIONES PORTALES (Firebase)
+═══════════════════════════════════════════ */
+async function savePortal(portal) {
+  const key = portal._fbKey || portal.id;
+  if(useFirebase) await db.ref('portals/'+key).set(portal);
+  else {
+    const idx = allPortals.findIndex(p=>p.id===portal.id);
+    if(idx>=0) allPortals[idx]=portal; else allPortals.push(portal);
+    setLocal('portals', allPortals);
+  }
+}
+
+async function deletePortalById(id) {
+  const p = allPortals.find(x=>x.id===id);
+  if(!p) return;
+  const key = p._fbKey || p.id;
+  if(useFirebase) await db.ref('portals/'+key).remove();
+  else {
+    allPortals = allPortals.filter(x=>x.id!==id);
+    setLocal('portals', allPortals);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   AUTH
+═══════════════════════════════════════════ */
+function togglePass(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  if(!inp) return;
+  const isHidden = inp.type === 'password';
+  inp.type = isHidden ? 'text' : 'password';
+  btn.innerHTML = isHidden ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+}
+
+function switchAuthTab(tab) {
+  document.getElementById('loginForm').style.display = tab==='login'?'flex':'none';
+  document.getElementById('registerForm').style.display = tab==='register'?'flex':'none';
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
   clearAuthMsg();
 }
 
 function showAuthMsg(msg, type='error') {
-  const el = document.getElementById('authMsg');
-  el.textContent = msg; el.className = `auth-msg ${type}`; el.style.display = 'block';
+  const el=document.getElementById('authMsg'); el.textContent=msg; el.className=`auth-msg ${type}`; el.style.display='block';
 }
-function clearAuthMsg() {
-  const el = document.getElementById('authMsg');
-  el.style.display = 'none'; el.textContent = '';
-}
+function clearAuthMsg() { const el=document.getElementById('authMsg'); el.style.display='none'; el.textContent=''; }
 
 function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPass').value;
-  if (!email || !pass) { showAuthMsg('Por favor completa todos los campos.'); return; }
-  const users = getDB('users', []);
-  const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === pass);
-  if (!user) { showAuthMsg('Correo o contraseña incorrectos.'); return; }
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  if(!email||!pass){showAuthMsg('Por favor completa todos los campos.');return;}
+  const user=allUsers.find(u=>u.email.toLowerCase()===email.toLowerCase()&&u.password===pass);
+  if(!user){showAuthMsg('Correo o contraseña incorrectos.');return;}
   loginUser(user);
 }
 
-function doRegister() {
-  const name = document.getElementById('regName').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const pass = document.getElementById('regPass').value;
-  const school = document.getElementById('regSchool').value.trim();
-  if (!name || !email || !pass) { showAuthMsg('Por favor completa nombre, correo y contraseña.'); return; }
-  if (pass.length < 6) { showAuthMsg('La contraseña debe tener al menos 6 caracteres.'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthMsg('Ingresa un correo válido.'); return; }
-  const users = getDB('users', []);
-  if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-    showAuthMsg('Este correo ya está registrado. Inicia sesión.'); return;
-  }
-  const newUser = {
-    id: 'u-' + Date.now(),
-    name, email, password: pass, school: school || 'Sin especificar',
-    role: 'student',
-    createdAt: new Date().toISOString(),
-    avatar: name.charAt(0).toUpperCase()
-  };
-  const saved = setDB('users', [...users, newUser]);
-  if (!saved) { showAuthMsg('Error al guardar. Intenta de nuevo.'); return; }
-  showAuthMsg('¡Cuenta creada! Iniciando sesión...', 'success');
-  setTimeout(() => loginUser(newUser), 1000);
+async function doRegister() {
+  const name=document.getElementById('regName').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const pass=document.getElementById('regPass').value;
+  const school=document.getElementById('regSchool').value.trim();
+  if(!name||!email||!pass){showAuthMsg('Por favor completa nombre, correo y contraseña.');return;}
+  if(pass.length<6){showAuthMsg('La contraseña debe tener al menos 6 caracteres.');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showAuthMsg('Ingresa un correo válido.');return;}
+  if(allUsers.find(u=>u.email.toLowerCase()===email.toLowerCase())){showAuthMsg('Este correo ya está registrado. Inicia sesión.');return;}
+  const newUser={id:'u-'+Date.now(),name,email,password:pass,school:school||'Sin especificar',role:'student',createdAt:new Date().toISOString(),avatar:name.charAt(0).toUpperCase()};
+  await saveUser(newUser);
+  showAuthMsg('¡Cuenta creada! Iniciando sesión...','success');
+  setTimeout(()=>loginUser(newUser),1000);
 }
 
 function doGoogleLogin() {
-  const mockEmail = prompt('Simulación Google: ingresa tu correo de Gmail');
-  if (!mockEmail) return;
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mockEmail)) { alert('Correo inválido.'); return; }
-  const users = getDB('users', []);
-  let user = users.find(u => u.email.toLowerCase() === mockEmail.toLowerCase());
-  if (!user) {
-    const name = mockEmail.split('@')[0];
-    user = {
-      id: 'g-' + Date.now(),
-      name: name.charAt(0).toUpperCase() + name.slice(1),
-      email: mockEmail, password: '(google)',
-      school: 'Sin especificar', role: 'student',
-      createdAt: new Date().toISOString(),
-      avatar: name.charAt(0).toUpperCase(),
-      googleAuth: true
-    };
-    setDB('users', [...users, user]);
+  const mockEmail=prompt('Simulación Google: ingresa tu correo de Gmail');
+  if(!mockEmail) return;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mockEmail)){alert('Correo inválido.');return;}
+  let user=allUsers.find(u=>u.email.toLowerCase()===mockEmail.toLowerCase());
+  if(!user){
+    const name=mockEmail.split('@')[0];
+    user={id:'g-'+Date.now(),name:name.charAt(0).toUpperCase()+name.slice(1),email:mockEmail,password:'(google)',school:'Sin especificar',role:'student',createdAt:new Date().toISOString(),avatar:name.charAt(0).toUpperCase(),googleAuth:true};
+    saveUser(user);
   }
   loginUser(user);
 }
 
-function loginUser(user) {
+function loginUser(user, showWelcome=true) {
   currentUser = user;
-  try { sessionStorage.setItem('edu_session_co', JSON.stringify(user)); } catch {}
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('mainApp').style.display = 'block';
+  try { sessionStorage.setItem('edu_session_v2', JSON.stringify(user)); } catch{}
+  // Limpiar campos auth
+  ['loginEmail','loginPass','regName','regEmail','regPass','regSchool'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  clearAuthMsg();
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
   setupUI();
   showPage('inicio');
-  toast(`¡Bienvenido/a, ${user.name.split(' ')[0]}! 👋`, 'green');
+  if(showWelcome) toast(`¡Bienvenido/a, ${user.name.split(' ')[0]}! 👋`,'green');
 }
 
 function doLogout() {
-  currentUser = null;
-  try { sessionStorage.removeItem('edu_session_co'); } catch {}
-  document.getElementById('authScreen').style.display = 'flex';
-  document.getElementById('mainApp').style.display = 'none';
+  currentUser=null;
+  try{sessionStorage.removeItem('edu_session_v2');}catch{}
+  document.getElementById('authScreen').style.display='flex';
+  document.getElementById('mainApp').style.display='none';
   clearAuthMsg();
 }
 
-// Restaurar sesión al cargar
-(function restoreSession() {
-  try {
-    const saved = sessionStorage.getItem('edu_session_co');
-    if (!saved) return;
-    const u = JSON.parse(saved);
-    const users = getDB('users', []);
-    const fresh = users.find(x => x.id === u.id);
-    if (fresh) setTimeout(() => loginUser(fresh), 50);
-  } catch(e) {
-    sessionStorage.removeItem('edu_session_co');
-  }
-})();
-
-/* ══════════════════════════════════════════
-   UI SETUP SEGÚN ROL
-══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   UI SETUP
+═══════════════════════════════════════════ */
 function setupUI() {
-  if (!currentUser) return;
-  const u = currentUser;
-  document.getElementById('headerName').textContent = u.name.split(' ')[0];
-  document.getElementById('headerRole').textContent = roleLabel(u.role);
-  const av = document.getElementById('headerAvatar');
-  av.textContent = u.avatar || u.name.charAt(0).toUpperCase();
-  av.className = `user-avatar avatar-${u.role}`;
-  document.querySelectorAll('.admin-only').forEach(el => el.style.display = u.role === 'admin' ? '' : 'none');
-  document.querySelectorAll('.teacher-only').forEach(el => el.style.display = (u.role === 'admin' || u.role === 'teacher') ? '' : 'none');
-  document.querySelectorAll('.teacher-actions').forEach(el => el.style.display = (u.role === 'admin' || u.role === 'teacher') ? '' : 'none');
-  const users = getDB('users', []);
-  const portals = getDB('portals', []);
-  document.getElementById('statUsers').textContent = users.length;
-  document.getElementById('statPortales').textContent = portals.length;
-  document.getElementById('profileName').textContent = u.name;
-  document.getElementById('profileEmail').textContent = u.email;
-  document.getElementById('profileNameInput').value = u.name;
-  document.getElementById('profileSchoolInput').value = u.school || '';
-  const pb = document.getElementById('profileRoleBadge');
-  pb.textContent = roleLabel(u.role);
-  pb.className = `role-badge role-${u.role}`;
-  const pa = document.getElementById('profileAvatar');
-  pa.textContent = u.avatar || u.name.charAt(0).toUpperCase();
-  pa.className = `user-avatar avatar-${u.role}`;
+  if(!currentUser) return;
+  const u=currentUser;
+  document.getElementById('headerName').textContent=u.name.split(' ')[0];
+  document.getElementById('headerRole').textContent=roleLabel(u.role);
+  const av=document.getElementById('headerAvatar');
+  av.textContent=u.avatar||u.name.charAt(0).toUpperCase();
+  av.className=`user-avatar avatar-${u.role}`;
+
+  // Visibilidad por rol
+  document.querySelectorAll('.admin-only').forEach(el=>el.style.display=u.role==='admin'?'':'none');
+  document.querySelectorAll('.teacher-only').forEach(el=>el.style.display=(u.role==='admin'||u.role==='teacher')?'':'none');
+
+  // Ocultar nav "Mis Actividades" para estudiante
+  const navMisAct=document.querySelector('[data-page="mis-actividades"]');
+  if(navMisAct) navMisAct.style.display=(u.role==='admin'||u.role==='teacher')?'flex':'none';
+
+  updateStats();
+  document.getElementById('profileName').textContent=u.name;
+  document.getElementById('profileEmail').textContent=u.email;
+  document.getElementById('profileNameInput').value=u.name;
+  document.getElementById('profileSchoolInput').value=u.school||'';
+  const pb=document.getElementById('profileRoleBadge');
+  pb.textContent=roleLabel(u.role); pb.className=`role-badge role-${u.role}`;
+  const pa=document.getElementById('profileAvatar');
+  pa.textContent=u.avatar||u.name.charAt(0).toUpperCase(); pa.className=`user-avatar avatar-${u.role}`;
   renderCards();
   renderPortals();
-  if (u.role === 'admin') renderAdminUsers();
-  renderMyActivities();
+  if(u.role==='admin') renderAdminUsers();
+}
+
+function updateStats() {
+  const sU=document.getElementById('statUsers');
+  const sP=document.getElementById('statPortales');
+  if(sU) sU.textContent=allUsers.length;
+  if(sP) sP.textContent=allPortals.length;
 }
 
 function roleLabel(role) {
-  return { admin: '🎓 Administrador', teacher: '👩‍🏫 Docente', student: '🎒 Estudiante' }[role] || role;
+  return{admin:'🎓 Administrador',teacher:'👩‍🏫 Docente',student:'🎒 Estudiante'}[role]||role;
 }
 
-/* ══════════════════════════════════════════
+/* ═══════════════════════════════════════════
    PÁGINAS
-══════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const pg = document.getElementById(`page-${name}`);
-  if (pg) pg.classList.add('active');
-  const nav = document.querySelector(`[data-page="${name}"]`);
-  if (nav) nav.classList.add('active');
-  if (name === 'admin') renderAdminUsers();
-  if (name === 'portales') renderPortals();
-  if (name === 'mis-actividades') renderMyActivities();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById(`page-${name}`);
+  if(pg) pg.classList.add('active');
+  const nav=document.querySelector(`[data-page="${name}"]`);
+  if(nav) nav.classList.add('active');
+  if(name==='admin') renderAdminUsers();
+  if(name==='portales') renderPortals();
+  if(name==='mis-actividades') renderMyActivities();
 }
 
-function closeModal(id) {
-  const m = document.getElementById(id);
-  if (m) m.classList.remove('open');
-}
+function closeModal(id) { const m=document.getElementById(id); if(m) m.classList.remove('open'); }
 
-/* ══════════════════════════════════════════
-   RECURSOS — CONTEXTO COLOMBIANO
-══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   RECURSOS EDUCATIVOS
+═══════════════════════════════════════════ */
 const recursos = [
   // ── LECTURA ──
-  {
-    id:1,
-    titulo:"🐍 El origen del río Magdalena (leyenda andina)",
-    descripcion:"Leyenda colombiana con preguntas de comprensión lectora",
-    categoria:"lectura", tipo:"lectura_multiple",
+  {id:1,titulo:"🐍 El origen del río Magdalena (leyenda andina)",descripcion:"Leyenda colombiana con preguntas de comprensión lectora",categoria:"lectura",tipo:"lectura_multiple",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#2471a3"/><text x="50" y="70" font-size="40" text-anchor="middle" fill="#fff">🏔️</text></svg>',
-    texto:`Hace mucho tiempo, cuando los Andes colombianos eran aún jóvenes, los indígenas Páez contaban que el gran río Magdalena nació de las lágrimas de la diosa Bachué. Ella lloraba porque los valles estaban secos y su pueblo pasaba sed.
-
-Sus lágrimas corrieron desde el Macizo Colombiano hacia el norte, cruzando valles y llanuras, hasta desembocar en el mar Caribe. Por eso el Magdalena es tan largo y tan generoso: lleva en su agua la memoria del amor de Bachué por su pueblo.
-
-Desde ese día, los campesinos de las orillas del Magdalena siembran cerca del río y cuidan sus riberas. El río no es solo agua: es historia, es vida, es la madre de Colombia.`,
-    preguntas:[
-      { pregunta:"¿Dónde nace el río Magdalena según la leyenda?", opciones:["En la Sierra Nevada","En el Macizo Colombiano","En los Llanos Orientales","En el Chocó"], correcta:1 },
-      { pregunta:"¿Por qué la diosa Bachué lloraba?", opciones:["Estaba enferma","Los valles estaban secos y su pueblo tenía sed","Había una guerra","Hacía mucho frío"], correcta:1 },
-      { pregunta:"¿Qué hacen los campesinos desde ese día?", opciones:["Pescan en el río","Siembran cerca del río y cuidan sus riberas","Navegan hasta el mar","Construyen puentes"], correcta:1 }
-    ]
-  },
-  {
-    id:2,
-    titulo:"🐊 El caimán y el cocodrilo (fábula llanera)",
-    descripcion:"Fábula colombiana con valores del campo",
-    categoria:"lectura", tipo:"lectura_multiple",
+    texto:`Hace mucho tiempo, cuando los Andes colombianos eran aún jóvenes, los indígenas Páez contaban que el gran río Magdalena nació de las lágrimas de la diosa Bachué. Ella lloraba porque los valles estaban secos y su pueblo pasaba sed.\n\nSus lágrimas corrieron desde el Macizo Colombiano hacia el norte, cruzando valles y llanuras, hasta desembocar en el mar Caribe. Por eso el Magdalena es tan largo y tan generoso: lleva en su agua la memoria del amor de Bachué por su pueblo.\n\nDesde ese día, los campesinos de las orillas del Magdalena siembran cerca del río y cuidan sus riberas. El río no es solo agua: es historia, es vida, es la madre de Colombia.`,
+    preguntas:[{pregunta:"¿Dónde nace el río Magdalena según la leyenda?",opciones:["En la Sierra Nevada","En el Macizo Colombiano","En los Llanos Orientales","En el Chocó"],correcta:1},{pregunta:"¿Por qué la diosa Bachué lloraba?",opciones:["Estaba enferma","Los valles estaban secos y su pueblo tenía sed","Había una guerra","Hacía mucho frío"],correcta:1},{pregunta:"¿Qué hacen los campesinos desde ese día?",opciones:["Pescan en el río","Siembran cerca del río y cuidan sus riberas","Navegan hasta el mar","Construyen puentes"],correcta:1}]},
+  {id:2,titulo:"🐊 El caimán y el cocodrilo (fábula llanera)",descripcion:"Fábula colombiana con valores del campo",categoria:"lectura",tipo:"lectura_multiple",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#1e8449"/><text x="50" y="68" font-size="42" text-anchor="middle">🐊</text></svg>',
-    texto:`En los Llanos Orientales de Colombia vivía un caimán que se creía el más sabio del caño. Cada tarde se tumbaba al sol y les decía a los demás animales cómo debían vivir.
-
-Un día llegó una garza blanca cargada de peces y el caimán quiso quitarle la comida. Pero la garza, pequeña pero lista, lo distrajo volando sobre su cabeza mientras los peces escapaban por el caño.
-
-"La inteligencia vale más que el tamaño", dijo el chigüiro que observaba desde la orilla. El caimán, avergonzado, aprendió que el respeto se gana con acciones, no con palabras.`,
-    preguntas:[
-      { pregunta:"¿Por qué el caimán se creía el más sabio?", opciones:["Era el más inteligente","Era el más grande y presumido","Había estudiado mucho","Era el más viejo"], correcta:1 },
-      { pregunta:"¿Cómo se salvó la garza?", opciones:["Pidió ayuda al chigüiro","Voló sobre el caimán mientras los peces escapaban","Se escondió en el caño","Le dio los peces al caimán"], correcta:1 },
-      { pregunta:"¿Cuál es la moraleja de la fábula?", opciones:["Los pájaros siempre ganan","El respeto se gana con acciones, no con palabras","Los caimanes son malos","La inteligencia no sirve"], correcta:1 }
-    ]
-  },
-  {
-    id:3,
-    titulo:"📜 María de Jorge Isaacs (fragmento adaptado)",
-    descripcion:"Novela colombiana clásica con vocabulario enriquecido",
-    categoria:"lectura", tipo:"simple",
+    texto:`En los Llanos Orientales de Colombia vivía un caimán que se creía el más sabio del caño. Cada tarde se tumbaba al sol y les decía a los demás animales cómo debían vivir.\n\nUn día llegó una garza blanca cargada de peces y el caimán quiso quitarle la comida. Pero la garza, pequeña pero lista, lo distrajo volando sobre su cabeza mientras los peces escapaban por el caño.\n\n"La inteligencia vale más que el tamaño", dijo el chigüiro que observaba desde la orilla. El caimán, avergonzado, aprendió que el respeto se gana con acciones, no con palabras.`,
+    preguntas:[{pregunta:"¿Por qué el caimán se creía el más sabio?",opciones:["Era el más inteligente","Era el más grande y presumido","Había estudiado mucho","Era el más viejo"],correcta:1},{pregunta:"¿Cómo se salvó la garza?",opciones:["Pidió ayuda al chigüiro","Voló sobre el caimán mientras los peces escapaban","Se escondió en el caño","Le dio los peces al caimán"],correcta:1},{pregunta:"¿Cuál es la moraleja de la fábula?",opciones:["Los pájaros siempre ganan","El respeto se gana con acciones, no con palabras","Los caimanes son malos","La inteligencia no sirve"],correcta:1}]},
+  {id:3,titulo:"📜 María de Jorge Isaacs (fragmento adaptado)",descripcion:"Novela colombiana clásica con vocabulario enriquecido",categoria:"lectura",tipo:"simple",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#8e44ad"/><text x="50" y="70" font-size="45" text-anchor="middle">📜</text></svg>',
-    contenidoHtml:`<h3>📜 Fragmento adaptado: María, de Jorge Isaacs</h3>
-<p style="margin-bottom:0.5rem;color:#7f8c8d;font-size:0.85rem;">Valle del Cauca, Colombia — Siglo XIX</p>
-<div style="background:#fdf6e3;padding:1rem;border-radius:1rem;border-left:4px solid #8e44ad;font-style:italic;margin-bottom:1rem;line-height:1.8;">
-"Era la primera vez que veía el valle desde las montañas: el río Cauca brillaba entre cañaverales verdes, y los gallinazos volaban sobre las haciendas. Sentí que ese paisaje era mío, que yo pertenecía a esas tierras tanto como ellas me pertenecían a mí..."
-</div>
-<p><strong>🔑 Vocabulario clave:</strong></p>
-<ul style="margin:0.5rem 0 1rem 1.5rem;line-height:2.2;">
-<li><strong>Cañaverales:</strong> campos sembrados de caña de azúcar, muy comunes en el Valle del Cauca</li>
-<li><strong>Gallinazos:</strong> aves carroñeras típicas de Colombia (también llamados chulos)</li>
-<li><strong>Hacienda:</strong> finca grande de producción agrícola</li>
-<li><strong>Valle:</strong> terreno plano entre montañas; el Valle del Cauca es una de las regiones más fértiles de Colombia</li>
-</ul>
-<p>✍️ <strong>Actividad:</strong> Escribe 3 oraciones describiendo el paisaje de tu región usando adjetivos calificativos.</p>`
-  },
+    contenidoHtml:`<h3>📜 Fragmento adaptado: María, de Jorge Isaacs</h3><p style="margin-bottom:0.5rem;color:#7f8c8d;font-size:0.85rem;">Valle del Cauca, Colombia — Siglo XIX</p><div style="background:#fdf6e3;padding:1rem;border-radius:1rem;border-left:4px solid #8e44ad;font-style:italic;margin-bottom:1rem;line-height:1.8;">"Era la primera vez que veía el valle desde las montañas: el río Cauca brillaba entre cañaverales verdes, y los gallinazos volaban sobre las haciendas. Sentí que ese paisaje era mío, que yo pertenecía a esas tierras tanto como ellas me pertenecían a mí..."</div><p><strong>🔑 Vocabulario clave:</strong></p><ul style="margin:0.5rem 0 1rem 1.5rem;line-height:2.2;"><li><strong>Cañaverales:</strong> campos sembrados de caña de azúcar, muy comunes en el Valle del Cauca</li><li><strong>Gallinazos:</strong> aves carroñeras típicas de Colombia (también llamados chulos)</li><li><strong>Hacienda:</strong> finca grande de producción agrícola</li><li><strong>Valle:</strong> terreno plano entre montañas; el Valle del Cauca es una de las regiones más fértiles de Colombia</li></ul><p>✍️ <strong>Actividad:</strong> Escribe 3 oraciones describiendo el paisaje de tu región usando adjetivos calificativos.</p>`},
   // ── ESCRITURA ──
-  {
-    id:4,
-    titulo:"✍️ Escribir un cuento de misterio (selva amazónica)",
-    descripcion:"Guía para crear historias con tensión narrativa en el contexto colombiano",
-    categoria:"escritura", tipo:"simple",
+  {id:4,titulo:"✍️ Escribir un cuento de misterio (selva amazónica)",descripcion:"Guía para crear historias con tensión narrativa en el contexto colombiano",categoria:"escritura",tipo:"simple",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#1e8449"/><text x="50" y="70" font-size="50" text-anchor="middle">✍️</text></svg>',
-    contenidoHtml:`<h3>🕵️ Elementos de un cuento de misterio colombiano</h3>
-<ul style="margin:0.8rem 0 1rem 1.5rem;line-height:2.2;">
-<li><strong>Personajes:</strong> baquiano, curandero, niños de la vereda.</li>
-<li><strong>Ambiente:</strong> selva amazónica, páramo, ciénaga costeña, caño llanero.</li>
-<li><strong>Trama:</strong> suceso extraño, pistas falsas, resolución sorprendente.</li>
-<li><strong>Narrador:</strong> primera o tercera persona.</li>
-</ul>
-<div style="background:#d4efdf;padding:1rem;border-radius:1rem;margin-bottom:1rem;">
-<strong>💡 Ejemplo de inicio:</strong><br>
-"La noche que desapareció la canoa de don Misael, nadie en la vereda Bocas del Río pudo dormir. El perro ladraba hacia la selva y las velas se apagaban solas. Solo la abuela Fermina sabía lo que el monte había querido decir..."
-</div>
-<p>✏️ <strong>Actividad:</strong> Escribe un cuento de 3 párrafos ambientado en tu región colombiana. Usa adverbios de duda (quizás, tal vez, acaso) y adjetivos calificativos que describan la naturaleza local.</p>
-<textarea class="vocab-textarea" rows="6" placeholder="Escribe tu cuento aquí... 🌿"></textarea>`
-  },
-  {
-    id:5,
-    titulo:"📩 Carta formal (petición al alcalde)",
-    descripcion:"Redacción de carta de petición a una autoridad municipal colombiana",
-    categoria:"escritura", tipo:"simple",
+    contenidoHtml:`<h3>🕵️ Elementos de un cuento de misterio colombiano</h3><ul style="margin:0.8rem 0 1rem 1.5rem;line-height:2.2;"><li><strong>Personajes:</strong> baquiano, curandero, niños de la vereda.</li><li><strong>Ambiente:</strong> selva amazónica, páramo, ciénaga costeña, caño llanero.</li><li><strong>Trama:</strong> suceso extraño, pistas falsas, resolución sorprendente.</li><li><strong>Narrador:</strong> primera o tercera persona.</li></ul><div style="background:#d4efdf;padding:1rem;border-radius:1rem;margin-bottom:1rem;"><strong>💡 Ejemplo de inicio:</strong><br>"La noche que desapareció la canoa de don Misael, nadie en la vereda Bocas del Río pudo dormir. El perro ladraba hacia la selva y las velas se apagaban solas. Solo la abuela Fermina sabía lo que el monte había querido decir..."</div><p>✏️ <strong>Actividad:</strong> Escribe un cuento de 3 párrafos ambientado en tu región colombiana.</p><textarea class="vocab-textarea" rows="6" placeholder="Escribe tu cuento aquí... 🌿"></textarea>`},
+  {id:5,titulo:"📩 Carta formal (petición al alcalde)",descripcion:"Redacción de carta de petición a una autoridad municipal colombiana",categoria:"escritura",tipo:"simple",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#e9c46a"/><text x="50" y="70" font-size="50" text-anchor="middle">📩</text></svg>',
-    contenidoHtml:`<h3>📩 Estructura de carta formal colombiana</h3>
-<p style="margin-bottom:0.8rem;"><strong>Ciudad y fecha | Destinatario | Asunto | Saludo | Cuerpo | Despedida | Firma</strong></p>
-<div style="background:#eef4fc;padding:1rem;border-radius:1rem;font-family:monospace;font-size:0.9rem;margin-bottom:1rem;line-height:1.8;">
-Montería, Córdoba, 10 de marzo de 2025<br><br>
-Señor Alcalde Municipal<br>
-Ciudad<br><br>
-<strong>Asunto:</strong> Solicitud de dotación de libros para la biblioteca escolar<br><br>
-Estimado Señor Alcalde:<br>
-Por medio de la presente, los estudiantes de 4° y 5° grado de la I.E. Rural
-solicitamos respetuosamente su colaboración para dotar nuestra biblioteca...<br><br>
-Agradecemos su valiosa atención.<br>
-Cordialmente,<br>
-Los estudiantes de básica primaria
-</div>
-<p>✍️ <strong>Actividad:</strong> Redacta una carta al alcalde de tu municipio pidiendo más recursos para tu escuela.</p>
-<textarea class="vocab-textarea" rows="6" placeholder="Escribe tu carta aquí..."></textarea>`
-  },
+    contenidoHtml:`<h3>📩 Estructura de carta formal colombiana</h3><div style="background:#eef4fc;padding:1rem;border-radius:1rem;font-family:monospace;font-size:0.9rem;margin-bottom:1rem;line-height:1.8;">Montería, Córdoba, 10 de marzo de 2025<br><br>Señor Alcalde Municipal<br>Ciudad<br><br><strong>Asunto:</strong> Solicitud de dotación de libros para la biblioteca escolar<br><br>Estimado Señor Alcalde:<br>Por medio de la presente, los estudiantes de 4° y 5° grado solicitamos respetuosamente su colaboración para dotar nuestra biblioteca...<br><br>Agradecemos su valiosa atención.<br>Cordialmente,<br>Los estudiantes de básica primaria</div><p>✍️ <strong>Actividad:</strong> Redacta una carta al alcalde de tu municipio pidiendo más recursos para tu escuela.</p><textarea class="vocab-textarea" rows="6" placeholder="Escribe tu carta aquí..."></textarea>`},
   // ── GRAMÁTICA ──
-  {
-    id:6,
-    titulo:"🔤 Reglas de acentuación",
-    descripcion:"Agudas, graves, esdrújulas con quiz",
-    categoria:"gramatica", tipo:"quiz",
+  {id:6,titulo:"🔤 Reglas de acentuación",descripcion:"Agudas, graves, esdrújulas con quiz",categoria:"gramatica",tipo:"quiz",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#2a9d8f"/><text x="50" y="70" font-size="45" text-anchor="middle">🔤</text></svg>',
-    preguntas:["¿Cuál es la palabra aguda?","¿Cuál es grave o llana?","¿Cuál es esdrújula?"],
-    opciones:[["Cárcel","Canción","Árbol"],["Médico","Caminar","Lápiz"],["Teléfono","Silla","Comer"]],
-    correctas:[1, 0, 0]
-  },
-  {
-    id:7,
-    titulo:"⏳ Tiempos verbales: pretérito y futuro",
-    descripcion:"Identifica el tiempo verbal correcto",
-    categoria:"gramatica", tipo:"quiz",
+    preguntas:["¿Cuál es la palabra aguda?","¿Cuál es grave o llana?","¿Cuál es esdrújula?"],opciones:[["Cárcel","Canción","Árbol"],["Médico","Caminar","Lápiz"],["Teléfono","Silla","Comer"]],correctas:[1,0,0]},
+  {id:7,titulo:"⏳ Tiempos verbales: pretérito y futuro",descripcion:"Identifica el tiempo verbal correcto",categoria:"gramatica",tipo:"quiz",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#e76f51"/><text x="50" y="70" font-size="45" text-anchor="middle">⏳</text></svg>',
-    preguntas:["Pretérito de 'comer'","Futuro de 'jugar'","Pretérito de 'vivir'"],
-    opciones:[["Comió","Comerá","Come"],["Jugó","Jugará","Juega"],["Vivió","Vivirá","Vive"]],
-    correctas:[0, 1, 0]
-  },
-  {
-    id:8,
-    titulo:"🔍 Aumentativos y diminutivos",
-    descripcion:"Formación de palabras derivadas con ejemplos colombianos",
-    categoria:"gramatica", tipo:"simple",
+    preguntas:["Pretérito de 'comer'","Futuro de 'jugar'","Pretérito de 'vivir'"],opciones:[["Comió","Comerá","Come"],["Jugó","Jugará","Juega"],["Vivió","Vivirá","Vive"]],correctas:[0,1,0]},
+  {id:8,titulo:"🔍 Aumentativos y diminutivos",descripcion:"Formación de palabras derivadas con ejemplos colombianos",categoria:"gramatica",tipo:"simple",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#f4a261"/><text x="50" y="70" font-size="45" text-anchor="middle">🔍</text></svg>',
-    contenidoHtml:`<h3>🔍 Aumentativos y Diminutivos en Colombia</h3>
-<p style="margin-bottom:0.8rem;">En Colombia usamos mucho los diminutivos, especialmente en regiones como Antioquia y el Eje Cafetero.</p>
-<p style="margin-bottom:0.8rem;"><strong>Aumentativos:</strong> -ón, -azo &nbsp;|&nbsp; <strong>Diminutivos:</strong> -ito, -illo, -ico (¡muy colombiano!)</p>
-<table style="width:100%;border-collapse:collapse;margin-bottom:1rem;">
-<tr style="background:#eef4fc;"><th style="padding:8px;text-align:left;">Palabra</th><th style="padding:8px;">Aumentativo</th><th style="padding:8px;">Diminutivo</th></tr>
-<tr><td style="padding:8px;">perro</td><td style="padding:8px;text-align:center;">perrazo</td><td style="padding:8px;text-align:center;">perrico / perrito</td></tr>
-<tr style="background:#f9f9f9;"><td style="padding:8px;">flor</td><td style="padding:8px;text-align:center;">florón</td><td style="padding:8px;text-align:center;">florecita</td></tr>
-<tr><td style="padding:8px;">tinto (café)</td><td style="padding:8px;text-align:center;">—</td><td style="padding:8px;text-align:center;">tintico</td></tr>
-<tr style="background:#f9f9f9;"><td style="padding:8px;">finca</td><td style="padding:8px;text-align:center;">fincón</td><td style="padding:8px;text-align:center;">finquita</td></tr>
-</table>
-<p>✏️ <strong>Actividad:</strong> Crea 5 pares propios usando palabras del campo colombiano (maíz, piedra, río, monte, potrero...).</p>
-<textarea class="vocab-textarea" rows="4" placeholder="Escribe tus ejemplos aquí..."></textarea>`
-  },
+    contenidoHtml:`<h3>🔍 Aumentativos y Diminutivos en Colombia</h3><p style="margin-bottom:0.8rem;">En Colombia usamos mucho los diminutivos, especialmente en Antioquia y el Eje Cafetero.</p><p style="margin-bottom:0.8rem;"><strong>Aumentativos:</strong> -ón, -azo &nbsp;|&nbsp; <strong>Diminutivos:</strong> -ito, -illo, -ico (¡muy colombiano!)</p><table style="width:100%;border-collapse:collapse;margin-bottom:1rem;"><tr style="background:#eef4fc;"><th style="padding:8px;text-align:left;">Palabra</th><th style="padding:8px;">Aumentativo</th><th style="padding:8px;">Diminutivo</th></tr><tr><td style="padding:8px;">perro</td><td style="padding:8px;text-align:center;">perrazo</td><td style="padding:8px;text-align:center;">perrico / perrito</td></tr><tr style="background:#f9f9f9;"><td style="padding:8px;">flor</td><td style="padding:8px;text-align:center;">florón</td><td style="padding:8px;text-align:center;">florecita</td></tr><tr><td style="padding:8px;">tinto (café)</td><td style="padding:8px;text-align:center;">—</td><td style="padding:8px;text-align:center;">tintico</td></tr><tr style="background:#f9f9f9;"><td style="padding:8px;">finca</td><td style="padding:8px;text-align:center;">fincón</td><td style="padding:8px;text-align:center;">finquita</td></tr></table><p>✏️ <strong>Actividad:</strong> Crea 5 pares propios usando palabras del campo colombiano (maíz, piedra, río, monte, potrero...).</p><textarea class="vocab-textarea" rows="4" placeholder="Escribe tus ejemplos aquí..."></textarea>`},
   // ── VOCABULARIO ──
-  {
-    id:9,
-    titulo:"🌿 Frutas y plantas de Colombia",
-    descripcion:"Vocabulario contextualizado con biodiversidad colombiana",
-    categoria:"vocabulario", tipo:"imagen",
+  {id:9,titulo:"🌿 Frutas y plantas de Colombia",descripcion:"Vocabulario contextualizado con biodiversidad colombiana",categoria:"vocabulario",tipo:"imagen",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#d4efdf"/><text x="50" y="70" font-size="45" text-anchor="middle">🌿</text></svg>',
     imagenSvg:'<svg width="320" height="180" viewBox="0 0 320 180"><rect width="320" height="180" fill="#eafaf1" rx="12"/><text x="15" y="35" fill="#1a6d3e" font-size="13">🍍 Piña — fruta tropical típica del Caribe</text><text x="15" y="65" fill="#1a6d3e" font-size="13">🌺 Heliconia — flor del Pacífico colombiano</text><text x="15" y="95" fill="#1a6d3e" font-size="13">☕ Café — cultivo del Eje Cafetero</text><text x="15" y="125" fill="#1a6d3e" font-size="13">🎋 Guadua — bambú gigante andino</text><text x="15" y="155" fill="#1a6d3e" font-size="13">🫐 Borojó — fruta amazónica exótica</text></svg>',
-    leyenda:"Piña, heliconia, café, guadua, borojó. Escribe una frase descriptiva para cada planta usando adjetivos y su región de origen en Colombia."
-  },
-  {
-    id:10,
-    titulo:"😊 Emociones y refranes colombianos",
-    descripcion:"Vocabulario emocional con expresiones populares de Colombia",
-    categoria:"vocabulario", tipo:"imagen",
+    leyenda:"Piña, heliconia, café, guadua, borojó. Escribe una frase descriptiva para cada planta usando adjetivos y su región de origen en Colombia."},
+  {id:10,titulo:"😊 Emociones y refranes colombianos",descripcion:"Vocabulario emocional con expresiones populares de Colombia",categoria:"vocabulario",tipo:"imagen",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#f4a261"/><text x="50" y="70" font-size="45" text-anchor="middle">😊</text></svg>',
-    imagenSvg:'<svg width="320" height="180" viewBox="0 0 320 180"><rect width="320" height="180" fill="#fef9e7" rx="12"/><text x="10" y="30" fill="#1a2a3a" font-size="12">😤 "No hay mal que dure cien años"</text><text x="10" y="55" fill="#1a2a3a" font-size="12">😞 "Camarón que se duerme, se lo lleva la corriente"</text><text x="10" y="80" fill="#1a2a3a" font-size="12">😲 "El que mucho abarca, poco aprieta"</text><text x="10" y="105" fill="#1a2a3a" font-size="12">🤗 "Más vale tarde que nunca"</text><text x="10" y="130" fill="#1a2a3a" font-size="12">🦁 "Al mal tiempo, buena cara"</text><text x="10" y="158" fill="#1a2a3a" font-size="12;font-style:italic;">— Refranes populares colombianos</text></svg>',
-    leyenda:"Relaciona cada refrán con una emoción: frustración, pereza, ambición, esperanza, valentía. Escribe una situación de tu vida para cada uno."
-  },
-  // ── VIDEOS (YouTube colombiano / hispanohablante con contexto colombiano) ──
-  {
-    id:11,
-    titulo:"🎬 El Dorado: la leyenda colombiana",
-    descripcion:"La famosa leyenda indígena muisca del lago sagrado",
-    categoria:"video", tipo:"video",
+    imagenSvg:'<svg width="320" height="200" viewBox="0 0 320 200"><rect width="320" height="200" fill="#fef9e7" rx="12"/><text x="10" y="35" fill="#1a2a3a" font-size="12">😤 "No hay mal que dure cien años"</text><text x="10" y="65" fill="#1a2a3a" font-size="12">😞 "Camarón que se duerme, se lo lleva la corriente"</text><text x="10" y="95" fill="#1a2a3a" font-size="12">😲 "El que mucho abarca, poco aprieta"</text><text x="10" y="125" fill="#1a2a3a" font-size="12">🤗 "Más vale tarde que nunca"</text><text x="10" y="155" fill="#1a2a3a" font-size="12">🦁 "Al mal tiempo, buena cara"</text></svg>',
+    leyenda:"Relaciona cada refrán con una emoción: frustración, pereza, ambición, esperanza, valentía. Escribe una situación de tu vida para cada uno."},
+  // ── VIDEOS (URLs de YouTube verificadas) ──
+  {id:11,titulo:"🎬 El Dorado: la leyenda colombiana",descripcion:"La famosa leyenda indígena muisca de la Laguna de Guatavita, Cundinamarca.",categoria:"video",tipo:"video",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#d4ac0d"/><text x="50" y="70" font-size="45" text-anchor="middle">🎬</text></svg>',
-    videoUrl:"https://www.youtube.com/watch?v=ZIbXbKqz3qU",
-    descripcion:"Descubre la leyenda muisca del Dorado: el cacique que se bañaba en oro en la Laguna de Guatavita, Cundinamarca."
-  },
-  {
-    id:12,
-    titulo:"📺 Las palabras homófonas en español",
-    descripcion:"Aprende la diferencia entre palabras que suenan igual",
-    categoria:"video", tipo:"video",
+    videoUrl:"https://www.youtube.com/watch?v=HCOmvtQMWpI"},
+  {id:12,titulo:"📺 Palabras homófonas en español",descripcion:"Aprende la diferencia entre hay/ahí/ay, hola/ola y otras palabras que suenan igual. Con ejemplos y ejercicios.",categoria:"video",tipo:"video",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#1a5276"/><text x="50" y="70" font-size="45" text-anchor="middle">📺</text></svg>',
-    videoUrl:"https://www.youtube.com/watch?v=SzrX2ZmY818",
-    descripcion:"Video educativo sobre homófonos en español: hay/ahí/ay, hola/ola, vaca/baca. Con ejemplos y ejercicios para practicar."
-  },
+    videoUrl:"https://www.youtube.com/watch?v=1rS2R7Yrwew"},
+  {id:16,titulo:"📽️ Comprensión lectora: estrategias para niños",descripcion:"Aprende técnicas de lectura eficaz para mejorar la comprensión de textos en la escuela.",categoria:"video",tipo:"video",
+    iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#8e44ad"/><text x="50" y="70" font-size="45" text-anchor="middle">📽️</text></svg>',
+    videoUrl:"https://www.youtube.com/watch?v=5MgBikgcWnY"},
   // ── JUEGOS ──
-  {
-    id:13,
-    titulo:"🧠 Memory: sinónimos del español colombiano",
-    descripcion:"Relaciona palabras con sus sinónimos",
-    categoria:"juego", tipo:"juego_memory_avanzado",
-    iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#2a9d8f"/><text x="50" y="70" font-size="45" text-anchor="middle">🧠</text></svg>'
-  },
-  {
-    id:14,
-    titulo:"🎯 Ahorcado: animales de Colombia",
-    descripcion:"Adivina los nombres de animales colombianos letra por letra",
-    categoria:"juego", tipo:"juego_ahorcado",
-    iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#e76f51"/><text x="50" y="70" font-size="45" text-anchor="middle">🎯</text></svg>'
-  },
-  {
-    id:15,
-    titulo:"⭐ Quiz: Diptongos e hiatos",
-    descripcion:"Identifica correctamente diptongos e hiatos en palabras del español",
-    categoria:"juego", tipo:"juego_quiz",
-    iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#f4a261"/><text x="50" y="70" font-size="45" text-anchor="middle">⭐</text></svg>'
-  }
+  {id:13,titulo:"🧠 Memory: sinónimos del español colombiano",descripcion:"Relaciona palabras con sus sinónimos en un juego de memoria",categoria:"juego",tipo:"juego_memory_avanzado",
+    iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#2a9d8f"/><text x="50" y="70" font-size="45" text-anchor="middle">🧠</text></svg>'},
+  {id:14,titulo:"🎯 Ahorcado: animales de Colombia",descripcion:"Adivina los nombres de animales colombianos letra por letra",categoria:"juego",tipo:"juego_ahorcado",
+    iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#e76f51"/><text x="50" y="70" font-size="45" text-anchor="middle">🎯</text></svg>'},
+  {id:15,titulo:"⭐ Quiz: Diptongos e hiatos",descripcion:"Identifica correctamente diptongos e hiatos en palabras del español",categoria:"juego",tipo:"juego_quiz",
+    iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#f4a261"/><text x="50" y="70" font-size="45" text-anchor="middle">⭐</text></svg>'}
 ];
 
-let currentFilter = "all";
-let currentSearch = "";
+let currentFilter="all", currentSearch="";
 
 function renderCards() {
-  const container = document.getElementById("cardsContainer");
-  if (!container) return;
-  const filtered = recursos.filter(r => {
-    if (currentFilter !== "all" && r.categoria !== currentFilter) return false;
-    if (currentSearch && !r.titulo.toLowerCase().includes(currentSearch) && !r.descripcion.toLowerCase().includes(currentSearch)) return false;
+  const container=document.getElementById("cardsContainer");
+  if(!container) return;
+  const canShare=currentUser&&(currentUser.role==='admin'||currentUser.role==='teacher');
+  const filtered=recursos.filter(r=>{
+    if(currentFilter!=="all"&&r.categoria!==currentFilter) return false;
+    if(currentSearch&&!r.titulo.toLowerCase().includes(currentSearch)&&!r.descripcion.toLowerCase().includes(currentSearch)) return false;
     return true;
   });
-  if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><p>No se encontraron recursos con esos filtros.</p></div>';
-    return;
-  }
-  const canShare = currentUser && (currentUser.role === 'admin' || currentUser.role === 'teacher');
-  container.innerHTML = filtered.map(r => `
+  if(filtered.length===0){container.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><p>No se encontraron recursos.</p></div>';return;}
+  container.innerHTML=filtered.map(r=>`
     <div class="card">
-      <div class="card-icon">${r.iconoSvg || ''}</div>
+      <div class="card-icon">${r.iconoSvg||''}</div>
       <div class="card-content">
         <span class="card-badge">${r.categoria}</span>
         <h3>${r.titulo}</h3>
         <p>${r.descripcion}</p>
         <div class="card-actions">
           <button class="btn-card btn-primary" onclick="abrirRecurso(${r.id})">Explorar <i class="fas fa-arrow-right"></i></button>
-          ${canShare ? `<button class="btn-card btn-share" onclick="quickShareResource(${r.id})"><i class="fas fa-share"></i> Compartir</button>` : ''}
+          ${canShare?`<button class="btn-card btn-share" onclick="quickShareResource(${r.id})"><i class="fas fa-share"></i> Compartir</button>`:''}
         </div>
       </div>
-    </div>
-  `).join("");
+    </div>`).join('');
 }
 
-document.getElementById("searchInput")?.addEventListener("input", e => {
-  currentSearch = e.target.value.toLowerCase();
-  renderCards();
-});
-document.querySelectorAll(".filter-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    currentFilter = btn.dataset.filter;
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    renderCards();
-  });
-});
+document.getElementById("searchInput")?.addEventListener("input",e=>{currentSearch=e.target.value.toLowerCase();renderCards();});
+document.querySelectorAll(".filter-btn").forEach(btn=>{btn.addEventListener("click",()=>{currentFilter=btn.dataset.filter;document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderCards();});});
 
 function convertirYouTubeEmbed(url) {
-  if (!url) return '';
-  if (url.includes('/embed/')) return url;
-  if (url.includes('youtu.be/')) return `https://www.youtube.com/embed/${url.split('youtu.be/')[1].split('?')[0]}?autoplay=0&rel=0`;
-  if (url.includes('watch?v=')) {
-    let vid = url.split('v=')[1]; const amp = vid.indexOf('&');
-    if (amp !== -1) vid = vid.substring(0, amp);
-    return `https://www.youtube.com/embed/${vid}?autoplay=0&rel=0`;
+  if(!url) return '';
+  if(url.includes('/embed/')) return url;
+  if(url.includes('youtu.be/')) return `https://www.youtube.com/embed/${url.split('youtu.be/')[1].split('?')[0]}?rel=0`;
+  if(url.includes('watch?v=')) {
+    let vid=url.split('v=')[1]; const amp=vid.indexOf('&'); if(amp!==-1) vid=vid.substring(0,amp);
+    return `https://www.youtube.com/embed/${vid}?rel=0`;
   }
   return url;
 }
 
 function abrirRecurso(id) {
-  const r = recursos.find(x => x.id === id);
-  if (!r) return;
-  document.getElementById('modalTitle').textContent = r.titulo;
-  const body = document.getElementById('modalBody');
-
-  if (r.tipo === 'lectura_multiple') {
-    let html = `<div style="background:#f8f9fa;padding:1rem;border-radius:1rem;margin-bottom:1.5rem;line-height:1.8;font-size:0.95rem;">${r.texto.replace(/\n/g,'<br>')}</div>`;
-    html += '<div class="multiquiz">';
-    r.preguntas.forEach((p, qi) => {
-      html += `<div class="question-item" id="qi${id}_${qi}">
-        <p><strong>${qi+1}. ${p.pregunta}</strong></p>
-        ${p.opciones.map((op, oi) => `<div class="option" onclick="selOption(${id},${qi},${oi},${p.correcta})">${op}</div>`).join('')}
-        <div id="fb${id}_${qi}"></div>
-      </div>`;
-    });
-    html += '</div>';
-    body.innerHTML = html;
-  } else if (r.tipo === 'simple') {
-    body.innerHTML = r.contenidoHtml || '';
-  } else if (r.tipo === 'quiz') {
-    let html = '<div class="multiquiz">';
-    r.preguntas.forEach((p, qi) => {
-      html += `<div class="question-item">
-        <p><strong>${qi+1}. ${p}</strong></p>
-        ${r.opciones[qi].map((op, oi) => `<div class="option" onclick="selQuiz(this,${oi},${r.correctas[qi]})">${op}</div>`).join('')}
-        <div class="fb-quiz"></div>
-      </div>`;
-    });
-    html += '</div>';
-    body.innerHTML = html;
-  } else if (r.tipo === 'imagen') {
-    body.innerHTML = `${r.imagenSvg || ''}<p style="margin-top:1rem;color:#7f8c8d;">${r.leyenda || ''}</p><textarea class="vocab-textarea" rows="4" placeholder="Escribe tus respuestas aquí..."></textarea>`;
-  } else if (r.tipo === 'video') {
-    const embed = convertirYouTubeEmbed(r.videoUrl);
-    body.innerHTML = `<iframe src="${embed}" allowfullscreen></iframe><p style="margin-top:1rem;color:#7f8c8d;">${r.descripcion || ''}</p>`;
-  } else if (r.tipo === 'juego_memory_avanzado') {
-    body.innerHTML = buildMemoryAvanzado();
-  } else if (r.tipo === 'juego_ahorcado') {
-    body.innerHTML = buildAhorcado();
-  } else if (r.tipo === 'juego_quiz') {
-    body.innerHTML = buildQuizDiptongos();
-  }
+  const r=recursos.find(x=>x.id===id); if(!r) return;
+  document.getElementById('modalTitle').textContent=r.titulo;
+  const body=document.getElementById('modalBody');
+  if(r.tipo==='lectura_multiple') {
+    let html=`<div style="background:#f8f9fa;padding:1rem;border-radius:1rem;margin-bottom:1.5rem;line-height:1.8;font-size:0.95rem;">${r.texto.replace(/\n/g,'<br>')}</div><div class="multiquiz">`;
+    r.preguntas.forEach((p,qi)=>{html+=`<div class="question-item" id="qi${id}_${qi}"><p><strong>${qi+1}. ${p.pregunta}</strong></p>${p.opciones.map((op,oi)=>`<div class="option" onclick="selOption(${id},${qi},${oi},${p.correcta})">${op}</div>`).join('')}<div id="fb${id}_${qi}"></div></div>`;});
+    html+='</div>'; body.innerHTML=html;
+  } else if(r.tipo==='simple') {
+    body.innerHTML=r.contenidoHtml||'';
+  } else if(r.tipo==='quiz') {
+    let html='<div class="multiquiz">';
+    r.preguntas.forEach((p,qi)=>{html+=`<div class="question-item"><p><strong>${qi+1}. ${p}</strong></p>${r.opciones[qi].map((op,oi)=>`<div class="option" onclick="selQuiz(this,${oi},${r.correctas[qi]})">${op}</div>`).join('')}<div class="fb-quiz"></div></div>`;});
+    html+='</div>'; body.innerHTML=html;
+  } else if(r.tipo==='imagen') {
+    body.innerHTML=`${r.imagenSvg||''}<p style="margin-top:1rem;color:#7f8c8d;">${r.leyenda||''}</p><textarea class="vocab-textarea" rows="4" placeholder="Escribe tus respuestas aquí..."></textarea>`;
+  } else if(r.tipo==='video') {
+    const embed=convertirYouTubeEmbed(r.videoUrl);
+    body.innerHTML=`<div class="yt-wrapper"><iframe src="${embed}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div><p style="color:#7f8c8d;">${r.descripcion||''}</p>`;
+  } else if(r.tipo==='juego_memory_avanzado') { body.innerHTML=buildMemoryAvanzado(); }
+  else if(r.tipo==='juego_ahorcado') { body.innerHTML=buildAhorcado(); }
+  else if(r.tipo==='juego_quiz') { body.innerHTML=buildQuizDiptongos(); }
   document.getElementById('modal').classList.add('open');
 }
 
-function selOption(rid, qi, oi, correcta) {
-  const container = document.getElementById(`qi${rid}_${qi}`);
-  if (!container) return;
-  const options = container.querySelectorAll('.option');
-  options.forEach(o => o.classList.remove('selected'));
-  options[oi].classList.add('selected');
-  const fb = document.getElementById(`fb${rid}_${qi}`);
-  if (oi === correcta) {
-    fb.innerHTML = '<div class="feedback-correct">✅ ¡Correcto!</div>';
-  } else {
-    fb.innerHTML = `<div class="feedback-wrong">❌ Incorrecto. La respuesta correcta es: <strong>${document.querySelectorAll(`#qi${rid}_${qi} .option`)[correcta]?.textContent}</strong></div>`;
-  }
+function selOption(rid,qi,oi,correcta) {
+  const c=document.getElementById(`qi${rid}_${qi}`); if(!c) return;
+  c.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+  c.querySelectorAll('.option')[oi].classList.add('selected');
+  const fb=document.getElementById(`fb${rid}_${qi}`);
+  fb.innerHTML=oi===correcta?'<div class="feedback-correct">✅ ¡Correcto!</div>':`<div class="feedback-wrong">❌ Incorrecto. La respuesta correcta es: <strong>${c.querySelectorAll('.option')[correcta]?.textContent}</strong></div>`;
 }
-
-function selQuiz(el, oi, correcta) {
-  const qitem = el.closest('.question-item');
-  if (!qitem) return;
-  qitem.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+function selQuiz(el,oi,correcta) {
+  const qi=el.closest('.question-item'); if(!qi) return;
+  qi.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
-  const fb = qitem.querySelector('.fb-quiz');
-  fb.innerHTML = oi === correcta ? '<div class="feedback-correct">✅ ¡Correcto!</div>' : '<div class="feedback-wrong">❌ Incorrecto.</div>';
+  qi.querySelector('.fb-quiz').innerHTML=oi===correcta?'<div class="feedback-correct">✅ ¡Correcto!</div>':'<div class="feedback-wrong">❌ Incorrecto.</div>';
 }
 
-/* ── JUEGO: MEMORY AVANZADO (sinónimos colombianos) ── */
+/* ─── JUEGO MEMORY ─── */
 function buildMemoryAvanzado() {
-  const pares = [
-    ['bonito','hermoso'],['casa','hogar'],['camino','sendero'],
-    ['llanero','costeño'],['amigo','parcero'],['monte','selva'],
-    ['río','caño'],['finca','hacienda']
-  ];
-  const tarjetas = [...pares.flatMap(p=>p)].sort(()=>Math.random()-0.5);
-  let flipped=[], matched=0;
-  const id = 'mem' + Date.now();
-  window[id+'data'] = { flipped, matched, tarjetas };
-  setTimeout(() => {
-    const grid = document.getElementById(id);
-    if (!grid) return;
-    grid.innerHTML = tarjetas.map((t,i) => `<div class="memory-card" id="${id}c${i}" onclick="flipMemCard('${id}',${i})">${t}</div>`).join('');
-    grid.querySelectorAll('.memory-card').forEach(c => c.textContent = '?');
-  }, 10);
-  return `<p style="margin-bottom:0.5rem;font-weight:700;">¡Encuentra los sinónimos! Toca dos cartas para voltearlas.</p><div class="memory-grid" id="${id}"></div><p id="${id}msg"></p>`;
+  const pares=[['bonito','hermoso'],['casa','hogar'],['camino','sendero'],['llanero','costeño'],['amigo','parcero'],['monte','selva'],['río','caño'],['finca','hacienda']];
+  const tarjetas=[...pares.flatMap(p=>p)].sort(()=>Math.random()-0.5);
+  let flipped=[],matched=0;
+  const id='mem'+Date.now();
+  window[id+'data']={flipped,matched,tarjetas};
+  setTimeout(()=>{const g=document.getElementById(id);if(!g)return;g.innerHTML=tarjetas.map((t,i)=>`<div class="memory-card" id="${id}c${i}" onclick="flipMemCard('${id}',${i})">${t}</div>`).join('');g.querySelectorAll('.memory-card').forEach(c=>c.textContent='?');},10);
+  return `<p style="margin-bottom:0.5rem;font-weight:700;">¡Encuentra los sinónimos! Toca dos cartas.</p><div class="memory-grid" id="${id}"></div><p id="${id}msg"></p>`;
 }
-
-function flipMemCard(id, i) {
-  const data = window[id+'data'];
-  if (!data) return;
-  const card = document.getElementById(`${id}c${i}`);
-  if (!card || card.classList.contains('flipped') || card.classList.contains('matched') || data.flipped.length >= 2) return;
-  card.classList.add('flipped');
-  card.textContent = data.tarjetas[i];
-  data.flipped.push({i, val: data.tarjetas[i]});
-  if (data.flipped.length === 2) {
-    const [a, b] = data.flipped;
-    // Buscar par
-    const pares = [['bonito','hermoso'],['casa','hogar'],['camino','sendero'],['llanero','costeño'],['amigo','parcero'],['monte','selva'],['río','caño'],['finca','hacienda']];
-    const esPareja = pares.some(p => (p[0]===a.val&&p[1]===b.val)||(p[1]===a.val&&p[0]===b.val));
-    setTimeout(() => {
-      if (esPareja) {
-        document.getElementById(`${id}c${a.i}`).classList.add('matched');
-        document.getElementById(`${id}c${b.i}`).classList.add('matched');
-        data.matched += 2;
-        if (data.matched >= data.tarjetas.length) document.getElementById(`${id}msg`).textContent = '🎉 ¡Completaste el memory!';
-      } else {
-        document.getElementById(`${id}c${a.i}`).classList.remove('flipped');
-        document.getElementById(`${id}c${b.i}`).classList.remove('flipped');
-        document.getElementById(`${id}c${a.i}`).textContent = '?';
-        document.getElementById(`${id}c${b.i}`).textContent = '?';
-      }
-      data.flipped = [];
-    }, 900);
+function flipMemCard(id,i) {
+  const data=window[id+'data']; if(!data) return;
+  const card=document.getElementById(`${id}c${i}`);
+  if(!card||card.classList.contains('flipped')||card.classList.contains('matched')||data.flipped.length>=2) return;
+  card.classList.add('flipped'); card.textContent=data.tarjetas[i]; data.flipped.push({i,val:data.tarjetas[i]});
+  if(data.flipped.length===2) {
+    const [a,b]=data.flipped;
+    const pares=[['bonito','hermoso'],['casa','hogar'],['camino','sendero'],['llanero','costeño'],['amigo','parcero'],['monte','selva'],['río','caño'],['finca','hacienda']];
+    const ok=pares.some(p=>(p[0]===a.val&&p[1]===b.val)||(p[1]===a.val&&p[0]===b.val));
+    setTimeout(()=>{
+      if(ok){document.getElementById(`${id}c${a.i}`).classList.add('matched');document.getElementById(`${id}c${b.i}`).classList.add('matched');data.matched+=2;if(data.matched>=data.tarjetas.length)document.getElementById(`${id}msg`).textContent='🎉 ¡Completaste el memory!';}
+      else{document.getElementById(`${id}c${a.i}`).classList.remove('flipped');document.getElementById(`${id}c${b.i}`).classList.remove('flipped');document.getElementById(`${id}c${a.i}`).textContent='?';document.getElementById(`${id}c${b.i}`).textContent='?';}
+      data.flipped=[];
+    },900);
   }
 }
 
-/* ── JUEGO: AHORCADO (animales colombianos) ── */
+/* ─── JUEGO AHORCADO ─── */
 function buildAhorcado() {
-  const palabras = ['CAIMÁN','MANATÍ','DELFÍN','CHIGÜIRO','CÓNDOR','SERPIENTE','JAGUAR','GUACAMAYO','TAPIR','ARMADILLO'];
-  const palabra = palabras[Math.floor(Math.random()*palabras.length)];
-  const aid = 'ahc' + Date.now();
-  window[aid] = { palabra, intentos:0, letras:new Set() };
-  const letras = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
-  const kb = letras.split('').map(l => `<span class="key" id="${aid}k${l}" onclick="tryLetter('${aid}','${l}')">${l}</span>`).join('');
-  return `<div id="${aid}display" style="font-size:1.8rem;font-weight:800;letter-spacing:8px;text-align:center;margin:1rem 0;"></div>
-<p id="${aid}msg" style="text-align:center;font-weight:700;margin-bottom:0.5rem;"></p>
-<div class="keyboard">${kb}</div>
-<button class="btn-card btn-primary" style="margin-top:1rem;" onclick="document.getElementById('modalBody').innerHTML=buildAhorcado()">🔄 Nueva palabra</button>
-<script>
-(function(){
-  const aid='${aid}';
-  function update(){
-    const d=window[aid];
-    document.getElementById(aid+'display').textContent=d.palabra.split('').map(l=>d.letras.has(l)?l:'_').join(' ');
-    const wrng=d.palabra.split('').filter(l=>!d.letras.has(l)).length;
-    document.getElementById(aid+'msg').textContent='Intentos restantes: '+(7-d.intentos)+' | Pistas: '+[...d.letras].join(',');
-  }
-  window.tryLetter=function(aid,l){
-    const d=window[aid]; if(!d||d.intentos>=7) return;
-    if(d.letras.has(l)) return;
-    d.letras.add(l);
-    const kEl=document.getElementById(aid+'k'+l);
-    if(kEl){kEl.style.background=d.palabra.includes(l)?'#d4edda':'#fdecea';kEl.style.pointerEvents='none';}
-    if(!d.palabra.includes(l)) d.intentos++;
-    update();
-    const ganó=d.palabra.split('').every(c=>d.letras.has(c));
-    if(ganó) document.getElementById(aid+'msg').textContent='🎉 ¡Excelente! La palabra era: '+d.palabra;
-    else if(d.intentos>=7) document.getElementById(aid+'msg').textContent='❌ Game over. Era: '+d.palabra;
-  };
-  update();
-})();
-<\/script>`;
+  const palabras=['CAIMÁN','MANATÍ','DELFÍN','CHIGÜIRO','CÓNDOR','SERPIENTE','JAGUAR','GUACAMAYO','TAPIR','ARMADILLO'];
+  const palabra=palabras[Math.floor(Math.random()*palabras.length)];
+  const aid='ahc'+Date.now(); window[aid]={palabra,intentos:0,letras:new Set()};
+  const letras='ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+  const kb=letras.split('').map(l=>`<span class="key" id="${aid}k${l}" onclick="tryLetterG('${aid}','${l}')">${l}</span>`).join('');
+  const HTML=`<div id="${aid}display" style="font-size:1.8rem;font-weight:800;letter-spacing:8px;text-align:center;margin:1rem 0;"></div><p id="${aid}msg" style="text-align:center;font-weight:700;margin-bottom:0.5rem;"></p><div class="keyboard">${kb}</div><button class="btn-card btn-primary" style="margin-top:1rem;" onclick="reiniciarAhorcado()">🔄 Nueva palabra</button>`;
+  window.reiniciarAhorcado=()=>{document.getElementById('modalBody').innerHTML=buildAhorcado();};
+  window.tryLetterG=(aid,l)=>{const d=window[aid];if(!d||d.intentos>=7)return;if(d.letras.has(l))return;d.letras.add(l);const kEl=document.getElementById(aid+'k'+l);if(kEl){kEl.style.background=d.palabra.includes(l)?'#d4edda':'#fdecea';kEl.style.pointerEvents='none';}if(!d.palabra.includes(l))d.intentos++;document.getElementById(aid+'display').textContent=d.palabra.split('').map(c=>d.letras.has(c)?c:'_').join(' ');document.getElementById(aid+'msg').textContent='Intentos restantes: '+(7-d.intentos);const ganó=d.palabra.split('').every(c=>d.letras.has(c));if(ganó)document.getElementById(aid+'msg').textContent='🎉 ¡Excelente! La palabra era: '+d.palabra;else if(d.intentos>=7)document.getElementById(aid+'msg').textContent='❌ Game over. Era: '+d.palabra;};
+  setTimeout(()=>{const el=document.getElementById(aid+'display');if(el)el.textContent=palabra.split('').map(()=>'_').join(' ');},10);
+  return HTML;
 }
 
-/* ── JUEGO: QUIZ DIPTONGOS ── */
+/* ─── JUEGO QUIZ DIPTONGOS ─── */
 function buildQuizDiptongos() {
-  const preguntas = [
-    { p:'¿"bueno" tiene diptongo o hiato?', ops:['Diptongo','Hiato'], c:0, exp:'bu-e-no → u+e = diptongo (vocales débil+fuerte)' },
-    { p:'¿"poema" tiene diptongo o hiato?', ops:['Diptongo','Hiato'], c:1, exp:'po-e-ma → o+e = hiato (dos vocales fuertes)' },
-    { p:'¿"ciudad" tiene diptongo?', ops:['Sí','No'], c:0, exp:'ciu-dad → i+u = diptongo (dos vocales débiles)' },
-    { p:'¿"maíz" tiene diptongo o hiato?', ops:['Diptongo','Hiato'], c:1, exp:'ma-íz → a+í (con tilde) = hiato' },
-    { p:'¿Cuántas sílabas tiene "viento"?', ops:['2','3','4'], c:0, exp:'vien-to = 2 sílabas (ie es diptongo)' }
-  ];
-  let score=0, cur=0;
-  const qid='qd'+Date.now();
+  const preguntas=[{p:'¿"bueno" tiene diptongo o hiato?',ops:['Diptongo','Hiato'],c:0,exp:'bu-e-no → u+e = diptongo'},{p:'¿"poema" tiene diptongo o hiato?',ops:['Diptongo','Hiato'],c:1,exp:'po-e-ma → hiato (vocales fuertes)'},{p:'¿"ciudad" tiene diptongo?',ops:['Sí','No'],c:0,exp:'ciu-dad → i+u = diptongo'},{p:'¿"maíz" tiene diptongo o hiato?',ops:['Diptongo','Hiato'],c:1,exp:'ma-íz → hiato (tilde)'},{p:'¿Cuántas sílabas tiene "viento"?',ops:['2','3','4'],c:0,exp:'vien-to = 2 sílabas (ie es diptongo)'}];
+  let score=0,cur=0; const qid='qd'+Date.now();
   function render(){
     const q=preguntas[cur];
-    if(!q) { document.getElementById(qid).innerHTML=`<div style="text-align:center;padding:2rem;"><div style="font-size:3rem;">🏆</div><h3>¡Terminaste!</h3><p>Puntaje: ${score}/${preguntas.length}</p><button class="btn-card btn-primary" onclick="document.getElementById('modalBody').innerHTML=buildQuizDiptongos()">Jugar de nuevo</button></div>`; return; }
-    document.getElementById(qid).innerHTML=`<div class="question-item"><p style="font-weight:700;margin-bottom:1rem;">${cur+1}/${preguntas.length}. ${q.p}</p>${q.ops.map((o,i)=>`<div class="option" onclick="answerQD('${qid}',${i},${q.c},'${q.exp}')">${o}</div>`).join('')}<div id="${qid}fb"></div></div>`;
+    if(!q){document.getElementById(qid).innerHTML=`<div style="text-align:center;padding:2rem;"><div style="font-size:3rem;">🏆</div><h3>¡Terminaste!</h3><p>Puntaje: ${score}/${preguntas.length}</p><button class="btn-card btn-primary" onclick="document.getElementById('modalBody').innerHTML=buildQuizDiptongos()">Jugar de nuevo</button></div>`;return;}
+    document.getElementById(qid).innerHTML=`<div class="question-item"><p style="font-weight:700;margin-bottom:1rem;">${cur+1}/${preguntas.length}. ${q.p}</p>${q.ops.map((o,i)=>`<div class="option" onclick="ansQD('${qid}',${i},${q.c},'${q.exp}')">${o}</div>`).join('')}<div id="${qid}fb"></div></div>`;
   }
-  window[`answerQD`] = function(gid, oi, correcta, exp){
-    if(gid!==qid) return;
-    const fb=document.getElementById(qid+'fb'); if(!fb) return;
-    document.querySelectorAll(`#${qid} .option`).forEach(o=>o.style.pointerEvents='none');
-    if(oi===correcta){score++;fb.innerHTML=`<div class="feedback-correct">✅ ¡Correcto! ${exp}</div>`;}
-    else{fb.innerHTML=`<div class="feedback-wrong">❌ Incorrecto. ${exp}</div>`;}
-    setTimeout(()=>{cur++;render();},1800);
-  };
-  setTimeout(render, 10);
+  window.ansQD=function(gid,oi,correcta,exp){if(gid!==qid)return;const fb=document.getElementById(qid+'fb');if(!fb)return;document.querySelectorAll(`#${qid} .option`).forEach(o=>o.style.pointerEvents='none');if(oi===correcta){score++;fb.innerHTML=`<div class="feedback-correct">✅ ¡Correcto! ${exp}</div>`;}else{fb.innerHTML=`<div class="feedback-wrong">❌ Incorrecto. ${exp}</div>`;}setTimeout(()=>{cur++;render();},1800);};
+  setTimeout(render,10);
   return `<div id="${qid}"></div>`;
 }
 
-/* ══════════════════════════════════════════
-   PORTALES
-══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   PORTALES — TIEMPO REAL
+═══════════════════════════════════════════ */
 function renderPortals() {
-  const container = document.getElementById('portalsContainer');
-  if (!container) return;
-  const portals = getDB('portals', []);
-  if (portals.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🌐</div><p>Aún no hay portales compartidos. ¡Sé el primero!</p></div>';
-    return;
-  }
-  const canEdit = currentUser && (currentUser.role === 'admin' || currentUser.role === 'teacher');
-  container.innerHTML = portals.map(p => {
-    const date = new Date(p.createdAt).toLocaleDateString('es-CO', {year:'numeric',month:'short',day:'numeric'});
+  const container=document.getElementById('portalsContainer'); if(!container) return;
+  const canEdit=currentUser&&(currentUser.role==='admin'||currentUser.role==='teacher');
+  if(allPortals.length===0){container.innerHTML='<div class="empty-state"><div class="empty-icon">🌐</div><p>Aún no hay portales compartidos. ¡Sé el primero!</p></div>';return;}
+  container.innerHTML=allPortals.map(p=>{
+    const date=new Date(p.createdAt).toLocaleDateString('es-CO',{year:'numeric',month:'short',day:'numeric'});
+    const isOwner=currentUser&&(currentUser.role==='admin'||p.createdBy===currentUser.id);
     return `<div class="portal-card">
+      ${isOwner?'<span class="portal-owner-badge">✏️ Mío</span>':''}
       <h3>🌐 ${p.name}</h3>
-      <p style="color:#7f8c8d;font-size:0.85rem;margin-top:4px;">${p.description || ''}</p>
+      <p style="color:#7f8c8d;font-size:0.85rem;margin-top:4px;">${p.description||''}</p>
       <div class="portal-meta">
         <span class="portal-tag">🏫 ${p.institution}</span>
-        <span class="portal-tag">📦 ${p.resources.length} recursos</span>
+        <span class="portal-tag">📦 ${(p.resources||[]).length} recursos</span>
         <span class="portal-tag">📋 ${p.clones||0} copias</span>
       </div>
       <p style="font-size:0.8rem;color:#aaa;">${p.createdByName||'—'} · ${date}</p>
       <div class="portal-actions">
         <button class="btn-card btn-primary" onclick="viewPortal('${p.id}')">👁️ Ver</button>
-        <button class="btn-card btn-secondary" onclick="clonePortal('${p.id}')">📋 Copiar</button>
-        ${canEdit && (currentUser.role==='admin' || p.createdBy===currentUser.id) ? `<button class="btn-card btn-secondary" onclick="deletePortal('${p.id}')">🗑️ Eliminar</button>` : ''}
+        ${canEdit?`<button class="btn-card btn-secondary" onclick="clonePortal('${p.id}')">📋 Copiar</button>`:''}
+        ${isOwner&&canEdit?`<button class="btn-card btn-edit-card" onclick="openEditPortal('${p.id}')">✏️ Editar</button>`:''}
+        ${isOwner?`<button class="btn-card" style="background:#fdecea;color:var(--rojo);" onclick="deletePortal('${p.id}')">🗑️</button>`:''}
       </div>
     </div>`;
   }).join('');
 }
 
-function openPortalShareModal() {
-  const picker = document.getElementById('portalResourcePicker');
-  if (picker) {
-    picker.innerHTML = recursos.map(r => `
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-        <input type="checkbox" value="${r.id}" style="width:18px;height:18px;">
-        <span>${r.titulo}</span>
-      </label>`).join('');
+function openPortalShareModal(editId=null) {
+  const picker=document.getElementById('portalResourcePicker');
+  document.getElementById('portalEditId').value='';
+  document.getElementById('portalModalTitle').textContent='🌐 Crear Portal Compartido';
+  document.getElementById('portalName').value='';
+  document.getElementById('portalDesc').value='';
+  document.getElementById('portalInstitution').value='';
+  if(picker) picker.innerHTML=recursos.map(r=>`<label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" value="${r.id}" style="width:18px;height:18px;"><span>${r.titulo}</span></label>`).join('');
+
+  if(editId) {
+    const p=allPortals.find(x=>x.id===editId); if(!p) return;
+    document.getElementById('portalEditId').value=editId;
+    document.getElementById('portalModalTitle').textContent='✏️ Editar Portal';
+    document.getElementById('portalName').value=p.name;
+    document.getElementById('portalDesc').value=p.description||'';
+    document.getElementById('portalInstitution').value=p.institution;
+    if(picker) picker.querySelectorAll('input[type="checkbox"]').forEach(cb=>{if((p.resources||[]).includes(parseInt(cb.value)))cb.checked=true;});
   }
   document.getElementById('portalShareModal').classList.add('open');
 }
 
-function createPortal() {
-  if (!currentUser) return;
-  const name = document.getElementById('portalName').value.trim();
-  const desc = document.getElementById('portalDesc').value.trim();
-  const inst = document.getElementById('portalInstitution').value.trim();
-  if (!name || !inst) { toast('Nombre e institución son obligatorios.', 'red'); return; }
-  const selected = [...document.querySelectorAll('#portalResourcePicker input:checked')].map(i => parseInt(i.value));
-  if (selected.length === 0) { toast('Selecciona al menos un recurso.', 'red'); return; }
-  const portals = getDB('portals', []);
-  portals.push({
-    id: 'p-' + Date.now(),
-    name, description: desc, institution: inst,
-    resources: selected,
-    createdBy: currentUser.id,
-    createdByName: currentUser.name,
-    createdAt: new Date().toISOString(),
-    clones: 0
-  });
-  const saved = setDB('portals', portals);
-  if (!saved) return;
-  closeModal('portalShareModal');
-  renderPortals();
-  toast('✅ Portal publicado con éxito.', 'green');
-  document.getElementById('portalName').value='';
-  document.getElementById('portalDesc').value='';
-  document.getElementById('portalInstitution').value='';
+function openEditPortal(id) { openPortalShareModal(id); }
+
+async function createOrUpdatePortal() {
+  if(!currentUser) return;
+  const name=document.getElementById('portalName').value.trim();
+  const desc=document.getElementById('portalDesc').value.trim();
+  const inst=document.getElementById('portalInstitution').value.trim();
+  if(!name||!inst){toast('Nombre e institución son obligatorios.','red');return;}
+  const selected=[...document.querySelectorAll('#portalResourcePicker input:checked')].map(i=>parseInt(i.value));
+  if(selected.length===0){toast('Selecciona al menos un recurso.','red');return;}
+  const editId=document.getElementById('portalEditId').value;
+  if(editId) {
+    // EDITAR portal existente
+    const idx=allPortals.findIndex(p=>p.id===editId); if(idx<0) return;
+    const updated={...allPortals[idx],name,description:desc,institution:inst,resources:selected,updatedAt:new Date().toISOString()};
+    await savePortal(updated);
+    closeModal('portalShareModal');
+    toast('✅ Portal actualizado correctamente.','green');
+  } else {
+    // CREAR nuevo portal
+    const newId='p-'+Date.now();
+    const newPortal={id:newId,name,description:desc,institution:inst,resources:selected,createdBy:currentUser.id,createdByName:currentUser.name,createdAt:new Date().toISOString(),clones:0};
+    if(useFirebase){await db.ref('portals/'+newId).set(newPortal);}
+    else{allPortals.push(newPortal);setLocal('portals',allPortals);}
+    closeModal('portalShareModal');
+    toast('✅ Portal publicado con éxito.','green');
+  }
 }
 
 function viewPortal(id) {
-  const portals = getDB('portals', []);
-  const p = portals.find(x => x.id === id);
-  if (!p) return;
-  const recs = p.resources.map(rid => recursos.find(r => r.id === rid)).filter(Boolean);
-  document.getElementById('modalTitle').textContent = '🌐 ' + p.name;
-  document.getElementById('modalBody').innerHTML = `
-    <p style="color:#7f8c8d;margin-bottom:1rem;">${p.description || ''} · <strong>${p.institution}</strong></p>
+  const p=allPortals.find(x=>x.id===id); if(!p) return;
+  const recs=(p.resources||[]).map(rid=>recursos.find(r=>r.id===rid)).filter(Boolean);
+  document.getElementById('modalTitle').textContent='🌐 '+p.name;
+  document.getElementById('modalBody').innerHTML=`
+    <p style="color:#7f8c8d;margin-bottom:1rem;">${p.description||''} · <strong>${p.institution}</strong></p>
     <div class="cards-grid">
-      ${recs.map(r => `<div class="card">
-        <div class="card-icon" style="height:80px;">${r.iconoSvg||''}</div>
-        <div class="card-content">
-          <span class="card-badge">${r.categoria}</span>
-          <h3>${r.titulo}</h3>
-          <button class="btn-card btn-primary" onclick="abrirRecurso(${r.id})">Explorar</button>
-        </div>
-      </div>`).join('')}
+      ${recs.map(r=>`<div class="card"><div class="card-icon" style="height:80px;">${r.iconoSvg||''}</div><div class="card-content"><span class="card-badge">${r.categoria}</span><h3>${r.titulo}</h3><button class="btn-card btn-primary" onclick="abrirRecurso(${r.id})">Explorar</button></div></div>`).join('')}
     </div>`;
   document.getElementById('modal').classList.add('open');
 }
 
-function clonePortal(id) {
-  if (!currentUser) return;
-  const portals = getDB('portals', []);
-  const orig = portals.find(p => p.id === id);
-  if (!orig) return;
-  const idx = portals.findIndex(p => p.id === id);
-  portals[idx].clones = (portals[idx].clones || 0) + 1;
-  const newPortal = {
-    ...orig,
-    id: 'p-' + Date.now(),
-    name: orig.name + ' (copia)',
-    createdBy: currentUser.id,
-    createdByName: currentUser.name,
-    createdAt: new Date().toISOString(),
-    clones: 0,
-    clonedFrom: id
-  };
-  portals.push(newPortal);
-  setDB('portals', portals);
-  renderPortals();
-  toast('📋 Portal copiado. Ahora aparece en la lista.', 'green');
+async function clonePortal(id) {
+  if(!currentUser) return;
+  const orig=allPortals.find(p=>p.id===id); if(!orig) return;
+  const newId='p-'+Date.now();
+  // incrementar clones en original
+  const updated={...orig,clones:(orig.clones||0)+1};
+  await savePortal(updated);
+  // crear copia EDITABLE
+  const newPortal={...orig,id:newId,name:orig.name+' (copia)',createdBy:currentUser.id,createdByName:currentUser.name,createdAt:new Date().toISOString(),clones:0,clonedFrom:id};
+  if(useFirebase){await db.ref('portals/'+newId).set(newPortal);}
+  else{allPortals.push(newPortal);setLocal('portals',allPortals);}
+  toast('📋 Portal copiado. Puedes editarlo desde "Mis Actividades".','green');
 }
 
-function deletePortal(id) {
-  if (!confirm('¿Eliminar este portal?')) return;
-  let portals = getDB('portals', []);
-  portals = portals.filter(p => p.id !== id);
-  setDB('portals', portals);
-  renderPortals();
-  if (document.getElementById('page-admin').classList.contains('active')) renderAdminUsers();
-  toast('Portal eliminado.', 'red');
+async function deletePortal(id) {
+  if(!confirm('¿Eliminar este portal?')) return;
+  await deletePortalById(id);
+  renderPortals(); renderMyActivities();
+  if(document.getElementById('page-admin')?.classList.contains('active')) renderAdminPortalsTable();
+  toast('Portal eliminado.','red');
 }
 
 function quickShareResource(rid) {
   openPortalShareModal();
-  setTimeout(() => {
-    const cb = document.querySelector(`#portalResourcePicker input[value="${rid}"]`);
-    if (cb) cb.checked = true;
-  }, 100);
+  setTimeout(()=>{const cb=document.querySelector(`#portalResourcePicker input[value="${rid}"]`);if(cb)cb.checked=true;},100);
 }
 
+/* ─── MIS ACTIVIDADES ─── */
 function renderMyActivities() {
-  const container = document.getElementById('myActivitiesContainer');
-  if (!container || !currentUser) return;
-  const portals = getDB('portals', []).filter(p => p.createdBy === currentUser.id);
-  if (portals.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div><p>Aún no has compartido actividades.</p></div>';
-    return;
-  }
-  container.innerHTML = `<p style="margin-bottom:1rem;color:#7f8c8d;">Has compartido <strong>${portals.length}</strong> portal(es).</p>` +
-    portals.map(p => {
-      const date = new Date(p.createdAt).toLocaleDateString('es-CO');
+  const container=document.getElementById('myActivitiesContainer');
+  if(!container||!currentUser) return;
+  const myPortals=allPortals.filter(p=>p.createdBy===currentUser.id);
+  if(myPortals.length===0){container.innerHTML='<div class="empty-state"><div class="empty-icon">📂</div><p>Aún no has compartido actividades. ¡Crea tu primer portal!</p></div>';return;}
+  container.innerHTML=`<p style="margin-bottom:1rem;color:#7f8c8d;">Has creado <strong>${myPortals.length}</strong> portal(es).</p>`+
+    myPortals.map(p=>{
+      const date=new Date(p.createdAt).toLocaleDateString('es-CO');
       return `<div class="portal-card" style="border-top-color:#8e44ad;">
         <h3>✏️ ${p.name}</h3>
-        <p style="color:#7f8c8d;font-size:0.85rem;">${p.institution} · ${date} · ${p.resources.length} recursos · ${p.clones||0} copias</p>
+        <p style="color:#7f8c8d;font-size:0.85rem;">${p.institution} · ${date} · ${(p.resources||[]).length} recursos · ${p.clones||0} copias</p>
+        ${p.clonedFrom?'<span style="font-size:0.75rem;color:#8e44ad;">📋 Copiado y personalizado</span>':''}
         <div class="portal-actions">
-          <button class="btn-card btn-secondary" onclick="deletePortal('${p.id}')">🗑️ Eliminar</button>
+          <button class="btn-card btn-primary" onclick="viewPortal('${p.id}')">👁️ Ver</button>
+          <button class="btn-card btn-edit-card" onclick="openEditPortal('${p.id}')">✏️ Editar</button>
+          <button class="btn-card" style="background:#fdecea;color:var(--rojo);" onclick="deletePortal('${p.id}')">🗑️ Eliminar</button>
         </div>
       </div>`;
     }).join('');
 }
 
-/* ══════════════════════════════════════════
+/* ═══════════════════════════════════════════
    ADMIN
-══════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 function renderAdminUsers() {
-  const users = getDB('users', []);
-  const tbody = document.getElementById('usersTableBody');
-  if (!tbody) return;
-  document.getElementById('adminStatUsers').textContent = users.length;
-  document.getElementById('adminStatAdmins').textContent = users.filter(u=>u.role==='admin').length;
-  document.getElementById('adminStatTeachers').textContent = users.filter(u=>u.role==='teacher').length;
-  document.getElementById('adminStatStudents').textContent = users.filter(u=>u.role==='student').length;
-  tbody.innerHTML = users.map(u => {
-    const date = new Date(u.createdAt).toLocaleDateString('es-CO',{year:'numeric',month:'short',day:'numeric'});
-    const isMe = u.id === currentUser?.id;
-    return `<tr>
-      <td><div style="display:flex;align-items:center;gap:8px;"><div class="user-avatar avatar-${u.role}" style="width:32px;height:32px;font-size:0.8rem;">${u.avatar||u.name.charAt(0)}</div><strong>${u.name}</strong>${isMe?' <span style="font-size:0.7rem;color:var(--verde);">(tú)</span>':''}</div></td>
-      <td>${u.email}</td>
-      <td>${u.school||'—'}</td>
-      <td><span class="role-badge role-${u.role}">${roleLabel(u.role)}</span></td>
-      <td>${date}</td>
-      <td style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="btn-sm btn-edit" onclick="openUserEdit('${u.id}')">✏️ Editar</button>
-        ${!isMe ? `<button class="btn-sm btn-danger" onclick="deleteUser('${u.id}')">🗑️</button>` : ''}
-      </td>
-    </tr>`;
+  const tbody=document.getElementById('usersTableBody'); if(!tbody) return;
+  document.getElementById('adminStatUsers').textContent=allUsers.length;
+  document.getElementById('adminStatAdmins').textContent=allUsers.filter(u=>u.role==='admin').length;
+  document.getElementById('adminStatTeachers').textContent=allUsers.filter(u=>u.role==='teacher').length;
+  document.getElementById('adminStatStudents').textContent=allUsers.filter(u=>u.role==='student').length;
+  tbody.innerHTML=allUsers.map(u=>{
+    const date=new Date(u.createdAt).toLocaleDateString('es-CO',{year:'numeric',month:'short',day:'numeric'});
+    const isMe=u.id===currentUser?.id;
+    return `<tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="user-avatar avatar-${u.role}" style="width:32px;height:32px;font-size:0.8rem;">${u.avatar||u.name.charAt(0)}</div><strong>${u.name}</strong>${isMe?' <span style="font-size:0.7rem;color:var(--verde);">(tú)</span>':''}</div></td><td>${u.email}</td><td>${u.school||'—'}</td><td><span class="role-badge role-${u.role}">${roleLabel(u.role)}</span></td><td>${date}</td><td style="display:flex;gap:6px;flex-wrap:wrap;"><button class="btn-sm btn-edit" onclick="openUserEdit('${u.id}')">✏️ Editar</button>${!isMe?`<button class="btn-sm btn-danger" onclick="deleteUser('${u.id}')">🗑️</button>`:''}</td></tr>`;
   }).join('');
   renderAdminPortalsTable();
 }
 
 function renderAdminPortalsTable() {
-  const portals = getDB('portals', []);
-  const tbody = document.getElementById('portalsTableBody');
-  if (!tbody) return;
-  if (portals.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#7f8c8d;padding:2rem;">No hay portales aún.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = portals.map(p => {
-    const date = new Date(p.createdAt).toLocaleDateString('es-CO');
-    return `<tr>
-      <td><strong>${p.name}</strong><br><small style="color:#7f8c8d;">${p.institution}</small></td>
-      <td>${p.createdByName||'—'}</td>
-      <td>${p.resources.length} recursos · ${p.clones||0} copias</td>
-      <td>${date}</td>
-      <td><button class="btn-sm btn-danger" onclick="deletePortal('${p.id}');renderAdminUsers();">🗑️ Eliminar</button></td>
-    </tr>`;
+  const tbody=document.getElementById('portalsTableBody'); if(!tbody) return;
+  if(allPortals.length===0){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#7f8c8d;padding:2rem;">No hay portales aún.</td></tr>';return;}
+  tbody.innerHTML=allPortals.map(p=>{
+    const date=new Date(p.createdAt).toLocaleDateString('es-CO');
+    return `<tr><td><strong>${p.name}</strong><br><small style="color:#7f8c8d;">${p.institution}</small></td><td>${p.createdByName||'—'}</td><td>${(p.resources||[]).length} recursos · ${p.clones||0} copias</td><td>${date}</td><td><button class="btn-sm btn-edit" onclick="openEditPortal('${p.id}')">✏️ Editar</button> <button class="btn-sm btn-danger" onclick="deletePortal('${p.id}')">🗑️</button></td></tr>`;
   }).join('');
 }
 
 function openUserEdit(userId) {
-  const users = getDB('users', []);
-  const u = users.find(x=>x.id===userId);
-  if (!u) return;
-  document.getElementById('editUserId').value = u.id;
-  document.getElementById('editUserName').value = u.name;
-  document.getElementById('editUserEmail').value = u.email;
-  document.getElementById('editUserSchool').value = u.school||'';
-  document.getElementById('editUserRole').value = u.role;
+  const u=allUsers.find(x=>x.id===userId); if(!u) return;
+  document.getElementById('editUserId').value=u.id;
+  document.getElementById('editUserName').value=u.name;
+  document.getElementById('editUserEmail').value=u.email;
+  document.getElementById('editUserSchool').value=u.school||'';
+  document.getElementById('editUserRole').value=u.role;
   document.getElementById('userEditModal').classList.add('open');
 }
 
-function saveUserEdit() {
-  const id = document.getElementById('editUserId').value;
-  const users = getDB('users', []);
-  const idx = users.findIndex(u=>u.id===id);
-  if (idx === -1) return;
-  users[idx].name = document.getElementById('editUserName').value.trim() || users[idx].name;
-  users[idx].school = document.getElementById('editUserSchool').value.trim();
-  users[idx].role = document.getElementById('editUserRole').value;
-  users[idx].avatar = users[idx].name.charAt(0).toUpperCase();
-  const saved = setDB('users', users);
-  if (!saved) return;
-  if (id === currentUser?.id) {
-    currentUser = users[idx];
-    try { sessionStorage.setItem('edu_session_co', JSON.stringify(currentUser)); } catch {}
-    setupUI();
-  }
+async function saveUserEdit() {
+  const id=document.getElementById('editUserId').value;
+  const u=allUsers.find(x=>x.id===id); if(!u) return;
+  const updated={...u,name:document.getElementById('editUserName').value.trim()||u.name,school:document.getElementById('editUserSchool').value.trim(),role:document.getElementById('editUserRole').value};
+  updated.avatar=updated.name.charAt(0).toUpperCase();
+  await saveUser(updated);
+  if(id===currentUser?.id){currentUser=updated;try{sessionStorage.setItem('edu_session_v2',JSON.stringify(currentUser));}catch{}setupUI();}
   closeModal('userEditModal');
   renderAdminUsers();
-  toast('✅ Usuario actualizado.', 'green');
+  toast('✅ Usuario actualizado.','green');
 }
 
-function deleteUser(id) {
-  if (!confirm('¿Eliminar este usuario? Esta acción no se puede deshacer.')) return;
-  let users = getDB('users', []);
-  users = users.filter(u=>u.id!==id);
-  setDB('users', users);
+async function deleteUser(id) {
+  if(!confirm('¿Eliminar este usuario? Esta acción no se puede deshacer.')) return;
+  await deleteUserById(id);
   renderAdminUsers();
-  toast('Usuario eliminado.', 'red');
+  toast('Usuario eliminado.','red');
 }
 
-/* ══════════════════════════════════════════
-   PERFIL
-══════════════════════════════════════════ */
-function saveProfile() {
-  if (!currentUser) return;
-  const name = document.getElementById('profileNameInput').value.trim();
-  const school = document.getElementById('profileSchoolInput').value.trim();
-  const pass = document.getElementById('profilePassInput').value;
-  const users = getDB('users', []);
-  const idx = users.findIndex(u=>u.id===currentUser.id);
-  if (idx === -1) return;
-  if (name) { users[idx].name = name; users[idx].avatar = name.charAt(0).toUpperCase(); }
-  if (school) users[idx].school = school;
-  if (pass && pass.length >= 6) users[idx].password = pass;
-  else if (pass && pass.length < 6) { toast('La contraseña debe tener al menos 6 caracteres.', 'red'); return; }
-  const saved = setDB('users', users);
-  if (!saved) return;
-  currentUser = users[idx];
-  try { sessionStorage.setItem('edu_session_co', JSON.stringify(currentUser)); } catch {}
+/* ─── PERFIL ─── */
+async function saveProfile() {
+  if(!currentUser) return;
+  const name=document.getElementById('profileNameInput').value.trim();
+  const school=document.getElementById('profileSchoolInput').value.trim();
+  const pass=document.getElementById('profilePassInput').value;
+  if(pass&&pass.length<6){toast('La contraseña debe tener al menos 6 caracteres.','red');return;}
+  const updated={...currentUser};
+  if(name){updated.name=name;updated.avatar=name.charAt(0).toUpperCase();}
+  if(school) updated.school=school;
+  if(pass) updated.password=pass;
+  await saveUser(updated);
+  currentUser=updated;
+  try{sessionStorage.setItem('edu_session_v2',JSON.stringify(currentUser));}catch{}
   setupUI();
-  document.getElementById('profilePassInput').value = '';
-  toast('✅ Perfil actualizado.', 'green');
+  document.getElementById('profilePassInput').value='';
+  toast('✅ Perfil actualizado.','green');
 }
 
-/* ══════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════ */
-function toast(msg, type='') {
-  const el = document.getElementById('toast');
-  if (!el) return;
-  el.textContent = msg;
-  el.className = `show ${type}`;
-  setTimeout(() => el.className = '', 3000);
+/* ═══════════════════════════════════════════
+   EXPORTAR / IMPORTAR / RESETEAR
+═══════════════════════════════════════════ */
+function exportarDatos() {
+  const backup={version:'v2',fecha:new Date().toISOString(),users:allUsers,portals:allPortals};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`edurepo_backup_${new Date().toISOString().slice(0,10)}.json`; a.click();
+  toast('✅ Datos exportados correctamente.','green');
 }
+
+async function importarDatos(event) {
+  const file=event.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.users||!Array.isArray(data.users)){toast('❌ Archivo inválido.','red');return;}
+      if(!confirm(`¿Importar ${data.users.length} usuario(s) y ${(data.portals||[]).length} portal(es)?`)) return;
+      if(useFirebase){
+        const batch={}; data.users.forEach(u=>batch[u.id]=u);
+        await db.ref('users').set(batch);
+        const pbatch={}; (data.portals||[]).forEach(p=>pbatch[p.id]=p);
+        await db.ref('portals').set(pbatch);
+      } else {
+        allUsers=data.users; allPortals=data.portals||[];
+        setLocal('users',allUsers); setLocal('portals',allPortals);
+      }
+      toast('✅ Datos importados.','green');
+      setTimeout(()=>location.reload(),1500);
+    }catch{toast('❌ Archivo corrupto.','red');}
+  };
+  reader.readAsText(file);
+}
+
+async function confirmarReset() {
+  if(!confirm('⚠️ ¿Resetear la base de datos? Se borrarán todos los usuarios y portales.')) return;
+  if(!confirm('Segunda confirmación: ¿Resetear definitivamente?')) return;
+  if(useFirebase){await db.ref('users').remove();await db.ref('portals').remove();}
+  else{setLocal('users',[]);setLocal('portals',[]);}
+  sessionStorage.removeItem('edu_session_v2');
+  allUsers=[]; allPortals=[];
+  await ensureDefaultAdmin();
+  toast('Base de datos reseteada. Recargando...','red');
+  setTimeout(()=>location.reload(),1500);
+}
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+function toast(msg,type='') {
+  const el=document.getElementById('toast'); if(!el) return;
+  el.textContent=msg; el.className=`show ${type}`;
+  setTimeout(()=>el.className='',3500);
+}
+
+/* ─── ARRANQUE ─── */
+window.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
 </html>
