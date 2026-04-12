@@ -7,9 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
   <style>
     :root {
@@ -467,7 +464,7 @@
         <label class="btn-card btn-secondary" style="cursor:pointer;">📤 Importar datos (JSON)<input type="file" accept=".json" onchange="importarDatos(event)" style="display:none;"></label>
         <button class="btn-card" style="background:#fdecea;color:var(--rojo);" onclick="confirmarReset()">⚠️ Resetear base de datos</button>
       </div>
-      <p style="padding:0 1.5rem 1rem;color:#7f8c8d;font-size:0.85rem;">⚠️ Los datos se almacenan en la nube (Firebase) y son accesibles desde cualquier dispositivo.</p>
+      <p style="padding:0 1.5rem 1rem;color:#7f8c8d;font-size:0.85rem;">⚠️ Los datos se almacenan localmente en este navegador. Usa "Exportar" para guardar una copia de respaldo.</p>
     </div>
   </div>
 
@@ -551,30 +548,11 @@
 
 <script>
 /* ═══════════════════════════════════════════
-   FIREBASE CONFIG — Realtime Database
-   (proyecto de demostración público compartido)
+   MODO OFFLINE — Solo localStorage
+   (Firebase eliminado; datos locales seguros)
 ═══════════════════════════════════════════ */
-const firebaseConfig = {
-  apiKey: "AIzaSyDemoKey_EduRepositorioColombia",
-  authDomain: "edurepo-colombia.firebaseapp.com",
-  databaseURL: "https://edurepo-colombia-default-rtdb.firebaseio.com",
-  projectId: "edurepo-colombia",
-  storageBucket: "edurepo-colombia.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
-};
-
-/* ── Inicializar Firebase con fallback a localStorage ── */
-let db = null;
-let useFirebase = false;
-
-try {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.database();
-  useFirebase = true;
-} catch(e) {
-  console.warn('Firebase no disponible, usando localStorage:', e.message);
-}
+const db = null;
+const useFirebase = false;
 
 /* ═══════════════════════════════════════════
    CAPA DE DATOS — Firebase + localStorage fallback
@@ -635,41 +613,11 @@ let unsubscribeUsers = null;
    INICIALIZACIÓN
 ═══════════════════════════════════════════ */
 async function initApp() {
-  // Cargar usuarios (para login offline también)
-  if(useFirebase) {
-    unsubscribeUsers = fbOnValue('users', data => {
-      allUsers = data ? Object.entries(data).map(([k,v])=>({...v,_fbKey:k})) : [];
-      setLocal('users', allUsers);
-      const dot = document.getElementById('syncDot');
-      if(dot) { dot.classList.remove('offline'); dot.title='Conectado a Firebase'; }
-      if(currentUser) {
-        const fresh = allUsers.find(u=>u.id===currentUser.id);
-        if(fresh) currentUser=fresh;
-        updateStats();
-        if(document.getElementById('page-admin')?.classList.contains('active')) renderAdminUsers();
-      }
-    });
-    unsubscribePortals = fbOnValue('portals', data => {
-      allPortals = data ? Object.entries(data).map(([k,v])=>({...v,_fbKey:k})) : [];
-      setLocal('portals', allPortals);
-      updateStats();
-      if(document.getElementById('page-portales')?.classList.contains('active')) renderPortals();
-      if(document.getElementById('page-mis-actividades')?.classList.contains('active')) renderMyActivities();
-      if(document.getElementById('page-admin')?.classList.contains('active')) renderAdminPortalsTable();
-    });
-    // Detectar desconexión
-    db.ref('.info/connected').on('value', snap => {
-      const dot=document.getElementById('syncDot');
-      if(!dot) return;
-      if(snap.val()) { dot.classList.remove('offline'); dot.title='Conectado'; }
-      else { dot.classList.add('offline'); dot.title='Sin conexión (modo local)'; }
-    });
-  } else {
-    allUsers = getLocal('users',[]);
-    allPortals = getLocal('portals',[]);
-    const dot=document.getElementById('syncDot');
-    if(dot){dot.classList.add('offline');dot.title='Modo sin conexión (localStorage)';}
-  }
+  // Cargar datos desde localStorage
+  allUsers = getLocal('users',[]);
+  allPortals = getLocal('portals',[]);
+  const dot=document.getElementById('syncDot');
+  if(dot){dot.classList.add('offline');dot.title='Modo local (datos guardados en este navegador)';}
 
   // Admin por defecto
   await ensureDefaultAdmin();
