@@ -239,6 +239,30 @@
     .loading-spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.8s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
+    /* ACTIVITY CONTENT EDITOR */
+    #activityContentModal{z-index:2200}
+    #activityContentModal .modal-content{max-width:780px}
+    .editor-section{background:var(--fondo);border-radius:1rem;padding:1.2rem;margin-bottom:1rem}
+    .editor-section h4{font-size:0.95rem;color:var(--texto);margin-bottom:0.8rem;display:flex;align-items:center;gap:6px}
+    .editor-resource-item{background:white;border-radius:0.8rem;padding:1rem;margin-bottom:0.8rem;border:2px solid var(--gris-claro)}
+    .editor-resource-item.expanded{border-color:var(--verde)}
+    .editor-resource-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+    .editor-resource-header h5{font-size:0.9rem;color:var(--texto)}
+    .editor-resource-body{display:none;margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--gris-claro)}
+    .editor-resource-item.expanded .editor-resource-body{display:block}
+    .editor-field{display:flex;flex-direction:column;gap:4px;margin-bottom:0.8rem}
+    .editor-field label{font-size:0.78rem;font-weight:700;color:#7f8c8d;text-transform:uppercase;letter-spacing:0.3px}
+    .editor-field input,.editor-field textarea,.editor-field select{padding:8px 12px;border:2px solid var(--gris-claro);border-radius:8px;font-family:inherit;font-size:0.88rem;outline:none;transition:0.2s}
+    .editor-field input:focus,.editor-field textarea:focus{border-color:var(--verde)}
+    .editor-field textarea{resize:vertical;min-height:60px}
+    .pregunta-editor{background:var(--fondo);border-radius:0.7rem;padding:0.8rem;margin-bottom:0.6rem}
+    .opcion-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+    .opcion-row input{flex:1}
+    .opcion-correcta{width:28px;height:28px;border-radius:50%;border:2px solid var(--gris-claro);background:white;cursor:pointer;font-size:0.7rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800}
+    .opcion-correcta.marcada{background:var(--verde);color:white;border-color:var(--verde)}
+    .btn-add-op{background:var(--verde-suave);color:var(--verde);border:none;border-radius:50px;padding:4px 12px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px}
+    .btn-add-preg{background:var(--azul-suave);color:var(--azul);border:none;border-radius:50px;padding:6px 14px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px}
+
     /* LIVE indicator */
     .live-badge{display:inline-flex;align-items:center;gap:6px;background:#e8f8f0;color:var(--verde);border:1.5px solid var(--verde-claro);border-radius:50px;padding:4px 12px;font-size:0.75rem;font-weight:800}
     .live-dot{width:8px;height:8px;border-radius:50%;background:var(--verde-claro);animation:pulse 1.5s infinite}
@@ -543,6 +567,17 @@
   </div>
 </div>
 
+<!-- ═══ MODAL EDITAR CONTENIDO ACTIVIDAD ═══ -->
+<div class="modal" id="activityContentModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>✏️ Editar contenido de actividad</h2>
+      <button class="close-btn" onclick="closeModal('activityContentModal')">&times;</button>
+    </div>
+    <div class="modal-body" id="activityContentBody"></div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast"></div>
 
@@ -811,6 +846,7 @@ function setupUI() {
   pa.textContent=u.avatar||u.name.charAt(0).toUpperCase(); pa.className=`user-avatar avatar-${u.role}`;
   renderCards();
   renderPortals();
+  renderMyActivities();
   if(u.role==='admin') renderAdminUsers();
 }
 
@@ -887,13 +923,13 @@ const recursos = [
   // ── VIDEOS (URLs de YouTube verificadas) ──
   {id:11,titulo:"🎬 El Dorado: la leyenda colombiana",descripcion:"La famosa leyenda indígena muisca de la Laguna de Guatavita, Cundinamarca.",categoria:"video",tipo:"video",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#d4ac0d"/><text x="50" y="70" font-size="45" text-anchor="middle">🎬</text></svg>',
-    videoUrl:"https://www.youtube.com/watch?v=HCOmvtQMWpI"},
+    videoUrl:"https://www.youtube.com/watch?v=XmAp_wKx7U8"},
   {id:12,titulo:"📺 Palabras homófonas en español",descripcion:"Aprende la diferencia entre hay/ahí/ay, hola/ola y otras palabras que suenan igual. Con ejemplos y ejercicios.",categoria:"video",tipo:"video",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#1a5276"/><text x="50" y="70" font-size="45" text-anchor="middle">📺</text></svg>',
-    videoUrl:"https://www.youtube.com/watch?v=1rS2R7Yrwew"},
+    videoUrl:"https://www.youtube.com/watch?v=SzrX2ZmY818"},
   {id:16,titulo:"📽️ Comprensión lectora: estrategias para niños",descripcion:"Aprende técnicas de lectura eficaz para mejorar la comprensión de textos en la escuela.",categoria:"video",tipo:"video",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#8e44ad"/><text x="50" y="70" font-size="45" text-anchor="middle">📽️</text></svg>',
-    videoUrl:"https://www.youtube.com/watch?v=5MgBikgcWnY"},
+    videoUrl:"https://www.youtube.com/watch?v=OCzLyawKSXI"},
   // ── JUEGOS ──
   {id:13,titulo:"🧠 Memory: sinónimos del español colombiano",descripcion:"Relaciona palabras con sus sinónimos en un juego de memoria",categoria:"juego",tipo:"juego_memory_avanzado",
     iconoSvg:'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#2a9d8f"/><text x="50" y="70" font-size="45" text-anchor="middle">🧠</text></svg>'},
@@ -1061,7 +1097,7 @@ function renderPortals() {
       <div class="portal-actions">
         <button class="btn-card btn-primary" onclick="viewPortal('${p.id}')">👁️ Ver</button>
         ${canEdit?`<button class="btn-card btn-secondary" onclick="clonePortal('${p.id}')">📋 Copiar</button>`:''}
-        ${isOwner&&canEdit?`<button class="btn-card btn-edit-card" onclick="openEditPortal('${p.id}')">✏️ Editar</button>`:''}
+        ${isOwner&&canEdit?`<button class="btn-card btn-edit-card" onclick="openEditPortal('${p.id}')">✏️ Editar</button><button class="btn-card" style="background:#eaf4ff;color:#1a5276;" onclick="openActivityContentEditor('${p.id}')">📝 Contenido</button>`:''}
         ${isOwner?`<button class="btn-card" style="background:#fdecea;color:var(--rojo);" onclick="deletePortal('${p.id}')">🗑️</button>`:''}
       </div>
     </div>`;
@@ -1173,6 +1209,7 @@ function renderMyActivities() {
         <div class="portal-actions">
           <button class="btn-card btn-primary" onclick="viewPortal('${p.id}')">👁️ Ver</button>
           <button class="btn-card btn-edit-card" onclick="openEditPortal('${p.id}')">✏️ Editar</button>
+          <button class="btn-card" style="background:#eaf4ff;color:#1a5276;" onclick="openActivityContentEditor('${p.id}')">📝 Editar contenido</button>
           <button class="btn-card" style="background:#fdecea;color:var(--rojo);" onclick="deletePortal('${p.id}')">🗑️ Eliminar</button>
         </div>
       </div>`;
@@ -1307,6 +1344,299 @@ function toast(msg,type='') {
   const el=document.getElementById('toast'); if(!el) return;
   el.textContent=msg; el.className=`show ${type}`;
   setTimeout(()=>el.className='',3500);
+}
+
+/* ═══════════════════════════════════════════
+   EDITOR DE CONTENIDO DE ACTIVIDAD
+═══════════════════════════════════════════ */
+
+// Copia local editable de recursos (persiste en localStorage)
+let recursosEditados = JSON.parse(localStorage.getItem('edu_co_v2_recursos_editados') || 'null') || null;
+
+function getRecursos() {
+  return recursosEditados || recursos;
+}
+
+function guardarRecursosEditados() {
+  localStorage.setItem('edu_co_v2_recursos_editados', JSON.stringify(recursosEditados || recursos));
+}
+
+// Parchar abrirRecurso para usar recursos editados
+const _abrirRecursoOrig = abrirRecurso;
+window.abrirRecurso = function(id) {
+  const r = (recursosEditados || recursos).find(x=>x.id===id);
+  if(!r) return;
+  document.getElementById('modalTitle').textContent = r.titulo;
+  const body = document.getElementById('modalBody');
+  if(r.tipo==='lectura_multiple') {
+    let html=`<div style="background:#f8f9fa;padding:1rem;border-radius:1rem;margin-bottom:1.5rem;line-height:1.8;font-size:0.95rem;">${r.texto.replace(/\n/g,'<br>')}</div><div class="multiquiz">`;
+    r.preguntas.forEach((p,qi)=>{html+=`<div class="question-item" id="qi${id}_${qi}"><p><strong>${qi+1}. ${p.pregunta}</strong></p>${p.opciones.map((op,oi)=>`<div class="option" onclick="selOption(${id},${qi},${oi},${p.correcta})">${op}</div>`).join('')}<div id="fb${id}_${qi}"></div></div>`;});
+    html+='</div>'; body.innerHTML=html;
+  } else if(r.tipo==='simple') {
+    body.innerHTML=r.contenidoHtml||'';
+  } else if(r.tipo==='quiz') {
+    let html='<div class="multiquiz">';
+    r.preguntas.forEach((p,qi)=>{html+=`<div class="question-item"><p><strong>${qi+1}. ${p}</strong></p>${r.opciones[qi].map((op,oi)=>`<div class="option" onclick="selQuiz(this,${oi},${r.correctas[qi]})">${op}</div>`).join('')}<div class="fb-quiz"></div></div>`;});
+    html+='</div>'; body.innerHTML=html;
+  } else if(r.tipo==='imagen') {
+    body.innerHTML=`${r.imagenSvg||''}<p style="margin-top:1rem;color:#7f8c8d;">${r.leyenda||''}</p><textarea class="vocab-textarea" rows="4" placeholder="Escribe tus respuestas aquí..."></textarea>`;
+  } else if(r.tipo==='video') {
+    const embed=convertirYouTubeEmbed(r.videoUrl);
+    body.innerHTML=`<div class="yt-wrapper"><iframe src="${embed}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div><p style="color:#7f8c8d;">${r.descripcion||''}</p>`;
+  } else if(r.tipo==='juego_memory_avanzado') { body.innerHTML=buildMemoryAvanzado(); }
+  else if(r.tipo==='juego_ahorcado') { body.innerHTML=buildAhorcado(); }
+  else if(r.tipo==='juego_quiz') { body.innerHTML=buildQuizDiptongos(); }
+  document.getElementById('modal').classList.add('open');
+};
+
+function openActivityContentEditor(portalId) {
+  const p = allPortals.find(x=>x.id===portalId); if(!p) return;
+  const recs = (p.resources||[]).map(rid=>{
+    const base = (recursosEditados||recursos).find(r=>r.id===rid);
+    return base ? JSON.parse(JSON.stringify(base)) : null;
+  }).filter(Boolean);
+
+  const body = document.getElementById('activityContentBody');
+  body.innerHTML = buildActivityEditor(p, recs);
+  document.getElementById('activityContentModal').classList.add('open');
+}
+
+function buildActivityEditor(portal, recs) {
+  let html = `<input type="hidden" id="aed_portalId" value="${portal.id}">`;
+
+  // Info general del portal
+  html += `<div class="editor-section">
+    <h4>📋 Información general</h4>
+    <div class="editor-field"><label>Nombre del portal</label><input type="text" id="aed_name" value="${escHtml(portal.name)}"></div>
+    <div class="editor-field"><label>Descripción</label><input type="text" id="aed_desc" value="${escHtml(portal.description||'')}"></div>
+    <div class="editor-field"><label>Institución</label><input type="text" id="aed_inst" value="${escHtml(portal.institution)}"></div>
+  </div>`;
+
+  // Recursos incluidos
+  html += `<div class="editor-section"><h4>📚 Recursos incluidos (${recs.length})</h4>`;
+  recs.forEach((r, ri) => {
+    html += buildResourceEditor(r, ri);
+  });
+  html += `</div>`;
+
+  html += `<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:1rem;">
+    <button class="btn-card btn-secondary" onclick="closeModal('activityContentModal')">Cancelar</button>
+    <button class="btn-card btn-primary" onclick="saveActivityContent()">💾 Guardar cambios</button>
+  </div>`;
+
+  return html;
+}
+
+function buildResourceEditor(r, ri) {
+  let inner = `<div class="editor-field"><label>Título</label><input type="text" id="aed_r${ri}_titulo" value="${escHtml(r.titulo)}"></div>
+    <div class="editor-field"><label>Descripción</label><input type="text" id="aed_r${ri}_desc" value="${escHtml(r.descripcion||'')}"></div>`;
+
+  if(r.tipo === 'video') {
+    inner += `<div class="editor-field"><label>URL del video (YouTube)</label><input type="text" id="aed_r${ri}_videoUrl" value="${escHtml(r.videoUrl||'')}"></div>`;
+  }
+
+  if(r.tipo === 'imagen') {
+    inner += `<div class="editor-field"><label>Texto / leyenda de actividad</label><textarea id="aed_r${ri}_leyenda">${escHtml(r.leyenda||'')}</textarea></div>`;
+  }
+
+  if(r.tipo === 'lectura_multiple') {
+    inner += `<div class="editor-field"><label>Texto de lectura</label><textarea id="aed_r${ri}_texto" rows="5">${escHtml(r.texto||'')}</textarea></div>`;
+    inner += `<div id="aed_r${ri}_preguntas">`;
+    (r.preguntas||[]).forEach((p,pi) => {
+      inner += buildPreguntaEditor(ri, pi, p);
+    });
+    inner += `</div><button class="btn-add-preg" onclick="addPregunta(${ri})">➕ Agregar pregunta</button>`;
+  }
+
+  if(r.tipo === 'quiz') {
+    inner += `<div id="aed_r${ri}_preguntas">`;
+    (r.preguntas||[]).forEach((p,pi) => {
+      inner += buildQuizEditor(ri, pi, p, r.opciones[pi], r.correctas[pi]);
+    });
+    inner += `</div><button class="btn-add-preg" onclick="addQuizPregunta(${ri})">➕ Agregar pregunta</button>`;
+  }
+
+  if(r.tipo === 'simple') {
+    inner += `<div class="editor-field"><label>Contenido HTML</label><textarea id="aed_r${ri}_html" rows="6">${escHtml(r.contenidoHtml||'')}</textarea></div>`;
+  }
+
+  return `<div class="editor-resource-item" id="aed_res_${ri}">
+    <div class="editor-resource-header" onclick="toggleResEditor(${ri})">
+      <h5>${r.iconoSvg ? r.iconoSvg.substring(0,30).replace(/<[^>]*>/g,'').trim() : ''} ${escHtml(r.titulo)} <small style="color:#7f8c8d;">(${r.tipo})</small></h5>
+      <span id="aed_toggle_${ri}" style="font-size:1.2rem;color:var(--verde);">▼</span>
+    </div>
+    <div class="editor-resource-body" id="aed_resbody_${ri}">
+      <input type="hidden" id="aed_r${ri}_id" value="${r.id}">
+      <input type="hidden" id="aed_r${ri}_tipo" value="${r.tipo}">
+      ${inner}
+    </div>
+  </div>`;
+}
+
+function buildPreguntaEditor(ri, pi, p) {
+  let opts = (p.opciones||[]).map((op,oi) =>
+    `<div class="opcion-row">
+      <input type="text" id="aed_r${ri}_p${pi}_op${oi}" value="${escHtml(op)}" placeholder="Opción ${oi+1}">
+      <button class="opcion-correcta ${p.correcta===oi?'marcada':''}" id="aed_r${ri}_p${pi}_c${oi}" onclick="marcarCorrecta(${ri},${pi},${oi})" title="Marcar como correcta">✓</button>
+    </div>`
+  ).join('');
+  return `<div class="pregunta-editor" id="aed_r${ri}_preg_${pi}">
+    <div class="editor-field"><label>Pregunta ${pi+1}</label><input type="text" id="aed_r${ri}_p${pi}_texto" value="${escHtml(p.pregunta||'')}"></div>
+    <div id="aed_r${ri}_p${pi}_opts">${opts}</div>
+    <button class="btn-add-op" onclick="addOpcion(${ri},${pi})">➕ Opción</button>
+    <input type="hidden" id="aed_r${ri}_p${pi}_correcta" value="${p.correcta||0}">
+    <input type="hidden" id="aed_r${ri}_p${pi}_numops" value="${(p.opciones||[]).length}">
+  </div>`;
+}
+
+function buildQuizEditor(ri, pi, pregunta, opciones, correcta) {
+  let opts = (opciones||[]).map((op,oi) =>
+    `<div class="opcion-row">
+      <input type="text" id="aed_r${ri}_p${pi}_op${oi}" value="${escHtml(op)}" placeholder="Opción ${oi+1}">
+      <button class="opcion-correcta ${correcta===oi?'marcada':''}" id="aed_r${ri}_p${pi}_c${oi}" onclick="marcarCorrecta(${ri},${pi},${oi})" title="Marcar como correcta">✓</button>
+    </div>`
+  ).join('');
+  return `<div class="pregunta-editor" id="aed_r${ri}_preg_${pi}">
+    <div class="editor-field"><label>Pregunta ${pi+1}</label><input type="text" id="aed_r${ri}_p${pi}_texto" value="${escHtml(pregunta||'')}"></div>
+    <div id="aed_r${ri}_p${pi}_opts">${opts}</div>
+    <button class="btn-add-op" onclick="addOpcion(${ri},${pi})">➕ Opción</button>
+    <input type="hidden" id="aed_r${ri}_p${pi}_correcta" value="${correcta||0}">
+    <input type="hidden" id="aed_r${ri}_p${pi}_numops" value="${(opciones||[]).length}">
+  </div>`;
+}
+
+function toggleResEditor(ri) {
+  const item = document.getElementById(`aed_res_${ri}`);
+  const body = document.getElementById(`aed_resbody_${ri}`);
+  const tog = document.getElementById(`aed_toggle_${ri}`);
+  if(!item||!body) return;
+  const open = item.classList.toggle('expanded');
+  body.style.display = open ? 'block' : 'none';
+  if(tog) tog.textContent = open ? '▲' : '▼';
+}
+
+function marcarCorrecta(ri, pi, oi) {
+  const numops = parseInt(document.getElementById(`aed_r${ri}_p${pi}_numops`)?.value||'0');
+  for(let i=0;i<numops;i++) {
+    const btn = document.getElementById(`aed_r${ri}_p${pi}_c${i}`);
+    if(btn) btn.classList.toggle('marcada', i===oi);
+  }
+  const hid = document.getElementById(`aed_r${ri}_p${pi}_correcta`);
+  if(hid) hid.value = oi;
+}
+
+function addOpcion(ri, pi) {
+  const hid = document.getElementById(`aed_r${ri}_p${pi}_numops`);
+  if(!hid) return;
+  const oi = parseInt(hid.value);
+  const container = document.getElementById(`aed_r${ri}_p${pi}_opts`);
+  if(!container) return;
+  const row = document.createElement('div');
+  row.className = 'opcion-row';
+  row.innerHTML = `<input type="text" id="aed_r${ri}_p${pi}_op${oi}" placeholder="Opción ${oi+1}">
+    <button class="opcion-correcta" id="aed_r${ri}_p${pi}_c${oi}" onclick="marcarCorrecta(${ri},${pi},${oi})" title="Marcar como correcta">✓</button>`;
+  container.appendChild(row);
+  hid.value = oi+1;
+}
+
+function addPregunta(ri) {
+  const container = document.getElementById(`aed_r${ri}_preguntas`); if(!container) return;
+  const pi = container.querySelectorAll('.pregunta-editor').length;
+  const div = document.createElement('div');
+  div.innerHTML = buildPreguntaEditor(ri, pi, {pregunta:'', opciones:['',''], correcta:0});
+  container.appendChild(div.firstElementChild);
+}
+
+function addQuizPregunta(ri) {
+  const container = document.getElementById(`aed_r${ri}_preguntas`); if(!container) return;
+  const pi = container.querySelectorAll('.pregunta-editor').length;
+  const div = document.createElement('div');
+  div.innerHTML = buildQuizEditor(ri, pi, '', ['',''], 0);
+  container.appendChild(div.firstElementChild);
+}
+
+async function saveActivityContent() {
+  const portalId = document.getElementById('aed_portalId')?.value; if(!portalId) return;
+  const pidx = allPortals.findIndex(p=>p.id===portalId); if(pidx<0) return;
+
+  // Actualizar info del portal
+  const name = document.getElementById('aed_name')?.value.trim() || allPortals[pidx].name;
+  const desc = document.getElementById('aed_desc')?.value.trim() || '';
+  const inst = document.getElementById('aed_inst')?.value.trim() || allPortals[pidx].institution;
+  const updatedPortal = {...allPortals[pidx], name, description:desc, institution:inst, updatedAt:new Date().toISOString()};
+  await savePortal(updatedPortal);
+
+  // Actualizar recursos editados
+  if(!recursosEditados) recursosEditados = JSON.parse(JSON.stringify(recursos));
+
+  // Recorrer todos los recursos del editor
+  let ri = 0;
+  while(document.getElementById(`aed_r${ri}_id`)) {
+    const rid = parseInt(document.getElementById(`aed_r${ri}_id`).value);
+    const tipo = document.getElementById(`aed_r${ri}_tipo`)?.value;
+    const idx = recursosEditados.findIndex(r=>r.id===rid);
+    if(idx>=0) {
+      recursosEditados[idx].titulo = document.getElementById(`aed_r${ri}_titulo`)?.value || recursosEditados[idx].titulo;
+      recursosEditados[idx].descripcion = document.getElementById(`aed_r${ri}_desc`)?.value || '';
+
+      if(tipo==='video') {
+        recursosEditados[idx].videoUrl = document.getElementById(`aed_r${ri}_videoUrl`)?.value || recursosEditados[idx].videoUrl;
+      }
+      if(tipo==='imagen') {
+        recursosEditados[idx].leyenda = document.getElementById(`aed_r${ri}_leyenda`)?.value || '';
+      }
+      if(tipo==='simple') {
+        recursosEditados[idx].contenidoHtml = document.getElementById(`aed_r${ri}_html`)?.value || '';
+      }
+      if(tipo==='lectura_multiple') {
+        recursosEditados[idx].texto = document.getElementById(`aed_r${ri}_texto`)?.value || '';
+        const pregContainer = document.getElementById(`aed_r${ri}_preguntas`);
+        if(pregContainer) {
+          const numPregs = pregContainer.querySelectorAll('.pregunta-editor').length;
+          recursosEditados[idx].preguntas = [];
+          for(let pi=0;pi<numPregs;pi++) {
+            const texto = document.getElementById(`aed_r${ri}_p${pi}_texto`)?.value || '';
+            const numops = parseInt(document.getElementById(`aed_r${ri}_p${pi}_numops`)?.value||'0');
+            const correcta = parseInt(document.getElementById(`aed_r${ri}_p${pi}_correcta`)?.value||'0');
+            const opciones = [];
+            for(let oi=0;oi<numops;oi++) opciones.push(document.getElementById(`aed_r${ri}_p${pi}_op${oi}`)?.value||'');
+            recursosEditados[idx].preguntas.push({pregunta:texto,opciones,correcta});
+          }
+        }
+      }
+      if(tipo==='quiz') {
+        const pregContainer = document.getElementById(`aed_r${ri}_preguntas`);
+        if(pregContainer) {
+          const numPregs = pregContainer.querySelectorAll('.pregunta-editor').length;
+          recursosEditados[idx].preguntas = [];
+          recursosEditados[idx].opciones = [];
+          recursosEditados[idx].correctas = [];
+          for(let pi=0;pi<numPregs;pi++) {
+            const texto = document.getElementById(`aed_r${ri}_p${pi}_texto`)?.value || '';
+            const numops = parseInt(document.getElementById(`aed_r${ri}_p${pi}_numops`)?.value||'0');
+            const correcta = parseInt(document.getElementById(`aed_r${ri}_p${pi}_correcta`)?.value||'0');
+            const opciones = [];
+            for(let oi=0;oi<numops;oi++) opciones.push(document.getElementById(`aed_r${ri}_p${pi}_op${oi}`)?.value||'');
+            recursosEditados[idx].preguntas.push(texto);
+            recursosEditados[idx].opciones.push(opciones);
+            recursosEditados[idx].correctas.push(correcta);
+          }
+        }
+      }
+    }
+    ri++;
+  }
+
+  guardarRecursosEditados();
+  closeModal('activityContentModal');
+  renderPortals();
+  renderMyActivities();
+  renderCards();
+  toast('✅ Actividad actualizada correctamente.','green');
+}
+
+function escHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 /* ─── ARRANQUE ─── */
