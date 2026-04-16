@@ -1230,8 +1230,19 @@ async function loadPortals() {
 
 async function savePortalDB(portal) {
   if (supabaseClient) {
+    // Construir objeto seguro: excluir 'clones' si la columna puede no existir
+    // Se intenta con clones primero; si falla, se reintenta sin él
     const { error } = await supabaseClient.from('portals').upsert([portal], { onConflict: 'id' });
-    if (error) throw error;
+    if (error) {
+      if (error.message && error.message.includes('clones')) {
+        // La columna 'clones' no existe en Supabase: reintentar sin ella
+        const { clones: _c, ...portalSinClones } = portal;
+        const { error: error2 } = await supabaseClient.from('portals').upsert([portalSinClones], { onConflict: 'id' });
+        if (error2) throw error2;
+      } else {
+        throw error;
+      }
+    }
   } else {
     const idx = allPortals.findIndex(p => p.id === portal.id);
     if (idx >= 0) allPortals[idx] = portal; else allPortals.push(portal);
@@ -1383,11 +1394,25 @@ async function clonePortal(id) {
   if (!currentUser) return;
   const orig = allPortals.find(p => p.id === id); if (!orig) return;
   const newId = 'p-' + Date.now();
-  const updated = { ...orig, clones: (orig.clones || 0) + 1 };
-  await savePortalDB(updated);
-  const newPortal = { ...orig, id: newId, name: orig.name + ' (copia)', owner_id: currentUser.id, createdBy: currentUser.id,
-    createdByName: currentUser.name, owner_name: currentUser.name, created_at: new Date().toISOString(),
-    createdAt: new Date().toISOString(), clones: 0, clonedFrom: id };
+  // Incrementar clones en memoria local sin enviar esa columna a Supabase si no existe
+  const updatedClones = (orig.clones || 0) + 1;
+  try {
+    if (supabaseClient) {
+      // Solo actualizar clones si la columna existe; usar try/catch silencioso
+      await supabaseClient.from('portals').update({ clones: updatedClones }).eq('id', id);
+    }
+  } catch(e) { /* columna clones puede no existir aún */ }
+  // Actualizar en memoria local
+  const origIdx = allPortals.findIndex(p => p.id === id);
+  if (origIdx >= 0) { allPortals[origIdx] = { ...allPortals[origIdx], clones: updatedClones }; }
+
+  // Crear portal copia (sin 'clones' para evitar error de schema si no existe)
+  const { clones: _c, ...origWithoutClones } = orig;
+  const newPortal = { ...origWithoutClones, id: newId, name: orig.name + ' (copia)',
+    owner_id: currentUser.id, createdBy: currentUser.id,
+    createdByName: currentUser.name, owner_name: currentUser.name,
+    created_at: new Date().toISOString(), createdAt: new Date().toISOString(),
+    clones: 0, clonedFrom: id };
   await savePortalDB(newPortal);
   if (!supabaseClient) allPortals.push(newPortal);
   await loadPortals();
@@ -1735,6 +1760,12 @@ async function approveUser(id, currentRole) {
       allUsers[idx] = { ...allUsers[idx], role: newRole };
       setLocal('users', allUsers);
     }
+    // Si es el usuario actual, actualizar sesión en pantalla
+    if (id === currentUser?.id) {
+      currentUser = { ...currentUser, role: newRole };
+      try { sessionStorage.setItem('edu_session_v7', JSON.stringify(currentUser)); } catch{}
+      setupUI();
+    }
     renderAdminUsers();
     toast('✅ Usuario aprobado como ' + (newRole === 'teacher' ? 'docente' : 'estudiante'), 'green');
   } catch(err) {
@@ -1890,6 +1921,40 @@ function setupRealtime() {
         }
       });
     realtimeChannels.push(ch);
+
+    // Escuchar cambios en la tabla 'users' para actualizar rol automáticamente
+    const chUsers = supabaseClient.channel('users-rt')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, async (payload) => {
+        // Si el cambio afecta al usuario actual, refrescar su perfil
+        if (currentUser && payload.new && payload.new.id === currentUser.id) {
+          const updatedRole = payload.new.role;
+          if (updatedRole && updatedRole !== currentUser.role) {
+            currentUser = { ...currentUser, ...payload.new };
+            try { sessionStorage.setItem('edu_session_v7', JSON.stringify(currentUser)); } catch{}
+            setupUI();
+            toast('🔄 Tu rol ha sido actualizado: ' + (roleLabel(updatedRole) || updatedRole), 'green');
+          }
+        }
+      })
+      .subscribe();
+    realtimeChannels.push(chUsers);
+
+    // Verificar el rol del usuario actual cada 30 segundos (por si Realtime no llega)
+    if (currentUser && currentUser.role && currentUser.role.startsWith('pending')) {
+      const rolePoller = setInterval(async () => {
+        if (!currentUser) { clearInterval(rolePoller); return; }
+        try {
+          const { data } = await supabaseClient.from('users').select('role,name,institution').eq('id', currentUser.id).maybeSingle();
+          if (data && data.role && data.role !== currentUser.role) {
+            currentUser = { ...currentUser, ...data };
+            try { sessionStorage.setItem('edu_session_v7', JSON.stringify(currentUser)); } catch{}
+            setupUI();
+            toast('🔄 Tu rol ha sido actualizado: ' + (roleLabel(data.role) || data.role), 'green');
+            if (!data.role.startsWith('pending')) clearInterval(rolePoller);
+          }
+        } catch(e) {}
+      }, 30000);
+    }
   } catch(e) { console.error(e); }
 }
 
