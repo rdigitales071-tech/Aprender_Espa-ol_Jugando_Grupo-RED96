@@ -1230,19 +1230,24 @@ async function loadPortals() {
 
 async function savePortalDB(portal) {
   if (supabaseClient) {
-    // Construir objeto seguro: excluir 'clones' si la columna puede no existir
-    // Se intenta con clones primero; si falla, se reintenta sin él
-    const { error } = await supabaseClient.from('portals').upsert([portal], { onConflict: 'id' });
-    if (error) {
-      if (error.message && error.message.includes('clones')) {
-        // La columna 'clones' no existe en Supabase: reintentar sin ella
-        const { clones: _c, ...portalSinClones } = portal;
-        const { error: error2 } = await supabaseClient.from('portals').upsert([portalSinClones], { onConflict: 'id' });
-        if (error2) throw error2;
-      } else {
-        throw error;
-      }
-    }
+    // Mapear SOLO las columnas que existen en la tabla portals (snake_case).
+    // Se descartan todos los campos camelCase (createdAt, createdBy, createdByName,
+    // clonedFrom, resources, updatedAt) que causan el error 42703 / schema cache.
+    const dbPortal = {
+      id:              portal.id,
+      name:            portal.name,
+      description:     portal.description     || null,
+      institution:     portal.institution     || '',
+      owner_id:        portal.owner_id        || portal.createdBy || '',
+      owner_name:      portal.owner_name      || portal.createdByName || null,
+      created_by_name: portal.created_by_name || portal.createdByName || null,
+      resource_ids:    portal.resource_ids    || portal.resources || [],
+      clones:          portal.clones          ?? 0,
+      cloned_from:     portal.cloned_from     || portal.clonedFrom || null,
+      created_at:      portal.created_at      || portal.createdAt || new Date().toISOString(),
+    };
+    const { error } = await supabaseClient.from('portals').upsert([dbPortal], { onConflict: 'id' });
+    if (error) throw error;
   } else {
     const idx = allPortals.findIndex(p => p.id === portal.id);
     if (idx >= 0) allPortals[idx] = portal; else allPortals.push(portal);
