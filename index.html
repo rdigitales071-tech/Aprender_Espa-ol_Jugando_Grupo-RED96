@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📚 EduRepositorio | Español 4° y 5° Grado · Colombia</title>
+  <title>ðŸ“š EduRepositorio | EspaÃ±ol 4Â° y 5Â° Grado Â· Colombia</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -31,7 +31,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Nunito', sans-serif; background: var(--fondo); color: var(--texto); overflow-x: hidden; }
 
-    /* ─── LOGIN ─── */
+    /* â”€â”€â”€ LOGIN â”€â”€â”€ */
     #authScreen {
       min-height: 100vh; display: flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, #1a7a4a 0%, #1a5276 50%, #6c3483 100%);
@@ -86,7 +86,7 @@
     .auth-msg.error{background:#fdecea;color:var(--rojo);display:block}
     .auth-msg.success{background:var(--verde-suave);color:var(--verde);display:block}
 
-    /* ─── MAIN APP ─── */
+    /* â”€â”€â”€ MAIN APP â”€â”€â”€ */
     #mainApp{display:none;min-height:100vh}
 
     /* HEADER */
@@ -257,22 +257,22 @@
 </head>
 <body>
 
-<!-- ════════════════════════════════════════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <!--                               PANTALLA DE LOGIN                              -->
-<!-- ════════════════════════════════════════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div id="authScreen">
   <div class="auth-decorations">
-    <span>📚</span><span>✏️</span><span>🎨</span><span>🌟</span><span>📖</span><span>💡</span>
+    <span>ðŸ“š</span><span>âœï¸</span><span>ðŸŽ¨</span><span>ðŸŒŸ</span><span>ðŸ“–</span><span>ðŸ’¡</span>
   </div>
   <div class="auth-box">
     <div class="auth-logo">
-      <span class="logo-icon">📚</span>
+      <span class="logo-icon">ðŸ“š</span>
       <h1>EduRepositorio</h1>
-      <p>Español 4° y 5° Grado · Colombia</p>
+      <p>EspaÃ±ol 4Â° y 5Â° Grado Â· Colombia</p>
     </div>
 
     <div class="auth-tabs">
-      <div class="auth-tab active" onclick="switchAuthTab('login')">Iniciar Sesión</div>
+      <div class="auth-tab active" onclick="switchAuthTab('login')">Iniciar SesiÃ³n</div>
       <div class="auth-tab" onclick="switchAuthTab('register')">Registrarse</div>
     </div>
 
@@ -281,14 +281,14 @@
     <!-- LOGIN FORM -->
     <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
       <div class="form-group">
-        <label>Correo electrónico</label>
+        <label>Correo electrÃ³nico</label>
         <input type="email" id="loginEmail" placeholder="correo@ejemplo.com" required>
       </div>
       <div class="form-group">
-        <label>Contraseña</label>
+        <label>ContraseÃ±a</label>
         <div class="pass-wrapper">
-          <input type="password" id="loginPassword" placeholder="••••••••" required>
-          <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword')">👁️</button>
+          <input type="password" id="loginPassword" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
+          <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword')">ðŸ‘ï¸</button>
         </div>
       </div>
       <button type="submit" class="btn-auth">Entrar</button>
@@ -301,14 +301,14 @@
         <input type="text" id="regName" placeholder="Tu nombre" required>
       </div>
       <div class="form-group">
-        <label>Correo electrónico</label>
+        <label>Correo electrÃ³nico</label>
         <input type="email" id="regEmail" placeholder="correo@ejemplo.com" required>
       </div>
       <div class="form-group">
-        <label>Contraseña</label>
+        <label>ContraseÃ±a</label>
         <div class="pass-wrapper">
-          <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
-          <button type="button" class="toggle-pass" onclick="togglePassword('regPassword')">👁️</button>
+          <input type="password" id="regPassword" placeholder="MÃ­nimo 6 caracteres" required minlength="6">
+          <button type="button" class="toggle-pass" onclick="togglePassword('regPassword')">ðŸ‘ï¸</button>
         </div>
       </div>
       <div class="form-group">
@@ -321,25 +321,25 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Institución</label>
-        <input type="text" id="regInstitution" placeholder="Nombre de tu institución" required>
+        <label>InstituciÃ³n</label>
+        <input type="text" id="regInstitution" placeholder="Nombre de tu instituciÃ³n" required>
       </div>
       <button type="submit" class="btn-auth">Crear Cuenta</button>
     </form>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════════════════════════ -->
-<!--                            APLICACIÓN PRINCIPAL                              -->
-<!-- ════════════════════════════════════════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!--                            APLICACIÃ“N PRINCIPAL                              -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div id="mainApp">
   <!-- HEADER -->
   <header class="header">
     <div class="header-left">
-      <span class="header-logo">📚</span>
+      <span class="header-logo">ðŸ“š</span>
       <div class="header-title">
         EduRepositorio
-        <small>Español 4° y 5° Grado · Colombia</small>
+        <small>EspaÃ±ol 4Â° y 5Â° Grado Â· Colombia</small>
       </div>
     </div>
     <div class="header-right">
@@ -354,7 +354,7 @@
           <div class="user-role" id="userRole">Rol</div>
         </div>
       </div>
-      <button class="btn-icon" onclick="logout()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
+      <button class="btn-icon" onclick="logout()" title="Cerrar sesiÃ³n"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </header>
 
@@ -366,56 +366,56 @@
     <button class="nav-item" onclick="switchPage('actividades')"><i class="fas fa-tasks"></i> Mis Actividades</button>
   </nav>
 
-  <!-- ══════════ PÁGINA: INICIO ══════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â• PÃGINA: INICIO â•â•â•â•â•â•â•â•â•â• -->
   <div id="page-inicio" class="page active">
     <div class="info-grid">
       <div class="info-card">
         <div class="info-card-header">
-          <div class="info-card-icon">🎯</div>
+          <div class="info-card-icon">ðŸŽ¯</div>
           <h3>Bienvenido</h3>
         </div>
-        <p>Esta plataforma integra Supabase para sincronización en tiempo real. Todos los cambios se actualizan automáticamente en todos los dispositivos conectados.</p>
+        <p>Esta plataforma integra Supabase para sincronizaciÃ³n en tiempo real. Todos los cambios se actualizan automÃ¡ticamente en todos los dispositivos conectados.</p>
       </div>
       <div class="info-card azul">
         <div class="info-card-header">
-          <div class="info-card-icon">☁️</div>
+          <div class="info-card-icon">â˜ï¸</div>
           <h3>Base de Datos en la Nube</h3>
         </div>
-        <p>Tus datos están almacenados de forma segura en Supabase y son accesibles desde cualquier dispositivo.</p>
+        <p>Tus datos estÃ¡n almacenados de forma segura en Supabase y son accesibles desde cualquier dispositivo.</p>
       </div>
       <div class="info-card naranja">
         <div class="info-card-header">
-          <div class="info-card-icon">⚡</div>
+          <div class="info-card-icon">âš¡</div>
           <h3>Actualizaciones en Tiempo Real</h3>
         </div>
-        <p>Cuando alguien crea o edita contenido, todos los usuarios conectados ven los cambios instantáneamente.</p>
+        <p>Cuando alguien crea o edita contenido, todos los usuarios conectados ven los cambios instantÃ¡neamente.</p>
       </div>
     </div>
   </div>
 
-  <!-- ══════════ PÁGINA: RECURSOS ══════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â• PÃGINA: RECURSOS â•â•â•â•â•â•â•â•â•â• -->
   <div id="page-recursos" class="page">
     <div class="section-header">
-      <h2 class="section-title">📚 Recursos Educativos</h2>
+      <h2 class="section-title">ðŸ“š Recursos Educativos</h2>
       <div class="search-bar">
         <input type="text" class="search-input" id="searchInput" placeholder="Buscar recursos..." oninput="filterResources()">
         <div class="filter-group">
           <button class="filter-chip active" data-filter="all" onclick="filterByType(this)">Todos</button>
-          <button class="filter-chip" data-filter="video" onclick="filterByType(this)">📹 Videos</button>
-          <button class="filter-chip" data-filter="imagen" onclick="filterByType(this)">🖼️ Imágenes</button>
-          <button class="filter-chip" data-filter="simple" onclick="filterByType(this)">📝 Texto</button>
-          <button class="filter-chip" data-filter="lectura_multiple" onclick="filterByType(this)">📖 Lectura</button>
-          <button class="filter-chip" data-filter="quiz" onclick="filterByType(this)">✅ Quiz</button>
+          <button class="filter-chip" data-filter="video" onclick="filterByType(this)">ðŸ“¹ Videos</button>
+          <button class="filter-chip" data-filter="imagen" onclick="filterByType(this)">ðŸ–¼ï¸ ImÃ¡genes</button>
+          <button class="filter-chip" data-filter="simple" onclick="filterByType(this)">ðŸ“ Texto</button>
+          <button class="filter-chip" data-filter="lectura_multiple" onclick="filterByType(this)">ðŸ“– Lectura</button>
+          <button class="filter-chip" data-filter="quiz" onclick="filterByType(this)">âœ… Quiz</button>
         </div>
       </div>
     </div>
     <div class="resource-grid" id="resourceGrid"></div>
   </div>
 
-  <!-- ══════════ PÁGINA: MIS PORTALES ══════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â• PÃGINA: MIS PORTALES â•â•â•â•â•â•â•â•â•â• -->
   <div id="page-portales" class="page">
     <div class="section-header">
-      <h2 class="section-title">📁 Mis Portales</h2>
+      <h2 class="section-title">ðŸ“ Mis Portales</h2>
       <button class="btn-primary" onclick="openCreatePortal()" id="btnCreatePortal">
         <i class="fas fa-plus"></i> Crear Portal
       </button>
@@ -423,39 +423,39 @@
     <div class="portal-grid" id="portalGrid"></div>
   </div>
 
-  <!-- ══════════ PÁGINA: MIS ACTIVIDADES ══════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â• PÃGINA: MIS ACTIVIDADES â•â•â•â•â•â•â•â•â•â• -->
   <div id="page-actividades" class="page">
     <div class="section-header">
-      <h2 class="section-title">📋 Mis Actividades</h2>
+      <h2 class="section-title">ðŸ“‹ Mis Actividades</h2>
     </div>
     <div class="resource-grid" id="myActivitiesGrid"></div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <!--                                  MODALES                                     -->
-<!-- ════════════════════════════════════════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 
 <!-- MODAL: CREAR PORTAL -->
 <div id="createPortalModal" class="modal" onclick="closeModalOnBackdrop(event,'createPortalModal')">
   <div class="modal-content" onclick="event.stopPropagation()">
     <div class="modal-header">
       <h3 class="modal-title">Crear Nuevo Portal</h3>
-      <button class="btn-close" onclick="closeModal('createPortalModal')">×</button>
+      <button class="btn-close" onclick="closeModal('createPortalModal')">Ã—</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div>
           <label class="form-label">Nombre del Portal</label>
-          <input type="text" class="form-input" id="newPortalName" placeholder="Ej: Portal de Español 4°">
+          <input type="text" class="form-input" id="newPortalName" placeholder="Ej: Portal de EspaÃ±ol 4Â°">
         </div>
         <div>
-          <label class="form-label">Descripción</label>
-          <textarea class="form-textarea" id="newPortalDesc" placeholder="Breve descripción del portal..."></textarea>
+          <label class="form-label">DescripciÃ³n</label>
+          <textarea class="form-textarea" id="newPortalDesc" placeholder="Breve descripciÃ³n del portal..."></textarea>
         </div>
         <div>
-          <label class="form-label">Institución</label>
-          <input type="text" class="form-input" id="newPortalInst" placeholder="Nombre de la institución">
+          <label class="form-label">InstituciÃ³n</label>
+          <input type="text" class="form-input" id="newPortalInst" placeholder="Nombre de la instituciÃ³n">
         </div>
       </div>
     </div>
@@ -471,18 +471,18 @@
   <div class="modal-content" onclick="event.stopPropagation()">
     <div class="modal-header">
       <h3 class="modal-title">Actividad</h3>
-      <button class="btn-close" onclick="closeModal('activityModal')">×</button>
+      <button class="btn-close" onclick="closeModal('activityModal')">Ã—</button>
     </div>
     <div class="modal-body" id="activityContent"></div>
   </div>
 </div>
 
 <script>
-/* ════════════════════════════════════════════════════════════════════════════
-   CONFIGURACIÓN DE SUPABASE
-   ════════════════════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CONFIGURACIÃ“N DE SUPABASE
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    
-   IMPORTANTE: Reemplaza estos valores con tu configuración de Supabase
+   IMPORTANTE: Reemplaza estos valores con tu configuraciÃ³n de Supabase
    1. Ve a https://supabase.com
    2. Crea un nuevo proyecto
    3. Ve a Settings > API
@@ -490,23 +490,87 @@
 */
 
 const SUPABASE_URL = 'https://hishzckzmjafiekgyhqj.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhpc2h6Y2t6bWphZmlla2d5aHFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMDU3MDAsImV4cCI6MjA5MTc4MTcwMH0.IZZT-x2KF3p_SSiDkMw6r_o-Fpd6SLZMAeLQhlyeJ6A';
+const SUPABASE_ANON_KEY = 'sb_publishable_xW2MZaZdDz7cTAe0IPhuow_bgkMyeD5';
 
 // Inicializar cliente de Supabase
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase?.createClient
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    VARIABLES GLOBALES
-   ════════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 let currentUser = null;
 let allPortals = [];
 let allResources = [];
 let realtimeChannels = [];
+const ADMIN_EMAIL = 'admin@edurepo.co';
+const ADMIN_PASSWORD = 'Admin2024*';
 
-/* ════════════════════════════════════════════════════════════════════════════
-   AUTENTICACIÓN
-   ════════════════════════════════════════════════════════════════════════════ */
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase();
+}
+
+function getDefaultProfileForUser(user) {
+  const metadata = user?.user_metadata || {};
+  const email = normalizeEmail(user?.email);
+  const isAdmin = email === ADMIN_EMAIL;
+
+  return {
+    id: user.id,
+    email: user.email,
+    name: metadata.name || (isAdmin ? 'Administrador' : 'Usuario'),
+    role: metadata.role || (isAdmin ? 'admin' : 'teacher'),
+    institution: metadata.institution || 'EduRepositorio'
+  };
+}
+
+function ensureSupabaseReady() {
+  if (supabaseClient) return true;
+  showAuthMessage('No se pudo cargar la conexiÃ³n con Supabase. Verifica internet o la librerÃ­a incluida.', 'error');
+  return false;
+}
+
+function setAuthButtonState(button, isLoading, loadingText) {
+  if (!button) return;
+
+  if (!button.dataset.defaultText) {
+    button.dataset.defaultText = button.textContent;
+  }
+
+  button.disabled = isLoading;
+  button.textContent = isLoading ? loadingText : button.dataset.defaultText;
+  button.style.opacity = isLoading ? '0.7' : '1';
+  button.style.cursor = isLoading ? 'wait' : 'pointer';
+}
+
+async function ensureUserProfile(user) {
+  if (!ensureSupabaseReady() || !user?.id) return null;
+
+  const { data: profile, error } = await supabaseClient
+    .from('users')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (!error && profile) {
+    return profile;
+  }
+
+  const fallbackProfile = getDefaultProfileForUser(user);
+  const { error: upsertError } = await supabaseClient
+    .from('users')
+    .upsert([fallbackProfile], { onConflict: 'id' });
+
+  if (upsertError) throw upsertError;
+
+  return fallbackProfile;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   AUTENTICACIÃ“N
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function switchAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -524,40 +588,59 @@ function switchAuthTab(tab) {
 
 function togglePassword(id) {
   const input = document.getElementById(id);
+  if (!input) return;
   input.type = input.type === 'password' ? 'text' : 'password';
+
+  if (window.event?.currentTarget) {
+    window.event.currentTarget.textContent = input.type === 'password' ? 'ðŸ‘ï¸' : 'ðŸ™ˆ';
+  }
 }
 
 async function handleLogin(e) {
   e.preventDefault();
-  const email = document.getElementById('loginEmail').value;
+  if (!ensureSupabaseReady()) return;
+
+  const form = e.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const email = normalizeEmail(document.getElementById('loginEmail').value);
   const password = document.getElementById('loginPassword').value;
 
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    setAuthButtonState(submitButton, true, 'Entrando...');
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email,
       password
     });
 
     if (error) throw error;
 
-    showAuthMessage('¡Bienvenido! Iniciando sesión...', 'success');
-    setTimeout(() => loadUserData(data.user), 1000);
+    await ensureUserProfile(data.user);
+    showAuthMessage('Bienvenido. Iniciando sesión...', 'success');
+    await loadUserData(data.user);
   } catch (error) {
-    showAuthMessage('Error: ' + error.message, 'error');
+    showAuthMessage('Error al iniciar sesión: ' + error.message, 'error');
+  } finally {
+    setAuthButtonState(submitButton, false);
   }
 }
 
 async function handleRegister(e) {
   e.preventDefault();
-  const email = document.getElementById('regEmail').value;
+  if (!ensureSupabaseReady()) return;
+
+  const form = e.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const email = normalizeEmail(document.getElementById('regEmail').value);
   const password = document.getElementById('regPassword').value;
-  const name = document.getElementById('regName').value;
+  const name = document.getElementById('regName').value.trim();
   const role = document.getElementById('regRole').value;
-  const institution = document.getElementById('regInstitution').value;
+  const institution = document.getElementById('regInstitution').value.trim();
 
   try {
-    // Crear usuario en Supabase Auth
-    const { data, error } = await supabase.auth.signUp({
+    setAuthButtonState(submitButton, true, 'Creando cuenta...');
+
+    const { data, error } = await supabaseClient.auth.signUp({
       email,
       password,
       options: {
@@ -570,42 +653,45 @@ async function handleRegister(e) {
     });
 
     if (error) throw error;
+    if (!data.user) throw new Error('Supabase no devolvio el usuario creado.');
 
-    // Crear perfil en la tabla users
-    const { error: profileError } = await supabase
-      .from('users')
-      .insert([{
-        id: data.user.id,
-        email,
-        name,
-        role,
-        institution
-      }]);
+    if (!data.session) {
+      showAuthMessage('La cuenta fue creada, pero Supabase exige confirmar el correo antes de iniciar sesion. Si quieres acceso inmediato, desactiva la confirmacion de email en Authentication > Providers > Email.', 'success');
+      switchAuthTab('login');
+      document.getElementById('loginEmail').value = email;
+      return;
+    }
 
-    if (profileError) throw profileError;
+    await ensureUserProfile({
+      ...data.user,
+      user_metadata: { name, role, institution }
+    });
 
-    showAuthMessage('¡Cuenta creada! Puedes iniciar sesión.', 'success');
-    setTimeout(() => switchAuthTab('login'), 2000);
+    showAuthMessage('Cuenta creada correctamente. Ya puedes ingresar.', 'success');
+    switchAuthTab('login');
+    document.getElementById('loginEmail').value = email;
+    document.getElementById('loginPassword').value = '';
   } catch (error) {
-    showAuthMessage('Error: ' + error.message, 'error');
+    showAuthMessage('Error al crear la cuenta: ' + error.message, 'error');
+  } finally {
+    setAuthButtonState(submitButton, false);
   }
 }
 
 async function logout() {
   try {
-    // Desconectar canales de tiempo real
     realtimeChannels.forEach(channel => {
-      supabase.removeChannel(channel);
+      supabaseClient.removeChannel(channel);
     });
     realtimeChannels = [];
 
-    await supabase.auth.signOut();
+    await supabaseClient.auth.signOut();
     currentUser = null;
     document.getElementById('authScreen').style.display = 'flex';
     document.getElementById('mainApp').style.display = 'none';
-    toast('Sesión cerrada', 'blue');
+    toast('Sesion cerrada', 'blue');
   } catch (error) {
-    toast('Error al cerrar sesión', 'red');
+    toast('Error al cerrar sesion', 'red');
   }
 }
 
@@ -619,24 +705,12 @@ function hideAuthMessage() {
   document.getElementById('authMessage').className = 'auth-msg';
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   CARGA DE DATOS DE USUARIO
-   ════════════════════════════════════════════════════════════════════════════ */
+/* CARGA DE DATOS DE USUARIO */
 
 async function loadUserData(user) {
   try {
-    // Obtener perfil del usuario
-    const { data: profile, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', user.id)
-      .single();
+    currentUser = await ensureUserProfile(user);
 
-    if (error) throw error;
-
-    currentUser = profile;
-
-    // Actualizar UI
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
     
@@ -644,9 +718,10 @@ async function loadUserData(user) {
     await loadAllData();
     setupRealtimeSubscriptions();
     
-    toast('¡Bienvenido, ' + currentUser.name + '!', 'green');
+    toast('Bienvenido, ' + currentUser.name + '!', 'green');
   } catch (error) {
     console.error('Error loading user data:', error);
+    showAuthMessage('No se pudo cargar el perfil del usuario. Revisa que la tabla public.users y sus politicas esten aplicadas.', 'error');
     toast('Error al cargar datos del usuario', 'red');
   }
 }
@@ -662,16 +737,16 @@ function updateUserUI() {
   role.textContent = currentUser.role === 'admin' ? 'Administrador' : 
                      currentUser.role === 'teacher' ? 'Docente' : 'Estudiante';
 
-  // Mostrar/ocultar botón de crear portal según rol
+  // Mostrar/ocultar botÃ³n de crear portal segÃºn rol
   const btnCreate = document.getElementById('btnCreatePortal');
   if (btnCreate) {
     btnCreate.style.display = currentUser.role === 'student' ? 'none' : 'flex';
   }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CARGA DE DATOS DESDE SUPABASE
-   ════════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 async function loadAllData() {
   await loadPortals();
@@ -681,7 +756,7 @@ async function loadAllData() {
 
 async function loadPortals() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('portals')
       .select('*')
       .order('created_at', { ascending: false });
@@ -697,7 +772,7 @@ async function loadPortals() {
 
 async function loadResources() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('resources')
       .select('*')
       .order('created_at', { ascending: false });
@@ -711,13 +786,13 @@ async function loadResources() {
   }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SUBSCRIPCIONES EN TIEMPO REAL
-   ════════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function setupRealtimeSubscriptions() {
-  // Subscripción a cambios en portales
-  const portalsChannel = supabase
+  // SubscripciÃ³n a cambios en portales
+  const portalsChannel = supabaseClient
     .channel('portals-changes')
     .on('postgres_changes', 
       { event: '*', schema: 'public', table: 'portals' },
@@ -727,8 +802,8 @@ function setupRealtimeSubscriptions() {
     )
     .subscribe();
 
-  // Subscripción a cambios en recursos
-  const resourcesChannel = supabase
+  // SubscripciÃ³n a cambios en recursos
+  const resourcesChannel = supabaseClient
     .channel('resources-changes')
     .on('postgres_changes',
       { event: '*', schema: 'public', table: 'resources' },
@@ -747,16 +822,16 @@ function handlePortalChange(payload) {
 
   if (eventType === 'INSERT') {
     allPortals.unshift(newRecord);
-    toast('✨ Nuevo portal creado', 'green');
+    toast('âœ¨ Nuevo portal creado', 'green');
   } else if (eventType === 'UPDATE') {
     const index = allPortals.findIndex(p => p.id === newRecord.id);
     if (index >= 0) {
       allPortals[index] = newRecord;
-      toast('📝 Portal actualizado', 'blue');
+      toast('ðŸ“ Portal actualizado', 'blue');
     }
   } else if (eventType === 'DELETE') {
     allPortals = allPortals.filter(p => p.id !== oldRecord.id);
-    toast('🗑️ Portal eliminado', 'red');
+    toast('ðŸ—‘ï¸ Portal eliminado', 'red');
   }
 
   renderPortals();
@@ -768,16 +843,16 @@ function handleResourceChange(payload) {
 
   if (eventType === 'INSERT') {
     allResources.unshift(newRecord);
-    toast('✨ Nuevo recurso añadido', 'green');
+    toast('âœ¨ Nuevo recurso aÃ±adido', 'green');
   } else if (eventType === 'UPDATE') {
     const index = allResources.findIndex(r => r.id === newRecord.id);
     if (index >= 0) {
       allResources[index] = newRecord;
-      toast('📝 Recurso actualizado', 'blue');
+      toast('ðŸ“ Recurso actualizado', 'blue');
     }
   } else if (eventType === 'DELETE') {
     allResources = allResources.filter(r => r.id !== oldRecord.id);
-    toast('🗑️ Recurso eliminado', 'red');
+    toast('ðŸ—‘ï¸ Recurso eliminado', 'red');
   }
 
   renderResources();
@@ -796,9 +871,9 @@ function updateSyncStatus(connected) {
   }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    RENDERIZADO DE DATOS
-   ════════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function renderAll() {
   renderPortals();
@@ -820,11 +895,11 @@ function renderPortals() {
     return `
       <div class="portal-card">
         <div class="portal-header">
-          <div class="portal-icon">📁</div>
+          <div class="portal-icon">ðŸ“</div>
           ${isOwner ? `
             <div class="portal-actions">
-              <button class="btn-portal-action" onclick="editPortal('${portal.id}')" title="Editar">✏️</button>
-              <button class="btn-portal-action" onclick="deletePortal('${portal.id}')" title="Eliminar">🗑️</button>
+              <button class="btn-portal-action" onclick="editPortal('${portal.id}')" title="Editar">âœï¸</button>
+              <button class="btn-portal-action" onclick="deletePortal('${portal.id}')" title="Eliminar">ðŸ—‘ï¸</button>
             </div>
           ` : ''}
         </div>
@@ -857,12 +932,12 @@ function renderResources() {
 
   grid.innerHTML = filtered.map(resource => {
     const typeLabel = {
-      video: '📹 Video',
-      imagen: '🖼️ Imagen',
-      simple: '📝 Texto',
-      lectura_multiple: '📖 Lectura',
-      quiz: '✅ Quiz'
-    }[resource.type] || '📄 Recurso';
+      video: 'ðŸ“¹ Video',
+      imagen: 'ðŸ–¼ï¸ Imagen',
+      simple: 'ðŸ“ Texto',
+      lectura_multiple: 'ðŸ“– Lectura',
+      quiz: 'âœ… Quiz'
+    }[resource.type] || 'ðŸ“„ Recurso';
 
     return `
       <div class="resource-card" onclick="viewResource('${resource.id}')">
@@ -874,7 +949,7 @@ function renderResources() {
           <div class="resource-title">${escHtml(resource.title)}</div>
           <div class="resource-desc">${escHtml(resource.description || '')}</div>
           <div class="resource-meta">
-            <span>📅 ${formatDate(resource.created_at)}</span>
+            <span>ðŸ“… ${formatDate(resource.created_at)}</span>
           </div>
         </div>
       </div>
@@ -896,24 +971,24 @@ function renderMyActivities() {
   grid.innerHTML = myPortals.map(portal => `
     <div class="resource-card" onclick="viewPortalActivity('${portal.id}')">
       <div class="resource-thumb" style="background:linear-gradient(135deg,var(--verde),var(--azul))">
-        📁
+        ðŸ“
         <div class="resource-type-badge">Portal</div>
       </div>
       <div class="resource-body">
         <div class="resource-title">${escHtml(portal.name)}</div>
         <div class="resource-desc">${escHtml(portal.description || '')}</div>
         <div class="resource-meta">
-          <span>📚 ${getResourceCountForPortal(portal.id)} recursos</span>
-          <span>📅 ${formatDate(portal.created_at)}</span>
+          <span>ðŸ“š ${getResourceCountForPortal(portal.id)} recursos</span>
+          <span>ðŸ“… ${formatDate(portal.created_at)}</span>
         </div>
       </div>
     </div>
   `).join('');
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    OPERACIONES CRUD - PORTALES
-   ════════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function openCreatePortal() {
   document.getElementById('newPortalName').value = '';
@@ -933,7 +1008,7 @@ async function createPortal() {
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('portals')
       .insert([{
         name,
@@ -947,7 +1022,7 @@ async function createPortal() {
     if (error) throw error;
 
     closeModal('createPortalModal');
-    toast('✅ Portal creado exitosamente', 'green');
+    toast('âœ… Portal creado exitosamente', 'green');
   } catch (error) {
     console.error('Error creating portal:', error);
     toast('Error al crear portal', 'red');
@@ -955,17 +1030,17 @@ async function createPortal() {
 }
 
 async function deletePortal(portalId) {
-  if (!confirm('¿Estás seguro de eliminar este portal y todos sus recursos?')) return;
+  if (!confirm('Â¿EstÃ¡s seguro de eliminar este portal y todos sus recursos?')) return;
 
   try {
     // Primero eliminar recursos asociados
-    await supabase
+    await supabaseClient
       .from('resources')
       .delete()
       .eq('portal_id', portalId);
 
     // Luego eliminar el portal
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('portals')
       .delete()
       .eq('id', portalId);
@@ -994,7 +1069,7 @@ function viewPortalActivity(portalId) {
   `;
 
   if (resources.length === 0) {
-    html += '<p style="text-align:center;color:#95a5a6">Este portal no tiene recursos aún</p>';
+    html += '<p style="text-align:center;color:#95a5a6">Este portal no tiene recursos aÃºn</p>';
   } else {
     resources.forEach(resource => {
       html += renderResourceContent(resource);
@@ -1096,27 +1171,27 @@ function selectOption(btn, questionIndex, optionIndex, correctIndex) {
 
   if (optionIndex === correctIndex) {
     btn.classList.add('correcta');
-    toast('✅ ¡Correcto!', 'green');
+    toast('âœ… Â¡Correcto!', 'green');
   } else {
     btn.classList.add('incorrecta');
     buttons[correctIndex].classList.add('correcta');
-    toast('❌ Incorrecto. La respuesta correcta está marcada en verde.', 'red');
+    toast('âŒ Incorrecto. La respuesta correcta estÃ¡ marcada en verde.', 'red');
   }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    UTILIDADES
-   ════════════════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function getResourceIcon(type) {
   const icons = {
-    video: '📹',
-    imagen: '🖼️',
-    simple: '📝',
-    lectura_multiple: '📖',
-    quiz: '✅'
+    video: 'ðŸ“¹',
+    imagen: 'ðŸ–¼ï¸',
+    simple: 'ðŸ“',
+    lectura_multiple: 'ðŸ“–',
+    quiz: 'âœ…'
   };
-  return icons[type] || '📄';
+  return icons[type] || 'ðŸ“„';
 }
 
 function getResourceCountForPortal(portalId) {
@@ -1162,9 +1237,9 @@ function escHtml(str) {
   return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   NAVEGACIÓN Y UI
-   ════════════════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   NAVEGACIÃ“N Y UI
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function switchPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1203,70 +1278,20 @@ function toast(message, color) {
   setTimeout(() => div.remove(), 3000);
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   INICIALIZACIÓN
-   ════════════════════════════════════════════════════════════════════════════ */
-
-async function ensureAdminExists() {
-  // Intenta crear el usuario admin si no existe
-  const adminEmail = 'admin@edurepo.co';
-  const adminPassword = 'Admin2024*';
-
-  try {
-    // Primero intenta hacer login para ver si ya existe
-    const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-      email: adminEmail,
-      password: adminPassword
-    });
-
-    if (!loginError && loginData.user) {
-      // Admin ya existe, cerramos esa sesión silenciosa y terminamos
-      await supabase.auth.signOut();
-      console.log('Admin ya existe en Supabase.');
-      return;
-    }
-
-    // Si no existe, lo registramos
-    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-      email: adminEmail,
-      password: adminPassword,
-      options: { data: { name: 'Administrador', role: 'admin', institution: 'EduRepositorio' } }
-    });
-
-    if (signUpError) {
-      console.warn('No se pudo crear admin:', signUpError.message);
-      return;
-    }
-
-    if (signUpData.user) {
-      // Crear perfil en tabla users
-      await supabase.from('users').upsert([{
-        id: signUpData.user.id,
-        email: adminEmail,
-        name: 'Administrador',
-        role: 'admin',
-        institution: 'EduRepositorio'
-      }], { onConflict: 'id' });
-      console.log('Admin creado exitosamente.');
-    }
-  } catch (err) {
-    console.warn('ensureAdminExists error:', err);
-  }
-}
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   INICIALIZACIÃ“N
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 async function initApp() {
-  // Intentar crear admin automáticamente si no existe
-  await ensureAdminExists();
+  if (!ensureSupabaseReady()) return;
 
-  // Verificar si hay sesión activa
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
   
   if (session) {
-    loadUserData(session.user);
+    await loadUserData(session.user);
   }
 
-  // Escuchar cambios en autenticación
-  supabase.auth.onAuthStateChange((event, session) => {
+  supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && session) {
       loadUserData(session.user);
     } else if (event === 'SIGNED_OUT') {
@@ -1281,3 +1306,5 @@ window.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
 </html>
+
+
