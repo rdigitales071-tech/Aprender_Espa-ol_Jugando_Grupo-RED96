@@ -3,45 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📚 EduRepositorio | Español 4° y 5° Grado · Colombia</title>
+  <title>📚 EduRepositorio Colombia | Español 4° y 5° Grado</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     :root {
-      --verde: #1a7a4a;
-      --verde-claro: #27ae60;
-      --verde-suave: #d4edda;
-      --azul: #1a5276;
-      --azul-claro: #2980b9;
-      --azul-suave: #d6eaf8;
-      --naranja: #d35400;
-      --naranja-suave: #fdebd0;
-      --amarillo: #f0c030;
-      --rojo: #c0392b;
-      --fondo: #f4f8f0;
-      --blanco: #ffffff;
-      --gris-claro: #ecf0f1;
-      --texto: #2c3e50;
-      --sombra: 0 8px 30px rgba(0,0,0,0.12);
+      --verde: #1a7a4a; --verde-claro: #27ae60; --verde-suave: #d4edda;
+      --azul: #1a5276; --azul-claro: #2980b9; --azul-suave: #d6eaf8;
+      --naranja: #d35400; --naranja-suave: #fdebd0;
+      --rojo: #c0392b; --morado: #8e44ad;
+      --fondo: #f4f8f0; --blanco: #ffffff; --gris-claro: #ecf0f1;
+      --texto: #2c3e50; --sombra: 0 8px 30px rgba(0,0,0,0.12);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Nunito', sans-serif; background: var(--fondo); color: var(--texto); overflow-x: hidden; }
 
     /* ─── LOGIN ─── */
-    #authScreen {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #1a7a4a 0%, #1a5276 50%, #6c3483 100%);
-      position: relative; overflow: hidden;
-    }
-    #authScreen::before {
-      content: ''; position: absolute; inset: 0;
-      background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06) 0%, transparent 50%);
-    }
-    .auth-decorations { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-    .auth-decorations span { position: absolute; font-size: 3rem; opacity: 0.06; animation: float 8s ease-in-out infinite; }
+    #authScreen { min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#1a7a4a 0%,#1a5276 50%,#6c3483 100%); position:relative; overflow:hidden; }
+    #authScreen::before { content:''; position:absolute; inset:0;
+      background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,0.08) 0%,transparent 50%),
+                       radial-gradient(circle at 80% 70%,rgba(255,255,255,0.06) 0%,transparent 50%); }
+    .auth-decorations { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .auth-decorations span { position:absolute; font-size:3rem; opacity:0.06; animation:float 8s ease-in-out infinite; }
     .auth-decorations span:nth-child(1){top:10%;left:5%;animation-delay:0s}
     .auth-decorations span:nth-child(2){top:20%;right:8%;animation-delay:2s}
     .auth-decorations span:nth-child(3){bottom:15%;left:10%;animation-delay:1s}
@@ -49,12 +34,8 @@
     .auth-decorations span:nth-child(5){top:50%;left:2%;animation-delay:1.5s}
     .auth-decorations span:nth-child(6){top:40%;right:2%;animation-delay:2.5s}
     @keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(10deg)}}
-
-    .auth-box {
-      background: white; border-radius: 2rem; padding: 2.5rem;
-      width: 90%; max-width: 460px; box-shadow: 0 30px 80px rgba(0,0,0,0.3);
-      position: relative; z-index: 1; animation: slideUp 0.5s ease;
-    }
+    .auth-box { background:white; border-radius:2rem; padding:2.5rem; width:90%; max-width:460px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.3); position:relative; z-index:1; animation:slideUp 0.5s ease; }
     @keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
     .auth-logo{text-align:center;margin-bottom:1.5rem}
     .auth-logo .logo-icon{font-size:3.5rem;display:block;margin-bottom:0.5rem}
@@ -66,14 +47,14 @@
     .auth-form{display:flex;flex-direction:column;gap:1rem}
     .form-group{display:flex;flex-direction:column;gap:6px}
     .form-group label{font-weight:700;font-size:0.85rem;color:var(--texto)}
+    .form-group input,.form-group select{padding:12px 16px;border:2px solid var(--gris-claro);border-radius:12px;font-family:inherit;font-size:0.95rem;transition:0.2s;outline:none}
+    .form-group input:focus,.form-group select:focus{border-color:var(--verde);box-shadow:0 0 0 4px rgba(26,122,74,0.1)}
     .pass-wrapper{position:relative}
-    .pass-wrapper input{width:100%;padding:12px 44px 12px 16px;border:2px solid var(--gris-claro);border-radius:12px;font-family:inherit;font-size:0.95rem;transition:0.2s;outline:none}
+    .pass-wrapper input{width:100%;padding:12px 50px 12px 16px;border:2px solid var(--gris-claro);border-radius:12px;font-family:inherit;font-size:0.95rem;transition:0.2s;outline:none}
     .pass-wrapper input:focus{border-color:var(--verde);box-shadow:0 0 0 4px rgba(26,122,74,0.1)}
     .toggle-pass{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#7f8c8d;font-size:0.8rem;padding:4px 6px;font-weight:800}
     .toggle-pass:hover{color:var(--verde)}
     .helper-text{font-size:0.8rem;line-height:1.5;color:#6c7a89;margin-top:2px}
-    .form-group input, .form-group select{padding:12px 16px;border:2px solid var(--gris-claro);border-radius:12px;font-family:inherit;font-size:0.95rem;transition:0.2s;outline:none}
-    .form-group input:focus,.form-group select:focus{border-color:var(--verde);box-shadow:0 0 0 4px rgba(26,122,74,0.1)}
     .btn-auth{padding:14px;background:linear-gradient(135deg,var(--verde),var(--azul));color:white;border:none;border-radius:12px;font-weight:800;font-size:1rem;cursor:pointer;transition:0.2s;font-family:inherit;letter-spacing:0.5px}
     .btn-auth:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,122,74,0.4)}
     .btn-auth:disabled{opacity:0.7;cursor:wait;transform:none}
@@ -83,8 +64,6 @@
 
     /* ─── MAIN APP ─── */
     #mainApp{display:none;min-height:100vh}
-
-    /* HEADER */
     .header{background:linear-gradient(135deg,#1a7a4a,#1a5276);color:white;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;min-height:70px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.2)}
     .header-left{display:flex;align-items:center;gap:12px}
     .header-logo{font-size:1.8rem}
@@ -94,7 +73,7 @@
     .user-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:50px;cursor:pointer;transition:0.2s}
     .user-pill:hover{background:rgba(255,255,255,0.25)}
     .user-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem}
-    .avatar-admin{background:var(--naranja)}.avatar-teacher{background:#8e44ad}.avatar-student{background:var(--azul-claro)}.avatar-pending{background:#95a5a6}
+    .avatar-admin{background:var(--naranja)}.avatar-teacher{background:var(--morado)}.avatar-student{background:var(--azul-claro)}.avatar-pending{background:#95a5a6}
     .user-info{line-height:1.2}
     .user-name{font-weight:700;font-size:0.9rem}
     .user-role{font-size:0.72rem;opacity:0.8}
@@ -103,30 +82,27 @@
     .sync-dot{width:10px;height:10px;border-radius:50%;background:#27ae60;display:inline-block;margin-right:4px;animation:pulse 2s infinite}
     .sync-dot.offline{background:#e74c3c;animation:none}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-
-    /* NAV */
     .nav-bar{background:white;border-bottom:2px solid var(--gris-claro);display:flex;gap:0;overflow-x:auto;padding:0 1rem;scrollbar-width:none;position:sticky;top:70px;z-index:99;box-shadow:0 2px 10px rgba(0,0,0,0.06)}
     .nav-bar::-webkit-scrollbar{display:none}
     .nav-item{padding:14px 18px;border:none;background:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:0.85rem;color:#7f8c8d;border-bottom:3px solid transparent;transition:0.2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
     .nav-item:hover{color:var(--verde)}
     .nav-item.active{color:var(--verde);border-bottom-color:var(--verde)}
-    .nav-badge{background:var(--naranja);color:white;border-radius:50px;padding:1px 7px;font-size:0.7rem}
 
     /* PAGES */
     .page{display:none;padding:2rem;max-width:1300px;margin:0 auto}
     .page.active{display:block}
 
     /* INFO CARDS */
-    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-bottom:2rem}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-bottom:2rem}
     .info-card{background:white;border-radius:1.5rem;padding:1.8rem;box-shadow:var(--sombra);border-left:5px solid var(--verde);transition:transform 0.2s}
     .info-card:hover{transform:translateY(-4px)}
-    .info-card.azul{border-left-color:var(--azul)}.info-card.naranja{border-left-color:var(--naranja)}.info-card.morado{border-left-color:#8e44ad}
+    .info-card.azul{border-left-color:var(--azul)}.info-card.naranja{border-left-color:var(--naranja)}.info-card.morado{border-left-color:var(--morado)}
     .info-card-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
     .info-card-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:var(--verde-suave)}
     .info-card.azul .info-card-icon{background:var(--azul-suave)}.info-card.naranja .info-card-icon{background:var(--naranja-suave)}.info-card.morado .info-card-icon{background:#f5eef8}
     .info-card h3{font-size:1.1rem;color:var(--texto)}.info-card p{color:#7f8c8d;font-size:0.9rem;line-height:1.7}.info-card ul{color:#7f8c8d;font-size:0.9rem;line-height:2;padding-left:1.2rem}
 
-    /* SECTION HEADER */
+    /* SECTION */
     .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
     .section-title{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--texto)}
     .search-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -136,41 +112,28 @@
     .filter-chip{padding:8px 14px;border:2px solid var(--gris-claro);background:white;border-radius:50px;font-size:0.85rem;font-weight:700;cursor:pointer;transition:0.2s;display:flex;align-items:center;gap:5px;font-family:inherit}
     .filter-chip:hover{border-color:var(--verde);background:var(--verde-suave)}
     .filter-chip.active{background:var(--verde);color:white;border-color:var(--verde)}
-    .btn-primary{padding:10px 20px;background:linear-gradient(135deg,var(--verde),var(--azul));color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:0.2s;font-size:0.9rem;display:flex;align-items:center;gap:6px}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,122,74,0.4)}
 
-    /* RESOURCE CARDS (V4 style pero mejorado) */
-    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.5rem}
-    .resource-card{background:white;border-radius:1.5rem;overflow:hidden;box-shadow:var(--sombra);transition:transform 0.2s,box-shadow 0.2s;border-top:4px solid var(--verde)}
+    /* RESOURCE CARDS */
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
+    .resource-card{background:white;border-radius:1.5rem;overflow:hidden;box-shadow:var(--sombra);transition:transform 0.2s,box-shadow 0.2s;border-top:4px solid var(--verde);cursor:pointer}
     .resource-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.15)}
-    .resource-card.type-video{border-top-color:#e74c3c}
-    .resource-card.type-imagen{border-top-color:#2980b9}
-    .resource-card.type-simple{border-top-color:#d35400}
-    .resource-card.type-lectura_multiple{border-top-color:#16a085}
-    .resource-card.type-quiz{border-top-color:#8e44ad}
-    .resource-card.type-juego{border-top-color:#f0c030}
-    .card-thumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,var(--verde-suave),var(--azul-suave));position:relative}
+    .card-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,var(--verde-suave),var(--azul-suave));position:relative}
     .card-type-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.95);color:var(--texto);padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:700}
     .card-body{padding:1.2rem}
     .card-category{display:inline-block;background:var(--verde-suave);color:var(--verde);padding:3px 12px;border-radius:50px;font-size:0.7rem;font-weight:800;margin-bottom:8px;text-transform:uppercase}
-    .card-category.lectura{background:var(--azul-suave);color:var(--azul)}
-    .card-category.escritura{background:#fdebd0;color:var(--naranja)}
-    .card-category.gramatica{background:#f5eef8;color:#8e44ad}
-    .card-category.vocabulario{background:#d4efdf;color:#1e8449}
-    .card-category.video{background:#fdecea;color:var(--rojo)}
-    .card-category.juego{background:#fef9e7;color:#d4ac0d}
-    .card-category.supabase{background:var(--azul-suave);color:var(--azul)}
     .card-title{font-size:1rem;font-weight:800;color:var(--texto);margin-bottom:6px;line-height:1.3}
     .card-desc{color:#7f8c8d;font-size:0.85rem;margin-bottom:12px;line-height:1.5}
     .card-actions{display:flex;gap:8px;flex-wrap:wrap}
     .btn-card{padding:7px 16px;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.82rem;cursor:pointer;transition:0.2s}
     .btn-open{background:var(--verde);color:white}.btn-open:hover{background:#156038}
-    .btn-add-portal{background:var(--azul-suave);color:var(--azul)}.btn-add-portal:hover{background:var(--azul);color:white}
+    .btn-share{background:var(--azul-suave);color:var(--azul)}.btn-share:hover{background:var(--azul);color:white}
+    .btn-copy{background:#f5eef8;color:var(--morado)}.btn-copy:hover{background:var(--morado);color:white}
+    .btn-export{background:#fef9e7;color:#d4ac0d;border:1px solid #d4ac0d}.btn-export:hover{background:#d4ac0d;color:white}
 
     /* MODAL */
-    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:1rem}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:1rem}
     .modal.show{display:flex}
-    .modal-content{background:white;width:100%;max-width:780px;max-height:90vh;border-radius:2rem;overflow-y:auto;position:relative;animation:modalPop 0.3s ease;box-shadow:0 30px 80px rgba(0,0,0,0.3)}
+    .modal-content{background:white;width:100%;max-width:900px;max-height:90vh;border-radius:2rem;overflow-y:auto;position:relative;animation:modalPop 0.3s ease;box-shadow:0 30px 80px rgba(0,0,0,0.3)}
     @keyframes modalPop{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
     .modal-header{position:sticky;top:0;background:white;padding:1.5rem 2rem 1rem;border-bottom:2px solid var(--gris-claro);display:flex;align-items:center;justify-content:space-between;z-index:10;border-radius:2rem 2rem 0 0}
     .modal-header h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--texto)}
@@ -178,53 +141,50 @@
     .modal-footer{padding:1rem 1.5rem;border-top:2px solid var(--gris-claro);display:flex;gap:10px;justify-content:flex-end}
     .btn-close{background:var(--gris-claro);border:none;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;color:#7f8c8d;transition:0.2s}
     .btn-close:hover{background:#d0d6d8;transform:rotate(90deg)}
+    .btn-primary{padding:10px 20px;background:linear-gradient(135deg,var(--verde),var(--azul));color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:0.2s;font-size:0.9rem;display:inline-flex;align-items:center;gap:6px}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,122,74,0.4)}
     .btn-secondary{padding:10px 20px;background:var(--gris-claro);border:none;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:0.2s;font-size:0.9rem}
     .btn-secondary:hover{background:#d0d6d8}
 
-    /* FORM STYLES */
+    /* FORM */
     .form-grid{display:grid;gap:1rem}
     .form-label{font-weight:700;font-size:0.85rem;color:var(--texto);margin-bottom:6px;display:block}
     .form-input,.form-select,.form-textarea{width:100%;padding:12px 16px;border:2px solid var(--gris-claro);border-radius:12px;font-family:inherit;font-size:0.95rem;outline:none;transition:0.2s}
     .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--verde);box-shadow:0 0 0 4px rgba(26,122,74,0.1)}
-    .form-textarea{resize:vertical;min-height:100px}
-
-    /* TOAST */
-    .toast-container{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:8px}
-    .toast{background:white;padding:1rem 1.5rem;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;font-weight:700;font-size:0.9rem;animation:slideIn 0.3s ease;max-width:320px}
-    @keyframes slideIn{from{opacity:0;transform:translateX(100px)}to{opacity:1;transform:translateX(0)}}
-    .toast.green{border-left:5px solid var(--verde)}.toast.red{border-left:5px solid var(--rojo)}.toast.blue{border-left:5px solid var(--azul)}
+    .form-textarea{resize:vertical;min-height:80px}
 
     /* PORTAL CARDS */
-    .portal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:0}
-    .portal-card{background:white;border-radius:1.2rem;padding:1.5rem;box-shadow:var(--sombra);transition:transform 0.2s;border-top:4px solid var(--azul)}
+    .portal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
+    .portal-card{background:white;border-radius:1.5rem;padding:1.5rem;box-shadow:var(--sombra);border-top:4px solid var(--azul);transition:transform 0.2s;position:relative}
     .portal-card:hover{transform:translateY(-4px)}
-    .portal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
-    .portal-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:linear-gradient(135deg,var(--verde),var(--azul));color:white;flex-shrink:0}
-    .portal-btns{display:flex;gap:6px}
-    .btn-portal-action{background:var(--gris-claro);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:0.85rem;color:var(--texto);transition:0.2s}
-    .btn-portal-action:hover{background:var(--verde);color:white}
-    .btn-portal-action.danger:hover{background:var(--rojo);color:white}
+    .portal-owner-badge{position:absolute;top:12px;right:12px;background:var(--naranja-suave);color:var(--naranja);padding:2px 10px;border-radius:50px;font-size:0.7rem;font-weight:800}
+    .portal-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:1rem}
+    .portal-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:linear-gradient(135deg,var(--verde),var(--azul));color:white;flex-shrink:0}
     .portal-info h3{font-size:1.1rem;color:var(--texto);margin-bottom:0.3rem}
     .portal-info p{font-size:0.85rem;color:#7f8c8d;line-height:1.5}
-    .portal-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;padding-top:1rem;border-top:2px solid var(--gris-claro)}
-    .portal-stats{font-size:0.8rem;color:#95a5a6}
-    .btn-open-portal{padding:8px 16px;background:var(--verde);color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.85rem;transition:0.2s}
-    .btn-open-portal:hover{background:var(--verde-claro)}
+    .portal-meta{display:flex;gap:8px;flex-wrap:wrap;margin:0.8rem 0}
+    .portal-tag{background:var(--gris-claro);color:var(--texto);padding:3px 10px;border-radius:50px;font-size:0.75rem;font-weight:700}
+    .portal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+    .btn-view{background:var(--verde);color:white;padding:7px 14px;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.82rem;cursor:pointer;transition:0.2s}
+    .btn-view:hover{background:#156038}
+    .btn-edit-portal{background:#f5eef8;color:var(--morado);padding:7px 14px;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.82rem;cursor:pointer;transition:0.2s}
+    .btn-edit-portal:hover{background:var(--morado);color:white}
+    .btn-content{background:var(--azul-suave);color:var(--azul);padding:7px 14px;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.82rem;cursor:pointer;transition:0.2s}
+    .btn-content:hover{background:var(--azul);color:white}
+    .btn-del{background:#fdecea;color:var(--rojo);padding:7px 14px;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.82rem;cursor:pointer;transition:0.2s}
+    .btn-del:hover{background:var(--rojo);color:white}
 
-    /* ACTIVITY VIEWER */
-    .activity-header{background:linear-gradient(135deg,var(--verde),var(--azul));color:white;padding:2rem;border-radius:1.2rem;margin-bottom:2rem}
-    .activity-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:0.5rem}
-    .activity-subtitle{opacity:0.9;font-size:0.95rem}
-    .resource-section{background:white;border-radius:1.2rem;padding:2rem;margin-bottom:1.5rem;box-shadow:var(--sombra)}
-    .resource-section-title{font-size:1.2rem;font-weight:800;color:var(--texto);margin-bottom:1rem;display:flex;align-items:center;gap:10px}
+    /* ACTIVITY CONTENT */
+    .resource-section{background:white;border-radius:1.2rem;padding:1.5rem;margin-bottom:1rem;box-shadow:var(--sombra)}
+    .resource-section-title{font-size:1.1rem;font-weight:800;color:var(--texto);margin-bottom:0.8rem}
     .video-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;background:#000;margin:1rem 0}
-    .video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%}
+    .video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
     .lectura-texto{background:var(--gris-claro);padding:1.5rem;border-radius:12px;line-height:1.9;margin-bottom:1.5rem;font-size:0.95rem;white-space:pre-line}
-    .preguntas-container{display:flex;flex-direction:column;gap:1.5rem}
-    .pregunta-item{background:var(--gris-claro);padding:1.5rem;border-radius:12px}
-    .pregunta-texto{font-weight:700;font-size:1rem;margin-bottom:1rem;color:var(--texto)}
-    .opciones-list{display:flex;flex-direction:column;gap:0.8rem}
-    .opcion-btn{width:100%;padding:12px;background:white;border:2px solid var(--gris-claro);border-radius:10px;text-align:left;cursor:pointer;font-family:inherit;font-size:0.9rem;transition:0.2s;font-weight:600}
+    .preguntas-container{display:flex;flex-direction:column;gap:1rem}
+    .pregunta-item{background:var(--fondo);padding:1.2rem;border-radius:12px}
+    .pregunta-texto{font-weight:700;font-size:0.95rem;margin-bottom:0.8rem;color:var(--texto)}
+    .opciones-list{display:flex;flex-direction:column;gap:0.6rem}
+    .opcion-btn{width:100%;padding:10px 14px;background:white;border:2px solid var(--gris-claro);border-radius:10px;text-align:left;cursor:pointer;font-family:inherit;font-size:0.9rem;transition:0.2s;font-weight:600}
     .opcion-btn:hover{border-color:var(--verde);background:var(--verde-suave)}
     .opcion-btn.correcta{background:var(--verde);color:white;border-color:var(--verde)}
     .opcion-btn.incorrecta{background:var(--rojo);color:white;border-color:var(--rojo)}
@@ -235,6 +195,33 @@
     .key{background:var(--azul-suave);min-width:36px;padding:7px;border-radius:10px;text-align:center;font-weight:700;cursor:pointer;color:var(--azul);font-size:0.85rem;border:none;font-family:inherit}
     .vocab-textarea{width:100%;padding:12px;border-radius:1rem;border:2px solid var(--gris-claro);font-family:inherit;font-size:0.95rem;margin:1rem 0;resize:vertical}
     .vocab-textarea:focus{outline:none;border-color:var(--verde)}
+    .multiquiz{background:var(--verde-suave);border-radius:1.2rem;padding:1.2rem;margin-top:1rem}
+    .question-item{background:white;border-radius:1rem;padding:1rem;margin-bottom:1rem}
+    .option{background:var(--gris-claro);margin:6px 0;padding:8px 14px;border-radius:50px;cursor:pointer;transition:0.15s;font-size:0.9rem}
+    .option:hover{background:var(--verde-suave)}.option.selected{background:var(--verde);color:white}
+    .feedback-correct{color:var(--verde);font-weight:700;margin-top:5px}
+    .feedback-wrong{color:var(--rojo);font-weight:700;margin-top:5px}
+
+    /* EDITOR DE CONTENIDO */
+    .editor-section{background:var(--fondo);border-radius:1rem;padding:1.2rem;margin-bottom:1rem}
+    .editor-section h4{font-size:0.95rem;color:var(--texto);margin-bottom:0.8rem;display:flex;align-items:center;gap:6px}
+    .editor-resource-item{background:white;border-radius:0.8rem;padding:1rem;margin-bottom:0.8rem;border:2px solid var(--gris-claro)}
+    .editor-resource-item.expanded{border-color:var(--verde)}
+    .editor-resource-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+    .editor-resource-header h5{font-size:0.9rem;color:var(--texto)}
+    .editor-resource-body{display:none;margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--gris-claro)}
+    .editor-resource-item.expanded .editor-resource-body{display:block}
+    .editor-field{display:flex;flex-direction:column;gap:4px;margin-bottom:0.8rem}
+    .editor-field label{font-size:0.78rem;font-weight:700;color:#7f8c8d;text-transform:uppercase;letter-spacing:0.3px}
+    .editor-field input,.editor-field textarea,.editor-field select{padding:8px 12px;border:2px solid var(--gris-claro);border-radius:8px;font-family:inherit;font-size:0.9rem;outline:none;transition:0.2s;width:100%}
+    .editor-field input:focus,.editor-field textarea:focus,.editor-field select:focus{border-color:var(--verde)}
+    .pregunta-editor{background:var(--fondo);border-radius:0.8rem;padding:0.8rem;margin-bottom:0.6rem;border:1px solid var(--gris-claro)}
+    .opcion-row{display:flex;gap:6px;align-items:center;margin-bottom:4px}
+    .opcion-row input{flex:1;padding:6px 10px;border:1.5px solid var(--gris-claro);border-radius:8px;font-family:inherit;font-size:0.88rem;outline:none}
+    .opcion-correcta{background:var(--gris-claro);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.8rem;transition:0.2s;flex-shrink:0}
+    .opcion-correcta.marcada{background:var(--verde);color:white}
+    .btn-add-preg,.btn-add-op{background:var(--azul-suave);color:var(--azul);border:none;padding:6px 12px;border-radius:8px;font-family:inherit;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:6px}
+    .btn-add-preg:hover,.btn-add-op:hover{background:var(--azul);color:white}
 
     /* ADMIN */
     .admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
@@ -250,33 +237,39 @@
     td{padding:12px 16px;border-top:1px solid var(--gris-claro);font-size:0.9rem}
     tr:hover td{background:var(--fondo)}
     .role-badge{padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700}
-    .role-admin{background:#fdebd0;color:var(--naranja)}.role-teacher{background:#f5eef8;color:#8e44ad}.role-student{background:var(--azul-suave);color:var(--azul)}.role-pending{background:var(--gris-claro);color:#7f8c8d}
+    .role-admin{background:#fdebd0;color:var(--naranja)}.role-teacher{background:#f5eef8;color:var(--morado)}.role-student{background:var(--azul-suave);color:var(--azul)}.role-pending{background:var(--gris-claro);color:#7f8c8d}
     .btn-sm{padding:5px 12px;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.78rem;cursor:pointer;transition:0.2s}
     .btn-danger{background:#fdecea;color:var(--rojo)}.btn-danger:hover{background:var(--rojo);color:white}
-    .btn-edit{background:var(--verde-suave);color:var(--verde)}.btn-edit:hover{background:var(--verde);color:white}
+    .btn-edit-sm{background:var(--verde-suave);color:var(--verde)}.btn-edit-sm:hover{background:var(--verde);color:white}
     .btn-approve{background:#d4efdf;color:#1e8449}.btn-approve:hover{background:#1e8449;color:white}
 
-    /* PENDING APPROVAL NOTICE */
+    /* PROFILE */
+    .profile-box{background:white;border-radius:1.5rem;padding:2rem;box-shadow:var(--sombra);max-width:600px}
+    .profile-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem}
+    .profile-avatar{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800}
+    .profile-info h2{font-size:1.5rem}
+    .profile-info p{color:#7f8c8d}
+    .profile-form{display:flex;flex-direction:column;gap:1rem}
+    .profile-form label{font-weight:700;font-size:0.85rem}
+    .profile-form input,.profile-form select{padding:10px 14px;border:2px solid var(--gris-claro);border-radius:10px;font-family:inherit;font-size:0.9rem;outline:none;transition:0.2s;width:100%}
+    .profile-form input:focus,.profile-form select:focus{border-color:var(--verde)}
+
+    /* PENDING NOTICE */
     .pending-notice{background:linear-gradient(135deg,#f39c12,#e67e22);color:white;padding:1.5rem;border-radius:1.2rem;text-align:center;margin-bottom:1.5rem}
     .pending-notice h3{font-size:1.1rem;margin-bottom:0.5rem}
     .pending-notice p{font-size:0.9rem;opacity:0.9}
 
-    /* EMPTY STATE */
+    /* TOAST */
+    .toast-container{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:8px}
+    .toast{background:white;padding:1rem 1.5rem;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;font-weight:700;font-size:0.9rem;animation:slideIn 0.3s ease;max-width:320px}
+    @keyframes slideIn{from{opacity:0;transform:translateX(100px)}to{opacity:1;transform:translateX(0)}}
+    .toast.green{border-left:5px solid var(--verde)}.toast.red{border-left:5px solid var(--rojo)}.toast.blue{border-left:5px solid var(--azul)}
+
+    /* MISC */
     .empty-state{text-align:center;padding:4rem 2rem;color:#7f8c8d}
     .empty-state .empty-icon{font-size:4rem;margin-bottom:1rem}
     .empty-state p{font-size:1rem}
-
-    @media(max-width:700px){
-      .header{padding:0 1rem}
-      .header-title{font-size:1rem}
-      .page{padding:1rem}
-      .memory-grid{grid-template-columns:repeat(3,1fr)}
-      .cards-grid{grid-template-columns:1fr}
-      .portal-grid{grid-template-columns:1fr}
-      .section-header{flex-direction:column;align-items:stretch}
-      .search-bar{flex-direction:column}
-      .search-input{min-width:100%}
-    }
+    @media(max-width:700px){.header{padding:0 1rem}.header-title{font-size:1rem}.page{padding:1rem}.memory-grid{grid-template-columns:repeat(3,1fr)}.cards-grid{grid-template-columns:1fr}.portal-grid{grid-template-columns:1fr}.section-header{flex-direction:column;align-items:stretch}}
   </style>
 </head>
 <body>
@@ -289,7 +282,7 @@
   <div class="auth-box">
     <div class="auth-logo">
       <span class="logo-icon">📚</span>
-      <h1>EduRepositorio</h1>
+      <h1>EduRepositorio Colombia</h1>
       <p>Español 4° y 5° Grado · Colombia</p>
     </div>
     <div class="auth-tabs">
@@ -297,7 +290,6 @@
       <div class="auth-tab" onclick="switchAuthTab('register')">Registrarse</div>
     </div>
     <div id="authMessage" class="auth-msg"></div>
-
     <!-- LOGIN -->
     <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
       <div class="form-group">
@@ -313,7 +305,6 @@
       </div>
       <button type="submit" class="btn-auth">Entrar</button>
     </form>
-
     <!-- REGISTER -->
     <form id="registerForm" class="auth-form" style="display:none" onsubmit="handleRegister(event)">
       <div class="form-group">
@@ -335,10 +326,10 @@
         <label>Tipo de cuenta</label>
         <select id="regAccountType" required>
           <option value="">Selecciona una opción</option>
-          <option value="pending_teacher">Soy docente</option>
-          <option value="pending_student">Soy estudiante</option>
+          <option value="teacher">👩‍🏫 Soy docente</option>
+          <option value="student">🎒 Soy estudiante</option>
         </select>
-        <div class="helper-text">Tu cuenta quedará pendiente de aprobación por el administrador.</div>
+        <div class="helper-text">Tu cuenta quedará pendiente de aprobación del administrador.</div>
       </div>
       <div class="form-group">
         <label>Institución</label>
@@ -354,12 +345,12 @@
   <header class="header">
     <div class="header-left">
       <span class="header-logo">📚</span>
-      <div class="header-title">EduRepositorio<small>Español 4° y 5° Grado · Colombia</small></div>
+      <div class="header-title">EduRepositorio Colombia<small>Español · 4° y 5° Grado</small></div>
     </div>
     <div class="header-right">
       <div style="font-size:0.75rem;display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.8)">
         <span class="sync-dot" id="syncDot"></span>
-        <span id="syncStatus">Conectado</span>
+        <span id="syncStatus">Conectando...</span>
       </div>
       <div class="user-pill">
         <div class="user-avatar avatar-student" id="userAvatar">U</div>
@@ -368,122 +359,211 @@
           <div class="user-role" id="userRole">Rol</div>
         </div>
       </div>
-      <button class="btn-icon" onclick="logout()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
+      <button class="btn-icon" onclick="doLogout()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </header>
 
   <nav class="nav-bar" id="navBar">
-    <button class="nav-item active" onclick="showPage('inicio')"><i class="fas fa-home"></i> Inicio</button>
-    <button class="nav-item" onclick="showPage('actividades')"><i class="fas fa-book-open"></i> Actividades</button>
-    <button class="nav-item" onclick="showPage('portales')"><i class="fas fa-folder-open"></i> Portales</button>
-    <button class="nav-item admin-only" style="display:none" onclick="showPage('admin')"><i class="fas fa-shield-alt"></i> Admin</button>
+    <button class="nav-item active" data-page="inicio" onclick="showPage('inicio')"><i class="fas fa-home"></i> Inicio</button>
+    <button class="nav-item" data-page="recursos" onclick="showPage('recursos')"><i class="fas fa-folder"></i> Recursos</button>
+    <button class="nav-item" data-page="portales" onclick="showPage('portales')"><i class="fas fa-globe"></i> Portales</button>
+    <button class="nav-item teacher-only" data-page="mis-actividades" style="display:none" onclick="showPage('mis-actividades')"><i class="fas fa-pencil-alt"></i> Mis Actividades</button>
+    <button class="nav-item admin-only" data-page="admin" style="display:none" onclick="showPage('admin')"><i class="fas fa-cog"></i> Administración</button>
+    <button class="nav-item" data-page="perfil" onclick="showPage('perfil')"><i class="fas fa-user"></i> Perfil</button>
   </nav>
 
-  <!-- INICIO -->
+  <!-- ─── INICIO ─── -->
   <div class="page active" id="page-inicio">
     <div id="pendingNotice" style="display:none" class="pending-notice">
       <h3>⏳ Cuenta pendiente de aprobación</h3>
-      <p>Tu cuenta fue creada exitosamente. El administrador debe aprobarla para acceder a todas las funciones. Mientras tanto, puedes explorar las actividades educativas.</p>
+      <p>Tu cuenta fue creada exitosamente. El administrador debe aprobarla para que tengas acceso completo. Mientras tanto, puedes explorar los recursos educativos.</p>
     </div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:1.5rem;color:var(--texto)">
+      Bienvenido/a al Repositorio
+      <span style="font-size:0.85rem;background:var(--verde-suave);color:var(--verde);padding:4px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;margin-left:10px;display:inline-flex;align-items:center;gap:5px;vertical-align:middle">
+        <span class="sync-dot" style="width:8px;height:8px;margin:0"></span> Sincronización activa
+      </span>
+    </h2>
     <div class="info-grid">
       <div class="info-card">
-        <div class="info-card-header"><div class="info-card-icon">🎯</div><h3>Bienvenido a EduRepositorio</h3></div>
-        <p>Plataforma educativa para Español de 4° y 5° grado de Colombia. Accede a lecturas, videos, gramática, vocabulario y juegos interactivos.</p>
+        <div class="info-card-header"><div class="info-card-icon">🎯</div><h3>Objetivo del Repositorio</h3></div>
+        <p>Fortalecer las competencias comunicativas de estudiantes de 4° y 5° grado en zonas rurales de Colombia, ofreciendo recursos digitales interactivos, lúdicos y contextualizados que promuevan la lectura, escritura y comprensión del español, alineados con los Estándares Básicos de Competencias del MEN.</p>
       </div>
       <div class="info-card azul">
-        <div class="info-card-header"><div class="info-card-icon">☁️</div><h3>Sincronización en Tiempo Real</h3></div>
-        <p>Todos los portales y recursos se guardan en la nube con Supabase. Los cambios se ven al instante en todos los dispositivos.</p>
+        <div class="info-card-header"><div class="info-card-icon">🏆</div><h3>Competencias Trabajadas</h3></div>
+        <ul>
+          <li>📖 Comprensión lectora crítica</li>
+          <li>✍️ Producción escrita creativa</li>
+          <li>🔤 Gramática y ortografía aplicada</li>
+          <li>🌿 Vocabulario contextualizado</li>
+          <li>🗣️ Comunicación oral y escrita</li>
+        </ul>
       </div>
       <div class="info-card naranja">
-        <div class="info-card-header"><div class="info-card-icon">📊</div><h3>Estadísticas</h3></div>
-        <p>Actividades educativas: <strong id="statActividades">15</strong> · Portales creados: <strong id="statPortales">0</strong> · Usuarios: <strong id="statUsuarios">0</strong></p>
+        <div class="info-card-header"><div class="info-card-icon">🌱</div><h3>Contexto Rural Colombiano</h3></div>
+        <p>Diseñado para comunidades rurales colombianas con acceso limitado a internet. Los recursos valoran los saberes campesinos y afrocolombianos, y conectan la lengua española con los ecosistemas de los Llanos, la Amazonia, la Costa Caribe, el Pacífico y los Andes.</p>
+      </div>
+      <div class="info-card morado">
+        <div class="info-card-header"><div class="info-card-icon">🔧</div><h3>¿Cómo funciona?</h3></div>
+        <ul>
+          <li>🎓 <strong>Administrador:</strong> gestiona usuarios y roles</li>
+          <li>👩‍🏫 <strong>Docente:</strong> comparte y crea portales propios</li>
+          <li>🎒 <strong>Estudiante:</strong> explora e interactúa</li>
+          <li>📋 Portales copiables y editables en tiempo real</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:white;border-radius:1.5rem;padding:1.5rem;box-shadow:var(--sombra)">
+      <h3 style="margin-bottom:1rem;color:var(--texto)">📊 Estadísticas del Repositorio</h3>
+      <div class="admin-stats" style="margin-bottom:0">
+        <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-num">15</div><div class="stat-label">Recursos educativos</div></div>
+        <div class="stat-card"><div class="stat-icon">📁</div><div class="stat-num" id="statPortales">0</div><div class="stat-label">Portales creados</div></div>
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-num" id="statUsuarios">0</div><div class="stat-label">Usuarios registrados</div></div>
       </div>
     </div>
   </div>
 
-  <!-- ACTIVIDADES (recursos educativos de V4) -->
-  <div class="page" id="page-actividades">
+  <!-- ─── RECURSOS ─── -->
+  <div class="page" id="page-recursos">
     <div class="section-header">
-      <h2 class="section-title">📚 Actividades Educativas</h2>
+      <h2 class="section-title">📂 Recursos Educativos</h2>
       <div class="search-bar">
-        <input type="text" class="search-input" id="searchActividades" placeholder="Buscar actividades..." oninput="renderActividades()">
-        <div class="filter-group">
-          <button class="filter-chip active" data-cat="all" onclick="setFilterCat(this)">Todas</button>
-          <button class="filter-chip" data-cat="lectura" onclick="setFilterCat(this)">📖 Lectura</button>
-          <button class="filter-chip" data-cat="escritura" onclick="setFilterCat(this)">✍️ Escritura</button>
-          <button class="filter-chip" data-cat="gramatica" onclick="setFilterCat(this)">🔤 Gramática</button>
-          <button class="filter-chip" data-cat="vocabulario" onclick="setFilterCat(this)">🌿 Vocabulario</button>
-          <button class="filter-chip" data-cat="video" onclick="setFilterCat(this)">🎬 Videos</button>
-          <button class="filter-chip" data-cat="juego" onclick="setFilterCat(this)">🎮 Juegos</button>
-        </div>
+        <input type="text" class="search-input" id="searchRecursos" placeholder="Buscar recursos..." oninput="renderRecursos()">
       </div>
     </div>
-    <div class="cards-grid" id="actividadesGrid"></div>
+    <div class="filter-group" style="margin-bottom:1.5rem">
+      <button class="filter-chip active" data-cat="all" onclick="setFilterCat(this,'recursos')">⭐ Todos</button>
+      <button class="filter-chip" data-cat="lectura" onclick="setFilterCat(this,'recursos')">📖 Lectura</button>
+      <button class="filter-chip" data-cat="escritura" onclick="setFilterCat(this,'recursos')">✍️ Escritura</button>
+      <button class="filter-chip" data-cat="gramatica" onclick="setFilterCat(this,'recursos')">🔤 Gramática</button>
+      <button class="filter-chip" data-cat="vocabulario" onclick="setFilterCat(this,'recursos')">🌿 Vocabulario</button>
+      <button class="filter-chip" data-cat="video" onclick="setFilterCat(this,'recursos')">🎬 Videos</button>
+      <button class="filter-chip" data-cat="juego" onclick="setFilterCat(this,'recursos')">🎮 Juegos</button>
+    </div>
+    <div class="cards-grid" id="recursosGrid"></div>
   </div>
 
-  <!-- PORTALES -->
+  <!-- ─── PORTALES ─── -->
   <div class="page" id="page-portales">
     <div class="section-header">
-      <h2 class="section-title">📁 Portales</h2>
-      <button class="btn-primary teacher-only" style="display:none" onclick="openModal('createPortalModal')"><i class="fas fa-plus"></i> Crear Portal</button>
+      <h2 class="section-title">🌐 Portales Compartidos</h2>
+      <button class="btn-primary teacher-only" style="display:none" onclick="openCreatePortalModal()"><i class="fas fa-plus"></i> Crear Portal</button>
     </div>
     <div class="portal-grid" id="portalGrid"></div>
   </div>
 
-  <!-- ADMIN -->
+  <!-- ─── MIS ACTIVIDADES ─── -->
+  <div class="page teacher-only" id="page-mis-actividades" style="display:none">
+    <h2 class="section-title" style="margin-bottom:1.5rem">✏️ Mis Actividades</h2>
+    <div id="myActivitiesContainer"></div>
+  </div>
+
+  <!-- ─── ADMIN ─── -->
   <div class="page admin-only" id="page-admin" style="display:none">
-    <h2 class="section-title" style="margin-bottom:1.5rem">🛡️ Panel Administrador</h2>
+    <h2 class="section-title" style="margin-bottom:1.5rem">⚙️ Panel de Administración</h2>
     <div class="admin-stats">
-      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-num" id="adminStatUsers">0</div><div class="stat-label">Usuarios registrados</div></div>
-      <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num" id="adminStatPending">0</div><div class="stat-label">Pendientes de aprobación</div></div>
-      <div class="stat-card"><div class="stat-icon">📁</div><div class="stat-num" id="adminStatPortals">0</div><div class="stat-label">Portales creados</div></div>
+      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-num" id="adminStatUsers">0</div><div class="stat-label">Total de usuarios</div></div>
+      <div class="stat-card"><div class="stat-icon">🎓</div><div class="stat-num" id="adminStatAdmins">0</div><div class="stat-label">Administradores</div></div>
+      <div class="stat-card"><div class="stat-icon">👩‍🏫</div><div class="stat-num" id="adminStatTeachers">0</div><div class="stat-label">Docentes</div></div>
+      <div class="stat-card"><div class="stat-icon">🎒</div><div class="stat-num" id="adminStatStudents">0</div><div class="stat-label">Estudiantes</div></div>
+      <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num" id="adminStatPending">0</div><div class="stat-label">Pendientes</div></div>
     </div>
     <div class="users-table">
-      <div class="table-header"><h3>👥 Gestión de Usuarios</h3></div>
+      <div class="table-header">
+        <h3><i class="fas fa-users"></i> Gestión de Usuarios</h3>
+        <button class="btn-sm btn-edit-sm" onclick="loadAllUsersAndRender()">🔄 Actualizar</button>
+      </div>
       <div style="overflow-x:auto">
         <table>
-          <thead><tr><th>Usuario</th><th>Correo</th><th>Institución</th><th>Rol</th><th>Acciones</th></tr></thead>
+          <thead><tr><th>Usuario</th><th>Correo</th><th>Institución</th><th>Rol</th><th>Registro</th><th>Acciones</th></tr></thead>
           <tbody id="usersTableBody"></tbody>
         </table>
+      </div>
+    </div>
+    <div class="users-table">
+      <div class="table-header"><h3><i class="fas fa-folder"></i> Portales del Sistema</h3></div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Portal</th><th>Creador</th><th>Recursos</th><th>Fecha</th><th>Acciones</th></tr></thead>
+          <tbody id="portalsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="users-table">
+      <div class="table-header"><h3><i class="fas fa-database"></i> Respaldo de Datos</h3></div>
+      <div style="padding:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+        <button class="btn-card btn-open" onclick="exportarDatos()">📥 Exportar JSON</button>
+        <label class="btn-card btn-share" style="cursor:pointer;">📤 Importar JSON<input type="file" accept=".json" onchange="importarDatos(event)" style="display:none;"></label>
+        <button class="btn-card" style="background:#fdecea;color:var(--rojo);" onclick="confirmarReset()">⚠️ Resetear base de datos</button>
+      </div>
+      <p style="padding:0 1.5rem 1rem;color:#7f8c8d;font-size:0.85rem;">Los datos se guardan en la nube (Supabase). Usa "Exportar" para hacer copias de seguridad locales.</p>
+    </div>
+  </div>
+
+  <!-- ─── PERFIL ─── -->
+  <div class="page" id="page-perfil">
+    <h2 class="section-title" style="margin-bottom:1.5rem">👤 Mi Perfil</h2>
+    <div class="profile-box">
+      <div class="profile-header">
+        <div class="profile-avatar user-avatar" id="profileAvatar" style="width:80px;height:80px;font-size:2rem;"></div>
+        <div class="profile-info">
+          <h2 id="profileName">—</h2>
+          <p id="profileEmail">—</p>
+          <span class="role-badge" id="profileRoleBadge">—</span>
+        </div>
+      </div>
+      <div class="profile-form">
+        <label>Nombre completo</label>
+        <input type="text" id="profileNameInput">
+        <label>Institución / Escuela</label>
+        <input type="text" id="profileSchoolInput">
+        <label>Nueva contraseña (dejar vacío para no cambiar)</label>
+        <div class="pass-wrapper" style="width:100%">
+          <input type="password" id="profilePassInput" placeholder="••••••••">
+          <button class="toggle-pass" type="button" onclick="togglePassword('profilePassInput')">Ver</button>
+        </div>
+        <button class="btn-auth" onclick="saveProfile()">💾 Guardar cambios</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MODAL: ACTIVIDAD VIEWER -->
-<div id="activityModal" class="modal" onclick="closeModalBack(event,'activityModal')">
-  <div class="modal-content" onclick="event.stopPropagation()" style="max-width:860px">
+<!-- ═══ MODAL RECURSO ═══ -->
+<div class="modal" id="resourceModal" onclick="closeModalBack(event,'resourceModal')">
+  <div class="modal-content" onclick="event.stopPropagation()" style="max-width:900px">
     <div class="modal-header">
-      <h2 id="activityModalTitle">Actividad</h2>
-      <button class="btn-close" onclick="closeModal('activityModal')">×</button>
+      <h2 id="resourceModalTitle">Recurso</h2>
+      <button class="btn-close" onclick="closeModal('resourceModal')">×</button>
     </div>
-    <div class="modal-body" id="activityModalBody"></div>
+    <div class="modal-body" id="resourceModalBody"></div>
   </div>
 </div>
 
-<!-- MODAL: CREAR PORTAL -->
-<div id="createPortalModal" class="modal" onclick="closeModalBack(event,'createPortalModal')">
-  <div class="modal-content" onclick="event.stopPropagation()" style="max-width:500px">
-    <div class="modal-header"><h2>🌐 Crear Portal</h2><button class="btn-close" onclick="closeModal('createPortalModal')">×</button></div>
+<!-- ═══ MODAL CREAR PORTAL ═══ -->
+<div class="modal" id="createPortalModal" onclick="closeModalBack(event,'createPortalModal')">
+  <div class="modal-content" onclick="event.stopPropagation()" style="max-width:550px">
+    <div class="modal-header"><h2 id="portalModalTitle">🌐 Crear Portal</h2><button class="btn-close" onclick="closeModal('createPortalModal')">×</button></div>
     <div class="modal-body">
+      <input type="hidden" id="portalEditId">
       <div class="form-grid">
-        <div><label class="form-label">Nombre del portal</label><input type="text" class="form-input" id="newPortalName" placeholder="Ej: Español 4° — Vereda La Esperanza"></div>
+        <div><label class="form-label">Nombre del portal *</label><input type="text" class="form-input" id="newPortalName" placeholder="Ej: Español 4° — Vereda La Esperanza"></div>
         <div><label class="form-label">Descripción</label><textarea class="form-textarea" id="newPortalDesc" placeholder="Breve descripción..."></textarea></div>
-        <div><label class="form-label">Institución</label><input type="text" class="form-input" id="newPortalInst" placeholder="Nombre de la escuela"></div>
-        <div><label class="form-label">Recursos incluidos</label>
-          <div id="portalResourcePicker" style="max-height:200px;overflow-y:auto;border:2px solid var(--gris-claro);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:6px;"></div>
+        <div><label class="form-label">Institución *</label><input type="text" class="form-input" id="newPortalInst" placeholder="Nombre de la escuela"></div>
+        <div>
+          <label class="form-label">Recursos a incluir *</label>
+          <div id="portalResourcePicker" style="max-height:220px;overflow-y:auto;border:2px solid var(--gris-claro);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:6px;"></div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal('createPortalModal')">Cancelar</button>
-      <button class="btn-primary" onclick="createPortal()">🚀 Publicar Portal</button>
+      <button class="btn-primary" onclick="createOrUpdatePortal()">🚀 Publicar Portal</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL: EDITAR USUARIO (Admin) -->
-<div id="editUserModal" class="modal" onclick="closeModalBack(event,'editUserModal')">
+<!-- ═══ MODAL EDITAR USUARIO ═══ -->
+<div class="modal" id="editUserModal" onclick="closeModalBack(event,'editUserModal')">
   <div class="modal-content" onclick="event.stopPropagation()" style="max-width:460px">
     <div class="modal-header"><h2>✏️ Editar Usuario</h2><button class="btn-close" onclick="closeModal('editUserModal')">×</button></div>
     <div class="modal-body">
@@ -491,13 +571,12 @@
       <div class="form-grid">
         <div><label class="form-label">Nombre</label><input type="text" class="form-input" id="editUserName"></div>
         <div><label class="form-label">Institución</label><input type="text" class="form-input" id="editUserInstitution"></div>
-        <div><label class="form-label">Rol</label>
+        <div>
+          <label class="form-label">Rol</label>
           <select class="form-select" id="editUserRole">
             <option value="student">🎒 Estudiante</option>
             <option value="teacher">👩‍🏫 Docente</option>
             <option value="admin">🎓 Administrador</option>
-            <option value="pending_student">⏳ Estudiante (pendiente)</option>
-            <option value="pending_teacher">⏳ Docente (pendiente)</option>
           </select>
         </div>
       </div>
@@ -506,6 +585,17 @@
       <button class="btn-secondary" onclick="closeModal('editUserModal')">Cancelar</button>
       <button class="btn-primary" onclick="saveUserEdit()">💾 Guardar cambios</button>
     </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL EDITAR CONTENIDO ACTIVIDAD ═══ -->
+<div class="modal" id="activityContentModal" onclick="closeModalBack(event,'activityContentModal')">
+  <div class="modal-content" onclick="event.stopPropagation()" style="max-width:780px">
+    <div class="modal-header">
+      <h2>✏️ Editar contenido de actividad</h2>
+      <button class="btn-close" onclick="closeModal('activityContentModal')">×</button>
+    </div>
+    <div class="modal-body" id="activityContentBody"></div>
   </div>
 </div>
 
@@ -523,6 +613,15 @@ const supabaseClient = window.supabase?.createClient
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null;
 
+// Fallback localStorage
+const DB_VERSION = 'edu_co_v7_';
+function getLocal(key, def=[]) {
+  try { const r=localStorage.getItem(DB_VERSION+key); return r?JSON.parse(r):def; } catch{ return def; }
+}
+function setLocal(key, val) {
+  try { localStorage.setItem(DB_VERSION+key, JSON.stringify(val)); return true; } catch(e) { return false; }
+}
+
 /* ══════════════════════════════════════════════
    ESTADO GLOBAL
 ══════════════════════════════════════════════ */
@@ -531,52 +630,48 @@ let allPortals = [];
 let allUsers = [];
 let realtimeChannels = [];
 let currentFilter = 'all';
+let recursosEditados = null;
+let useSupabase = false;
 
 /* ══════════════════════════════════════════════
-   ACTIVIDADES EDUCATIVAS (de V4, restauradas)
+   RECURSOS EDUCATIVOS
 ══════════════════════════════════════════════ */
-const ACTIVIDADES = [
-  // ── LECTURA ──
-  {id:1,titulo:"🐍 El origen del río Magdalena",descripcion:"Leyenda andina colombiana con preguntas de comprensión lectora",categoria:"lectura",tipo:"lectura_multiple",
+const recursos = [
+  {id:1,titulo:"🐍 El origen del río Magdalena (leyenda andina)",descripcion:"Leyenda colombiana con preguntas de comprensión lectora",categoria:"lectura",tipo:"lectura_multiple",
+    iconEmoji:"🏔️",
     texto:`Hace mucho tiempo, cuando los Andes colombianos eran aún jóvenes, los indígenas Páez contaban que el gran río Magdalena nació de las lágrimas de la diosa Bachué. Ella lloraba porque los valles estaban secos y su pueblo pasaba sed.\n\nSus lágrimas corrieron desde el Macizo Colombiano hacia el norte, cruzando valles y llanuras, hasta desembocar en el mar Caribe. Por eso el Magdalena es tan largo y tan generoso: lleva en su agua la memoria del amor de Bachué por su pueblo.\n\nDesde ese día, los campesinos de las orillas del Magdalena siembran cerca del río y cuidan sus riberas. El río no es solo agua: es historia, es vida, es la madre de Colombia.`,
     preguntas:[{pregunta:"¿Dónde nace el río Magdalena según la leyenda?",opciones:["En la Sierra Nevada","En el Macizo Colombiano","En los Llanos Orientales","En el Chocó"],correcta:1},{pregunta:"¿Por qué la diosa Bachué lloraba?",opciones:["Estaba enferma","Los valles estaban secos y su pueblo tenía sed","Había una guerra","Hacía mucho frío"],correcta:1},{pregunta:"¿Qué hacen los campesinos desde ese día?",opciones:["Pescan en el río","Siembran cerca del río y cuidan sus riberas","Navegan hasta el mar","Construyen puentes"],correcta:1}]},
-  {id:2,titulo:"🐊 El caimán y la garza (fábula llanera)",descripcion:"Fábula colombiana con valores del campo y la sabiduría",categoria:"lectura",tipo:"lectura_multiple",
+  {id:2,titulo:"🐊 El caimán y el cocodrilo (fábula llanera)",descripcion:"Fábula colombiana con valores del campo",categoria:"lectura",tipo:"lectura_multiple",
+    iconEmoji:"🐊",
     texto:`En los Llanos Orientales de Colombia vivía un caimán que se creía el más sabio del caño. Cada tarde se tumbaba al sol y les decía a los demás animales cómo debían vivir.\n\nUn día llegó una garza blanca cargada de peces y el caimán quiso quitarle la comida. Pero la garza, pequeña pero lista, lo distrajo volando sobre su cabeza mientras los peces escapaban por el caño.\n\n"La inteligencia vale más que el tamaño", dijo el chigüiro que observaba desde la orilla. El caimán, avergonzado, aprendió que el respeto se gana con acciones, no con palabras.`,
     preguntas:[{pregunta:"¿Por qué el caimán se creía el más sabio?",opciones:["Era el más inteligente","Era el más grande y presumido","Había estudiado mucho","Era el más viejo"],correcta:1},{pregunta:"¿Cómo se salvó la garza?",opciones:["Pidió ayuda al chigüiro","Voló sobre el caimán mientras los peces escapaban","Se escondió en el caño","Le dio los peces al caimán"],correcta:1},{pregunta:"¿Cuál es la moraleja?",opciones:["Los pájaros siempre ganan","El respeto se gana con acciones, no con palabras","Los caimanes son malos","La inteligencia no sirve"],correcta:1}]},
-  {id:3,titulo:"📜 María de Jorge Isaacs (fragmento)",descripcion:"Novela colombiana clásica con vocabulario enriquecido",categoria:"lectura",tipo:"simple",
-    contenidoHtml:`<h3>📜 Fragmento adaptado: María, de Jorge Isaacs</h3><p style="margin-bottom:0.5rem;color:#7f8c8d;font-size:0.85rem;">Valle del Cauca, Colombia — Siglo XIX</p><div style="background:#fdf6e3;padding:1rem;border-radius:1rem;border-left:4px solid #8e44ad;font-style:italic;margin-bottom:1rem;line-height:1.8;">"Era la primera vez que veía el valle desde las montañas: el río Cauca brillaba entre cañaverales verdes, y los gallinazos volaban sobre las haciendas. Sentí que ese paisaje era mío, que yo pertenecía a esas tierras tanto como ellas me pertenecían a mí..."</div><p><strong>🔑 Vocabulario clave:</strong></p><ul style="margin:0.5rem 0 1rem 1.5rem;line-height:2.2;"><li><strong>Cañaverales:</strong> campos sembrados de caña de azúcar, muy comunes en el Valle del Cauca</li><li><strong>Gallinazos:</strong> aves carroñeras típicas de Colombia (también llamados chulos)</li><li><strong>Hacienda:</strong> finca grande de producción agrícola</li><li><strong>Valle:</strong> terreno plano entre montañas; el Valle del Cauca es una de las regiones más fértiles</li></ul><p>✍️ <strong>Actividad:</strong> Escribe 3 oraciones describiendo el paisaje de tu región usando adjetivos calificativos.</p><textarea class="vocab-textarea" rows="5" placeholder="Escribe aquí tu descripción..."></textarea>`},
-  // ── ESCRITURA ──
-  {id:4,titulo:"✍️ Cuento de misterio en la selva amazónica",descripcion:"Guía para crear historias con tensión narrativa en contexto colombiano",categoria:"escritura",tipo:"simple",
-    contenidoHtml:`<h3>🕵️ Elementos de un cuento de misterio colombiano</h3><ul style="margin:0.8rem 0 1rem 1.5rem;line-height:2.2;"><li><strong>Personajes:</strong> baquiano, curandero, niños de la vereda.</li><li><strong>Ambiente:</strong> selva amazónica, páramo, ciénaga costeña, caño llanero.</li><li><strong>Trama:</strong> suceso extraño, pistas falsas, resolución sorprendente.</li><li><strong>Narrador:</strong> primera o tercera persona.</li></ul><div style="background:#d4efdf;padding:1rem;border-radius:1rem;margin-bottom:1rem;"><strong>💡 Ejemplo de inicio:</strong><br>"La noche que desapareció la canoa de don Misael, nadie en la vereda Bocas del Río pudo dormir. El perro ladraba hacia la selva y las velas se apagaban solas. Solo la abuela Fermina sabía lo que el monte había querido decir..."</div><p>✏️ <strong>Actividad:</strong> Escribe un cuento de 3 párrafos ambientado en tu región colombiana.</p><textarea class="vocab-textarea" rows="8" placeholder="Escribe tu cuento aquí... 🌿"></textarea>`},
-  {id:5,titulo:"📩 Carta formal al alcalde",descripcion:"Redacción de carta de petición a una autoridad municipal colombiana",categoria:"escritura",tipo:"simple",
-    contenidoHtml:`<h3>📩 Estructura de carta formal colombiana</h3><div style="background:#eef4fc;padding:1rem;border-radius:1rem;font-family:monospace;font-size:0.9rem;margin-bottom:1rem;line-height:1.8;">Montería, Córdoba, 10 de marzo de 2025<br><br>Señor Alcalde Municipal<br>Ciudad<br><br><strong>Asunto:</strong> Solicitud de dotación de libros para la biblioteca escolar<br><br>Estimado Señor Alcalde:<br>Por medio de la presente, los estudiantes de 4° y 5° grado solicitamos respetuosamente su colaboración para dotar nuestra biblioteca...<br><br>Agradecemos su valiosa atención.<br>Cordialmente,<br>Los estudiantes de básica primaria</div><p>✍️ <strong>Actividad:</strong> Redacta una carta al alcalde de tu municipio pidiendo más recursos para tu escuela.</p><textarea class="vocab-textarea" rows="8" placeholder="Escribe tu carta aquí..."></textarea>`},
-  // ── GRAMÁTICA ──
-  {id:6,titulo:"🔤 Reglas de acentuación",descripcion:"Agudas, graves y esdrújulas con quiz interactivo",categoria:"gramatica",tipo:"quiz",
-    preguntas:["¿Cuál es la palabra aguda?","¿Cuál es grave o llana?","¿Cuál es esdrújula?"],
-    opciones:[["Cárcel","Canción","Árbol"],["Médico","Caminar","Lápiz"],["Teléfono","Silla","Comer"]],correctas:[1,0,0]},
-  {id:7,titulo:"⏳ Tiempos verbales: pretérito y futuro",descripcion:"Identifica el tiempo verbal correcto en cada oración",categoria:"gramatica",tipo:"quiz",
-    preguntas:["Pretérito de 'comer'","Futuro de 'jugar'","Pretérito de 'vivir'"],
-    opciones:[["Comió","Comerá","Come"],["Jugó","Jugará","Juega"],["Vivió","Vivirá","Vive"]],correctas:[0,1,0]},
-  {id:8,titulo:"🔍 Aumentativos y diminutivos",descripcion:"Formación de palabras derivadas con ejemplos colombianos",categoria:"gramatica",tipo:"simple",
+  {id:3,titulo:"📜 María de Jorge Isaacs (fragmento adaptado)",descripcion:"Novela colombiana clásica con vocabulario enriquecido",categoria:"lectura",tipo:"simple",iconEmoji:"📜",
+    contenidoHtml:`<h3>📜 Fragmento adaptado: María, de Jorge Isaacs</h3><p style="margin-bottom:0.5rem;color:#7f8c8d;font-size:0.85rem;">Valle del Cauca, Colombia — Siglo XIX</p><div style="background:#fdf6e3;padding:1rem;border-radius:1rem;border-left:4px solid #8e44ad;font-style:italic;margin-bottom:1rem;line-height:1.8;">"Era la primera vez que veía el valle desde las montañas: el río Cauca brillaba entre cañaverales verdes, y los gallinazos volaban sobre las haciendas. Sentí que ese paisaje era mío, que yo pertenecía a esas tierras tanto como ellas me pertenecían a mí..."</div><p><strong>🔑 Vocabulario clave:</strong></p><ul style="margin:0.5rem 0 1rem 1.5rem;line-height:2.2;"><li><strong>Cañaverales:</strong> campos de caña de azúcar, muy comunes en el Valle del Cauca</li><li><strong>Gallinazos:</strong> aves carroñeras típicas de Colombia (también llamados chulos)</li><li><strong>Hacienda:</strong> finca grande de producción agrícola</li><li><strong>Valle:</strong> terreno plano entre montañas; el Valle del Cauca es una de las regiones más fértiles</li></ul><p>✍️ <strong>Actividad:</strong> Escribe 3 oraciones describiendo el paisaje de tu región usando adjetivos calificativos.</p><textarea class="vocab-textarea" rows="5" placeholder="Escribe aquí tu descripción..."></textarea>`},
+  {id:4,titulo:"✍️ Escribir un cuento de misterio (selva amazónica)",descripcion:"Guía para crear historias con tensión narrativa en el contexto colombiano",categoria:"escritura",tipo:"simple",iconEmoji:"✍️",
+    contenidoHtml:`<h3>🕵️ Elementos de un cuento de misterio colombiano</h3><ul style="margin:0.8rem 0 1rem 1.5rem;line-height:2.2;"><li><strong>Personajes:</strong> baquiano, curandero, niños de la vereda.</li><li><strong>Ambiente:</strong> selva amazónica, páramo, ciénaga costeña, caño llanero.</li><li><strong>Trama:</strong> suceso extraño, pistas falsas, resolución sorprendente.</li><li><strong>Narrador:</strong> primera o tercera persona.</li></ul><div style="background:#d4efdf;padding:1rem;border-radius:1rem;margin-bottom:1rem;"><strong>💡 Ejemplo de inicio:</strong><br>"La noche que desapareció la canoa de don Misael, nadie en la vereda Bocas del Río pudo dormir. El perro ladraba hacia la selva y las velas se apagaban solas. Solo la abuela Fermina sabía lo que el monte había querido decir..."</div><p>✏️ <strong>Actividad:</strong> Escribe un cuento de 3 párrafos ambientado en tu región colombiana.</p><textarea class="vocab-textarea" rows="6" placeholder="Escribe tu cuento aquí... 🌿"></textarea>`},
+  {id:5,titulo:"📩 Carta formal (petición al alcalde)",descripcion:"Redacción de carta de petición a una autoridad municipal colombiana",categoria:"escritura",tipo:"simple",iconEmoji:"📩",
+    contenidoHtml:`<h3>📩 Estructura de carta formal colombiana</h3><div style="background:#eef4fc;padding:1rem;border-radius:1rem;font-family:monospace;font-size:0.9rem;margin-bottom:1rem;line-height:1.8;">Montería, Córdoba, 10 de marzo de 2025<br><br>Señor Alcalde Municipal<br>Ciudad<br><br><strong>Asunto:</strong> Solicitud de dotación de libros para la biblioteca escolar<br><br>Estimado Señor Alcalde:<br>Por medio de la presente, los estudiantes de 4° y 5° grado solicitamos respetuosamente su colaboración para dotar nuestra biblioteca...<br><br>Agradecemos su valiosa atención.<br>Cordialmente,<br>Los estudiantes de básica primaria</div><p>✍️ <strong>Actividad:</strong> Redacta una carta al alcalde de tu municipio pidiendo más recursos para tu escuela.</p><textarea class="vocab-textarea" rows="6" placeholder="Escribe tu carta aquí..."></textarea>`},
+  {id:6,titulo:"🔤 Reglas de acentuación",descripcion:"Agudas, graves, esdrújulas con quiz",categoria:"gramatica",tipo:"quiz",iconEmoji:"🔤",
+    preguntas:["¿Cuál es la palabra aguda?","¿Cuál es grave o llana?","¿Cuál es esdrújula?"],opciones:[["Cárcel","Canción","Árbol"],["Médico","Caminar","Lápiz"],["Teléfono","Silla","Comer"]],correctas:[1,0,0]},
+  {id:7,titulo:"⏳ Tiempos verbales: pretérito y futuro",descripcion:"Identifica el tiempo verbal correcto",categoria:"gramatica",tipo:"quiz",iconEmoji:"⏳",
+    preguntas:["Pretérito de 'comer'","Futuro de 'jugar'","Pretérito de 'vivir'"],opciones:[["Comió","Comerá","Come"],["Jugó","Jugará","Juega"],["Vivió","Vivirá","Vive"]],correctas:[0,1,0]},
+  {id:8,titulo:"🔍 Aumentativos y diminutivos",descripcion:"Formación de palabras derivadas con ejemplos colombianos",categoria:"gramatica",tipo:"simple",iconEmoji:"🔍",
     contenidoHtml:`<h3>🔍 Aumentativos y Diminutivos en Colombia</h3><p style="margin-bottom:0.8rem;">En Colombia usamos mucho los diminutivos, especialmente en Antioquia y el Eje Cafetero.</p><p style="margin-bottom:0.8rem;"><strong>Aumentativos:</strong> -ón, -azo &nbsp;|&nbsp; <strong>Diminutivos:</strong> -ito, -illo, -ico (¡muy colombiano!)</p><table style="width:100%;border-collapse:collapse;margin-bottom:1rem;"><tr style="background:#eef4fc;"><th style="padding:8px;text-align:left;">Palabra</th><th style="padding:8px;">Aumentativo</th><th style="padding:8px;">Diminutivo</th></tr><tr><td style="padding:8px;">perro</td><td style="padding:8px;text-align:center;">perrazo</td><td style="padding:8px;text-align:center;">perrico / perrito</td></tr><tr style="background:#f9f9f9;"><td style="padding:8px;">flor</td><td style="padding:8px;text-align:center;">florón</td><td style="padding:8px;text-align:center;">florecita</td></tr><tr><td style="padding:8px;">tinto (café)</td><td style="padding:8px;text-align:center;">—</td><td style="padding:8px;text-align:center;">tintico</td></tr><tr style="background:#f9f9f9;"><td style="padding:8px;">finca</td><td style="padding:8px;text-align:center;">fincón</td><td style="padding:8px;text-align:center;">finquita</td></tr></table><p>✏️ <strong>Actividad:</strong> Crea 5 pares usando palabras del campo colombiano (maíz, piedra, río, monte, potrero...).</p><textarea class="vocab-textarea" rows="4" placeholder="Escribe tus ejemplos aquí..."></textarea>`},
-  // ── VOCABULARIO ──
-  {id:9,titulo:"🌿 Frutas y plantas de Colombia",descripcion:"Vocabulario contextualizado con biodiversidad colombiana",categoria:"vocabulario",tipo:"imagen",
+  {id:9,titulo:"🌿 Frutas y plantas de Colombia",descripcion:"Vocabulario contextualizado con biodiversidad colombiana",categoria:"vocabulario",tipo:"imagen",iconEmoji:"🌿",
     imagenHtml:`<div style="background:#eafaf1;padding:1.5rem;border-radius:1rem;margin-bottom:1rem;"><p style="font-weight:800;margin-bottom:1rem;color:#1a6d3e;">🌱 Plantas y frutas colombianas</p><ul style="line-height:2.5;list-style:none;"><li>🍍 <strong>Piña</strong> — fruta tropical típica del Caribe colombiano</li><li>🌺 <strong>Heliconia</strong> — flor icónica del Pacífico</li><li>☕ <strong>Café</strong> — cultivo emblema del Eje Cafetero</li><li>🎋 <strong>Guadua</strong> — bambú gigante andino</li><li>🫐 <strong>Borojó</strong> — fruta amazónica con propiedades nutricionales</li></ul></div>`,
     leyenda:"Escribe una frase descriptiva para cada planta usando adjetivos y su región de origen en Colombia."},
-  {id:10,titulo:"😊 Emociones y refranes colombianos",descripcion:"Vocabulario emocional con expresiones populares de Colombia",categoria:"vocabulario",tipo:"imagen",
+  {id:10,titulo:"😊 Emociones y refranes colombianos",descripcion:"Vocabulario emocional con expresiones populares de Colombia",categoria:"vocabulario",tipo:"imagen",iconEmoji:"😊",
     imagenHtml:`<div style="background:#fef9e7;padding:1.5rem;border-radius:1rem;margin-bottom:1rem;"><p style="font-weight:800;margin-bottom:1rem;color:#1a2a3a;">🗣️ Refranes colombianos</p><ul style="line-height:2.5;list-style:none;"><li>😤 "No hay mal que dure cien años" — <em>paciencia y esperanza</em></li><li>😞 "Camarón que se duerme, se lo lleva la corriente" — <em>diligencia</em></li><li>😲 "El que mucho abarca, poco aprieta" — <em>moderación</em></li><li>🤗 "Más vale tarde que nunca" — <em>perseverancia</em></li><li>🦁 "Al mal tiempo, buena cara" — <em>valentía</em></li></ul></div>`,
     leyenda:"Relaciona cada refrán con una emoción y escribe una situación de tu vida para cada uno."},
-  // ── VIDEOS ──
-  {id:11,titulo:"🎬 El Dorado: leyenda muisca de la Laguna de Guatavita",descripcion:"La famosa leyenda indígena muisca de Cundinamarca explicada con animación.",categoria:"video",tipo:"video",
+  {id:11,titulo:"🎬 El Dorado: la leyenda colombiana",descripcion:"La famosa leyenda indígena muisca de la Laguna de Guatavita, Cundinamarca.",categoria:"video",tipo:"video",iconEmoji:"🎬",
     videoUrl:"https://www.youtube.com/watch?v=XmAp_wKx7U8"},
-  {id:12,titulo:"📺 Palabras homófonas en español",descripcion:"Aprende la diferencia entre hay/ahí/ay, hola/ola y otras palabras que suenan igual.",categoria:"video",tipo:"video",
+  {id:12,titulo:"📺 Palabras homófonas en español",descripcion:"Aprende la diferencia entre hay/ahí/ay, hola/ola y otras palabras que suenan igual.",categoria:"video",tipo:"video",iconEmoji:"📺",
     videoUrl:"https://www.youtube.com/watch?v=SzrX2ZmY818"},
-  {id:16,titulo:"📽️ Comprensión lectora: estrategias para niños",descripcion:"Técnicas de lectura eficaz para mejorar la comprensión de textos escolares.",categoria:"video",tipo:"video",
+  {id:16,titulo:"📽️ Comprensión lectora: estrategias para niños",descripcion:"Aprende técnicas de lectura eficaz para mejorar la comprensión de textos en la escuela.",categoria:"video",tipo:"video",iconEmoji:"📽️",
     videoUrl:"https://www.youtube.com/watch?v=OCzLyawKSXI"},
-  // ── JUEGOS ──
-  {id:13,titulo:"🧠 Memory: sinónimos del español colombiano",descripcion:"Relaciona palabras con sus sinónimos en un juego de memoria interactivo",categoria:"juego",tipo:"juego_memory"},
-  {id:14,titulo:"🎯 Ahorcado: animales de Colombia",descripcion:"Adivina los nombres de animales colombianos letra por letra",categoria:"juego",tipo:"juego_ahorcado"},
-  {id:15,titulo:"⭐ Quiz: Diptongos e hiatos",descripcion:"Identifica correctamente diptongos e hiatos en palabras del español",categoria:"juego",tipo:"juego_quiz"}
+  {id:13,titulo:"🧠 Memory: sinónimos del español colombiano",descripcion:"Relaciona palabras con sus sinónimos en un juego de memoria",categoria:"juego",tipo:"juego_memory",iconEmoji:"🧠"},
+  {id:14,titulo:"🎯 Ahorcado: animales de Colombia",descripcion:"Adivina los nombres de animales colombianos letra por letra",categoria:"juego",tipo:"juego_ahorcado",iconEmoji:"🎯"},
+  {id:15,titulo:"⭐ Quiz: Diptongos e hiatos",descripcion:"Identifica correctamente diptongos e hiatos en palabras del español",categoria:"juego",tipo:"juego_quiz",iconEmoji:"⭐"}
 ];
 
 /* ══════════════════════════════════════════════
@@ -588,7 +683,6 @@ function togglePassword(id) {
   if (input.type === 'password') { input.type = 'text'; btn.textContent = 'Ocultar'; }
   else { input.type = 'password'; btn.textContent = 'Ver'; }
 }
-
 function switchAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
   if (tab === 'login') {
@@ -602,56 +696,46 @@ function switchAuthTab(tab) {
   }
   clearAuthMsg();
 }
-
 function showAuthMsg(msg, type='error') {
   const el = document.getElementById('authMessage');
   el.textContent = msg;
   el.className = 'auth-msg ' + type;
 }
-function clearAuthMsg() {
-  document.getElementById('authMessage').className = 'auth-msg';
-}
-
-function ensureSupabase() {
-  if (supabaseClient) return true;
-  showAuthMsg('No se pudo conectar con Supabase. Verifica tu conexión a internet.');
-  return false;
-}
-
-function setButtonLoading(btn, loading, text) {
-  if (!btn) return;
-  if (!btn._defaultText) btn._defaultText = btn.textContent;
-  btn.disabled = loading;
-  btn.textContent = loading ? text : btn._defaultText;
-  btn.style.opacity = loading ? '0.7' : '1';
-}
+function clearAuthMsg() { document.getElementById('authMessage').className = 'auth-msg'; }
 
 /* ══════════════════════════════════════════════
-   PERFIL DE USUARIO EN SUPABASE
+   SUPABASE — PERFIL DE USUARIO
 ══════════════════════════════════════════════ */
 function buildDefaultProfile(user) {
   const meta = user?.user_metadata || {};
   const email = (user?.email || '').trim().toLowerCase();
   const isAdmin = email === ADMIN_EMAIL;
+  const reqRole = meta.requested_role || 'student';
   return {
     id: user.id,
     email: user.email,
-    name: meta.name || (isAdmin ? 'Administrador' : 'Usuario'),
-    role: isAdmin ? 'admin' : (meta.requested_role || 'pending_student'),
-    institution: meta.institution || 'EduRepositorio'
+    name: meta.name || (isAdmin ? 'Administrador Principal' : 'Usuario'),
+    role: isAdmin ? 'admin' : 'pending_' + reqRole,
+    institution: meta.institution || 'EduRepositorio Colombia',
+    created_at: new Date().toISOString()
   };
 }
 
 async function ensureUserProfile(user) {
   if (!user?.id) return null;
-  const { data: profile, error } = await supabaseClient
-    .from('users').select('*').eq('id', user.id).maybeSingle();
-  if (!error && profile) return profile;
-  const def = buildDefaultProfile(user);
-  const { error: upsertErr } = await supabaseClient
-    .from('users').upsert([def], { onConflict: 'id' });
-  if (upsertErr) throw upsertErr;
-  return def;
+  try {
+    const { data: profile, error } = await supabaseClient
+      .from('users').select('*').eq('id', user.id).maybeSingle();
+    if (!error && profile) return profile;
+    const def = buildDefaultProfile(user);
+    const { error: upsertErr } = await supabaseClient
+      .from('users').upsert([def], { onConflict: 'id' });
+    if (upsertErr) console.error('Upsert error:', upsertErr);
+    return def;
+  } catch(e) {
+    console.error(e);
+    return buildDefaultProfile(user);
+  }
 }
 
 /* ══════════════════════════════════════════════
@@ -659,66 +743,83 @@ async function ensureUserProfile(user) {
 ══════════════════════════════════════════════ */
 async function handleLogin(e) {
   e.preventDefault();
-  if (!ensureSupabase()) return;
   const btn = e.currentTarget.querySelector('button[type="submit"]');
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
   const password = document.getElementById('loginPassword').value;
   try {
-    setButtonLoading(btn, true, 'Entrando...');
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    await loadUserData(data.user);
+    btn.disabled = true; btn.textContent = 'Entrando...';
+    if (supabaseClient) {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      await loadUserData(data.user);
+    } else {
+      // Fallback local
+      const users = getLocal('users', []);
+      const u = users.find(x => x.email.toLowerCase() === email && x.password === password);
+      if (!u) throw new Error('Correo o contraseña incorrectos.');
+      loginLocal(u);
+    }
   } catch(err) {
-    showAuthMsg('Error al iniciar sesión: ' + err.message);
+    showAuthMsg('Error al iniciar sesión: ' + (err.message || err));
   } finally {
-    setButtonLoading(btn, false);
+    btn.disabled = false; btn.textContent = 'Entrar';
   }
 }
 
 async function handleRegister(e) {
   e.preventDefault();
-  if (!ensureSupabase()) return;
   const btn = e.currentTarget.querySelector('button[type="submit"]');
   const email = document.getElementById('regEmail').value.trim().toLowerCase();
   const password = document.getElementById('regPassword').value;
   const name = document.getElementById('regName').value.trim();
   const requestedRole = document.getElementById('regAccountType').value;
   const institution = document.getElementById('regInstitution').value.trim();
+  if (!name || !email || !password || !requestedRole || !institution) {
+    showAuthMsg('Por favor completa todos los campos.'); return;
+  }
   try {
-    setButtonLoading(btn, true, 'Creando cuenta...');
-    // signUp con emailRedirectTo vacío y confirmación deshabilitada desde Supabase Dashboard
-    const { data, error } = await supabaseClient.auth.signUp({
-      email, password,
-      options: { data: { name, requested_role: requestedRole, institution } }
-    });
-    if (error) throw error;
-    if (!data.user) throw new Error('No se pudo crear el usuario.');
-
-    // Crear perfil directamente
-    await ensureUserProfile({ ...data.user, user_metadata: { name, requested_role: requestedRole, institution } });
-
-    // Si hay sesión activa (confirmación deshabilitada), ingresar directamente
-    if (data.session) {
-      showAuthMsg('¡Cuenta creada! Iniciando sesión...', 'success');
-      setTimeout(() => loadUserData(data.user), 800);
+    btn.disabled = true; btn.textContent = 'Creando cuenta...';
+    if (supabaseClient) {
+      const { data, error } = await supabaseClient.auth.signUp({
+        email, password,
+        options: { data: { name, requested_role: requestedRole, institution } }
+      });
+      if (error) throw error;
+      if (!data.user) throw new Error('No se pudo crear el usuario.');
+      await ensureUserProfile({ ...data.user, user_metadata: { name, requested_role: requestedRole, institution } });
+      if (data.session) {
+        showAuthMsg('¡Cuenta creada! Iniciando sesión...', 'success');
+        setTimeout(() => loadUserData(data.user), 800);
+      } else {
+        showAuthMsg('Cuenta creada. Tu acceso está pendiente de aprobación. Ya puedes iniciar sesión.', 'success');
+        switchAuthTab('login');
+        document.getElementById('loginEmail').value = email;
+      }
     } else {
-      // Si Supabase aún requiere confirmación, informar al usuario
-      showAuthMsg('Cuenta creada. Tu acceso está pendiente de aprobación del administrador. Ya puedes iniciar sesión.', 'success');
+      // Fallback local
+      const users = getLocal('users', []);
+      if (users.find(u => u.email.toLowerCase() === email)) {
+        showAuthMsg('Este correo ya está registrado.'); return;
+      }
+      const newUser = { id: 'u-'+Date.now(), name, email, password, institution, role: 'pending_'+requestedRole, created_at: new Date().toISOString() };
+      users.push(newUser);
+      setLocal('users', users);
+      showAuthMsg('¡Cuenta creada! Inicia sesión.', 'success');
       switchAuthTab('login');
-      document.getElementById('loginEmail').value = email;
     }
   } catch(err) {
-    showAuthMsg('Error al crear cuenta: ' + err.message);
+    showAuthMsg('Error: ' + (err.message || err));
   } finally {
-    setButtonLoading(btn, false);
+    btn.disabled = false; btn.textContent = 'Crear Cuenta';
   }
 }
 
-async function logout() {
-  realtimeChannels.forEach(ch => supabaseClient.removeChannel(ch));
+async function doLogout() {
+  realtimeChannels.forEach(ch => { try { supabaseClient?.removeChannel(ch); } catch{} });
   realtimeChannels = [];
-  await supabaseClient.auth.signOut();
+  if (supabaseClient) await supabaseClient.auth.signOut().catch(()=>{});
   currentUser = null;
+  try { sessionStorage.removeItem('edu_session_v7'); } catch{}
   document.getElementById('authScreen').style.display = 'flex';
   document.getElementById('mainApp').style.display = 'none';
   toast('Sesión cerrada', 'blue');
@@ -730,275 +831,202 @@ async function logout() {
 async function loadUserData(user) {
   try {
     currentUser = await ensureUserProfile(user);
-    if (!currentUser) throw new Error('Perfil no disponible');
-    document.getElementById('authScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-    setupUI();
+    if (!currentUser) throw new Error('No se pudo cargar el perfil.');
+    // Guardar sesión local
+    try { sessionStorage.setItem('edu_session_v7', JSON.stringify(currentUser)); } catch{}
+    showMainApp();
     await loadPortals();
     if (currentUser.role === 'admin') await loadAllUsers();
     setupRealtime();
-    toast('¡Bienvenido, ' + currentUser.name.split(' ')[0] + '!', 'green');
+    toast('¡Bienvenido/a, ' + currentUser.name.split(' ')[0] + '! 👋', 'green');
   } catch(err) {
     console.error(err);
-    showAuthMsg('Error al cargar datos: ' + err.message);
+    showAuthMsg('Error al cargar datos: ' + (err.message || err));
   }
 }
 
+function loginLocal(user) {
+  currentUser = user;
+  try { sessionStorage.setItem('edu_session_v7', JSON.stringify(user)); } catch{}
+  showMainApp();
+  allPortals = getLocal('portals', []);
+  if (currentUser.role === 'admin') allUsers = getLocal('users', []);
+  toast('¡Bienvenido/a, ' + user.name.split(' ')[0] + '! 👋', 'green');
+}
+
+function showMainApp() {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  setupUI();
+  showPage('inicio');
+}
+
 function setupUI() {
+  if (!currentUser) return;
   const u = currentUser;
-  const roleLabels = { admin:'🎓 Administrador', teacher:'👩‍🏫 Docente', student:'🎒 Estudiante', pending_teacher:'⏳ Docente (pendiente)', pending_student:'⏳ Estudiante (pendiente)' };
-  document.getElementById('userAvatar').textContent = u.name.charAt(0).toUpperCase();
-  document.getElementById('userAvatar').className = 'user-avatar ' + (u.role === 'admin' ? 'avatar-admin' : u.role === 'teacher' ? 'avatar-teacher' : u.role.startsWith('pending') ? 'avatar-pending' : 'avatar-student');
-  document.getElementById('userName').textContent = u.name.split(' ')[0];
+  const roleLabels = { admin:'Administrador', teacher:'Docente', student:'Estudiante', pending_teacher:'Docente (pendiente)', pending_student:'Estudiante (pendiente)' };
+  const av = document.getElementById('userAvatar');
+  av.textContent = (u.name || 'U').charAt(0).toUpperCase();
+  av.className = 'user-avatar ' + (u.role === 'admin' ? 'avatar-admin' : u.role === 'teacher' ? 'avatar-teacher' : u.role.startsWith('pending') ? 'avatar-pending' : 'avatar-student');
+  document.getElementById('userName').textContent = (u.name || 'Usuario').split(' ')[0];
   document.getElementById('userRole').textContent = roleLabels[u.role] || u.role;
 
   const isAdmin = u.role === 'admin';
   const isTeacher = u.role === 'teacher' || isAdmin;
-  const isPending = u.role.startsWith('pending');
+  const isPending = (u.role || '').startsWith('pending');
 
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? '' : 'none');
-  document.querySelectorAll('.teacher-only').forEach(el => el.style.display = isTeacher ? 'flex' : 'none');
+  document.querySelectorAll('.teacher-only').forEach(el => el.style.display = isTeacher ? '' : 'none');
 
   document.getElementById('pendingNotice').style.display = isPending ? 'block' : 'none';
+
+  // Perfil
+  document.getElementById('profileName').textContent = u.name || '—';
+  document.getElementById('profileEmail').textContent = u.email || '—';
+  document.getElementById('profileNameInput').value = u.name || '';
+  document.getElementById('profileSchoolInput').value = u.institution || '';
+  const pb = document.getElementById('profileRoleBadge');
+  pb.textContent = roleLabels[u.role] || u.role;
+  pb.className = 'role-badge role-' + (isAdmin ? 'admin' : isTeacher ? 'teacher' : isPending ? 'pending' : 'student');
+  const pa = document.getElementById('profileAvatar');
+  pa.textContent = (u.name || 'U').charAt(0).toUpperCase();
+  pa.className = 'user-avatar avatar-' + (isAdmin ? 'admin' : isTeacher ? 'teacher' : 'student');
+
   updateStats();
-  renderActividades();
+  renderRecursos();
   renderPortals();
-  showPage('inicio');
+  renderMyActivities();
+  if (isAdmin) renderAdminUsers();
 }
 
 function updateStats() {
-  document.getElementById('statPortales').textContent = allPortals.length;
+  const sp = document.getElementById('statPortales'); if(sp) sp.textContent = allPortals.length;
+  const su = document.getElementById('statUsuarios'); if(su) su.textContent = allUsers.length;
   if (document.getElementById('adminStatUsers')) {
     document.getElementById('adminStatUsers').textContent = allUsers.length;
-    document.getElementById('adminStatPending').textContent = allUsers.filter(u => u.role && u.role.startsWith('pending')).length;
-    document.getElementById('adminStatPortals').textContent = allPortals.length;
+    document.getElementById('adminStatAdmins').textContent = allUsers.filter(u => u.role === 'admin').length;
+    document.getElementById('adminStatTeachers').textContent = allUsers.filter(u => u.role === 'teacher').length;
+    document.getElementById('adminStatStudents').textContent = allUsers.filter(u => u.role === 'student').length;
+    document.getElementById('adminStatPending').textContent = allUsers.filter(u => (u.role||'').startsWith('pending')).length;
   }
 }
 
+/* ══════════════════════════════════════════════
+   PÁGINAS Y NAVEGACIÓN
+══════════════════════════════════════════════ */
 function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); });
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const pg = document.getElementById('page-' + name);
   if (pg) { pg.style.display = ''; pg.classList.add('active'); }
-  const navBtns = document.querySelectorAll('.nav-item');
-  navBtns.forEach(n => {
-    if (n.textContent.toLowerCase().includes(name === 'inicio' ? 'inicio' :
-        name === 'actividades' ? 'activid' :
-        name === 'portales' ? 'portal' :
-        name === 'admin' ? 'admin' : name)) {
-      n.classList.add('active');
-    }
-  });
+  const navBtn = document.querySelector(`[data-page="${name}"]`);
+  if (navBtn) navBtn.classList.add('active');
   if (name === 'admin') renderAdminUsers();
+  if (name === 'portales') renderPortals();
+  if (name === 'mis-actividades') renderMyActivities();
+}
+
+function openModal(id) { const m = document.getElementById(id); if (m) m.classList.add('show'); }
+function closeModal(id) { const m = document.getElementById(id); if (m) m.classList.remove('show'); }
+function closeModalBack(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+
+function roleLabel(role) {
+  return { admin:'🎓 Administrador', teacher:'👩‍🏫 Docente', student:'🎒 Estudiante', pending_teacher:'⏳ Docente pend.', pending_student:'⏳ Estudiante pend.' }[role] || role;
 }
 
 /* ══════════════════════════════════════════════
-   PORTALES (Supabase)
+   RECURSOS — RENDERIZADO
 ══════════════════════════════════════════════ */
-async function loadPortals() {
-  try {
-    const { data, error } = await supabaseClient.from('portals').select('*').order('created_at', { ascending: false });
-    if (error) throw error;
-    allPortals = data || [];
-    renderPortals();
-    updateStats();
-    document.getElementById('statPortales').textContent = allPortals.length;
-  } catch(err) {
-    console.error(err);
-  }
-}
-
-function renderPortals() {
-  const grid = document.getElementById('portalGrid');
-  if (!grid) return;
-  const canEdit = currentUser && (currentUser.role === 'admin' || currentUser.role === 'teacher');
-  if (allPortals.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🌐</div><p>Aún no hay portales. ¡Crea el primero!</p></div>';
-    return;
-  }
-  grid.innerHTML = allPortals.map(p => {
-    const isOwner = currentUser && (currentUser.role === 'admin' || p.owner_id === currentUser.id);
-    const date = new Date(p.created_at || p.createdAt).toLocaleDateString('es-CO', { year:'numeric', month:'short', day:'numeric' });
-    return `<div class="portal-card">
-      <div class="portal-header">
-        <div class="portal-icon">📁</div>
-        ${isOwner ? `<div class="portal-btns">
-          <button class="btn-portal-action" onclick="deletePortal('${p.id}')" title="Eliminar">🗑️</button>
-        </div>` : ''}
-      </div>
-      <div class="portal-info">
-        <h3>${escHtml(p.name)}</h3>
-        <p>${escHtml(p.description || '')}</p>
-        <p style="font-size:0.75rem;color:#95a5a6;margin-top:4px">🏫 ${escHtml(p.institution || '')} · ${date}</p>
-      </div>
-      <div class="portal-footer">
-        <div class="portal-stats"><i class="fas fa-book"></i> ${(p.resource_ids || []).length} recursos</div>
-        <button class="btn-open-portal" onclick="viewPortal('${p.id}')">Abrir</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function openCreatePortal() {
-  // populate picker
-  const picker = document.getElementById('portalResourcePicker');
-  picker.innerHTML = ACTIVIDADES.map(a =>
-    `<label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 0;">
-      <input type="checkbox" value="${a.id}" style="width:16px;height:16px;">
-      <span>${a.titulo}</span>
-    </label>`
-  ).join('');
-  openModal('createPortalModal');
-}
-
-async function createPortal() {
-  const name = document.getElementById('newPortalName').value.trim();
-  const desc = document.getElementById('newPortalDesc').value.trim();
-  const inst = document.getElementById('newPortalInst').value.trim();
-  const checked = [...document.querySelectorAll('#portalResourcePicker input:checked')].map(cb => parseInt(cb.value));
-  if (!name || !inst) { toast('Completa nombre e institución', 'red'); return; }
-  try {
-    const { error } = await supabaseClient.from('portals').insert([{
-      name, description: desc, institution: inst,
-      owner_id: currentUser.id,
-      resource_ids: checked
-    }]);
-    if (error) throw error;
-    closeModal('createPortalModal');
-    toast('✅ Portal creado', 'green');
-    await loadPortals();
-  } catch(err) {
-    toast('Error al crear portal: ' + err.message, 'red');
-  }
-}
-
-async function deletePortal(id) {
-  if (!confirm('¿Eliminar este portal?')) return;
-  try {
-    const { error } = await supabaseClient.from('portals').delete().eq('id', id);
-    if (error) throw error;
-    toast('Portal eliminado', 'blue');
-    await loadPortals();
-  } catch(err) {
-    toast('Error: ' + err.message, 'red');
-  }
-}
-
-function viewPortal(id) {
-  const portal = allPortals.find(p => p.id === id);
-  if (!portal) return;
-  const resourceIds = portal.resource_ids || [];
-  const recursos = ACTIVIDADES.filter(a => resourceIds.includes(a.id));
-  let html = `<div class="activity-header">
-    <div class="activity-title">${escHtml(portal.name)}</div>
-    <div class="activity-subtitle">${escHtml(portal.description || '')}</div>
-    <div class="activity-subtitle">🏫 ${escHtml(portal.institution || '')}</div>
-  </div>`;
-  if (recursos.length === 0) html += '<p style="text-align:center;color:#95a5a6;padding:2rem">Este portal no tiene recursos asignados.</p>';
-  else recursos.forEach(r => { html += renderActividadContent(r); });
-  document.getElementById('activityModalTitle').textContent = portal.name;
-  document.getElementById('activityModalBody').innerHTML = html;
-  openModal('activityModal');
-}
-
-/* ══════════════════════════════════════════════
-   RENDERIZADO ACTIVIDADES
-══════════════════════════════════════════════ */
-function setFilterCat(btn) {
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+function setFilterCat(btn, ctx) {
+  const parent = btn.closest('.filter-group') || btn.parentElement;
+  parent.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
   btn.classList.add('active');
   currentFilter = btn.dataset.cat;
-  renderActividades();
+  renderRecursos();
 }
 
-function renderActividades() {
-  const grid = document.getElementById('actividadesGrid');
+function renderRecursos() {
+  const grid = document.getElementById('recursosGrid');
   if (!grid) return;
-  const search = (document.getElementById('searchActividades')?.value || '').toLowerCase();
-  const filtered = ACTIVIDADES.filter(a => {
-    const matchCat = currentFilter === 'all' || a.categoria === currentFilter;
-    const matchSearch = !search || a.titulo.toLowerCase().includes(search) || a.descripcion.toLowerCase().includes(search);
+  const search = (document.getElementById('searchRecursos')?.value || '').toLowerCase();
+  const canManage = currentUser && (currentUser.role === 'admin' || currentUser.role === 'teacher');
+  const filtered = recursos.filter(r => {
+    const matchCat = currentFilter === 'all' || r.categoria === currentFilter;
+    const matchSearch = !search || r.titulo.toLowerCase().includes(search) || r.descripcion.toLowerCase().includes(search);
     return matchCat && matchSearch;
   });
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><p>No se encontraron actividades.</p></div>';
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><p>No se encontraron recursos.</p></div>';
     return;
   }
-  grid.innerHTML = filtered.map(a => {
-    const catLabel = { lectura:'📖 Lectura', escritura:'✍️ Escritura', gramatica:'🔤 Gramática', vocabulario:'🌿 Vocabulario', video:'🎬 Video', juego:'🎮 Juego' }[a.categoria] || a.categoria;
-    const typeEmoji = { lectura_multiple:'📖', simple:'📝', quiz:'✅', video:'🎬', imagen:'🖼️', juego_memory:'🧠', juego_ahorcado:'🎯', juego_quiz:'⭐' }[a.tipo] || '📄';
-    return `<div class="resource-card type-${a.tipo || a.categoria}" onclick="abrirActividad(${a.id})">
-      <div class="card-thumb">
-        <span style="font-size:3rem">${typeEmoji}</span>
-        <span class="card-type-badge">${catLabel}</span>
+  const catColors = { lectura:'background:var(--azul-suave);color:var(--azul)', escritura:'background:var(--naranja-suave);color:var(--naranja)', gramatica:'background:#f5eef8;color:var(--morado)', vocabulario:'background:#d4efdf;color:#1e8449', video:'background:#fdecea;color:var(--rojo)', juego:'background:#fef9e7;color:#d4ac0d' };
+  grid.innerHTML = filtered.map(r => `
+    <div class="resource-card">
+      <div class="card-thumb" style="background:linear-gradient(135deg,var(--verde-suave),var(--azul-suave))">
+        <span style="font-size:2.8rem">${r.iconEmoji || '📄'}</span>
+        <span class="card-type-badge">${r.categoria}</span>
       </div>
       <div class="card-body">
-        <div class="card-title">${a.titulo}</div>
-        <div class="card-desc">${a.descripcion}</div>
+        <span class="card-category" style="${catColors[r.categoria]||''}">${r.categoria.toUpperCase()}</span>
+        <div class="card-title">${r.titulo}</div>
+        <div class="card-desc">${r.descripcion}</div>
         <div class="card-actions">
-          <button class="btn-card btn-open" onclick="event.stopPropagation();abrirActividad(${a.id})">▶ Abrir</button>
+          <button class="btn-card btn-open" onclick="abrirRecurso(${r.id})">Explorar →</button>
+          ${canManage ? `<button class="btn-card btn-share" onclick="quickShareResource(${r.id})"><i class="fas fa-share-alt"></i> Compartir</button>` : ''}
+          ${canManage ? `<button class="btn-card btn-copy" onclick="copyResourceToPortal(${r.id})" title="Copiar a portal">📋 Copiar</button>` : ''}
+          ${canManage ? `<button class="btn-card btn-export" onclick="exportRecurso(${r.id})" title="Exportar">📥 Exportar</button>` : ''}
         </div>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
-function abrirActividad(id) {
-  const a = ACTIVIDADES.find(x => x.id === id);
-  if (!a) return;
-  document.getElementById('activityModalTitle').textContent = a.titulo;
-  document.getElementById('activityModalBody').innerHTML = renderActividadContent(a);
-  openModal('activityModal');
+function abrirRecurso(id) {
+  const rec = (recursosEditados || recursos).find(r => r.id === id) || recursos.find(r => r.id === id);
+  if (!rec) return;
+  document.getElementById('resourceModalTitle').textContent = rec.titulo;
+  document.getElementById('resourceModalBody').innerHTML = buildRecursoContent(rec);
+  openModal('resourceModal');
 }
 
-function renderActividadContent(a) {
-  let html = `<div class="resource-section">
-    <div class="resource-section-title">${a.titulo}</div>
-    <p style="color:#7f8c8d;margin-bottom:1.2rem;font-size:0.9rem">${a.descripcion}</p>`;
-
-  if (a.tipo === 'video' && a.videoUrl) {
-    const vid = extractYouTubeId(a.videoUrl);
+function buildRecursoContent(r) {
+  let html = `<p style="color:#7f8c8d;margin-bottom:1.2rem;font-size:0.9rem">${r.descripcion}</p>`;
+  if (r.tipo === 'video' && r.videoUrl) {
+    const vid = extractYouTubeId(r.videoUrl);
     if (vid) html += `<div class="video-container"><iframe src="https://www.youtube.com/embed/${vid}" frameborder="0" allowfullscreen></iframe></div>`;
-  }
-  else if (a.tipo === 'simple' && a.contenidoHtml) {
-    html += `<div style="line-height:1.8">${a.contenidoHtml}</div>`;
-  }
-  else if (a.tipo === 'imagen') {
-    if (a.imagenHtml) html += a.imagenHtml;
-    if (a.leyenda) html += `<p style="font-style:italic;color:#7f8c8d;margin-top:0.5rem">✍️ <strong>Actividad:</strong> ${escHtml(a.leyenda)}</p><textarea class="vocab-textarea" rows="4" placeholder="Escribe tu respuesta aquí..."></textarea>`;
-  }
-  else if (a.tipo === 'lectura_multiple') {
-    if (a.texto) html += `<div class="lectura-texto">${escHtml(a.texto)}</div>`;
-    if (a.preguntas && a.preguntas.length > 0) {
+  } else if (r.tipo === 'simple' && r.contenidoHtml) {
+    html += `<div style="line-height:1.8">${r.contenidoHtml}</div>`;
+  } else if (r.tipo === 'imagen') {
+    if (r.imagenHtml) html += r.imagenHtml;
+    else if (r.imagenSvg) html += r.imagenSvg;
+    if (r.leyenda) html += `<p style="font-style:italic;color:#7f8c8d;margin-top:0.5rem">✍️ <strong>Actividad:</strong> ${escHtml(r.leyenda)}</p><textarea class="vocab-textarea" rows="4" placeholder="Escribe tu respuesta aquí..."></textarea>`;
+  } else if (r.tipo === 'lectura_multiple') {
+    const texto = r.texto || '';
+    if (texto) html += `<div class="lectura-texto">${escHtml(texto)}</div>`;
+    if (r.preguntas && r.preguntas.length > 0) {
       html += '<div class="preguntas-container">';
-      a.preguntas.forEach((p, i) => {
-        html += `<div class="pregunta-item"><div class="pregunta-texto">${i+1}. ${escHtml(p.pregunta)}</div><div class="opciones-list">`;
-        p.opciones.forEach((op, j) => {
-          html += `<button class="opcion-btn" onclick="elegirOpcion(this,${j},${p.correcta})">${escHtml(op)}</button>`;
-        });
+      r.preguntas.forEach((p, i) => {
+        const pregs = typeof p === 'string' ? p : p.pregunta;
+        const opts = p.opciones || [];
+        const corr = typeof p.correcta !== 'undefined' ? p.correcta : 0;
+        html += `<div class="pregunta-item"><div class="pregunta-texto">${i+1}. ${escHtml(pregs)}</div><div class="opciones-list">`;
+        opts.forEach((op, j) => { html += `<button class="opcion-btn" onclick="elegirOpcion(this,${j},${corr})">${escHtml(op)}</button>`; });
         html += '</div></div>';
       });
       html += '</div>';
     }
-  }
-  else if (a.tipo === 'quiz' && a.preguntas) {
-    const qid = 'q' + a.id + '_' + Date.now();
-    window['_quiz_' + qid] = { preguntas: a.preguntas, opciones: a.opciones, correctas: a.correctas, cur: 0, score: 0 };
+  } else if (r.tipo === 'quiz') {
+    const qid = 'q' + r.id + '_' + Date.now();
+    window['_quiz_'+qid] = { preguntas: r.preguntas, opciones: r.opciones, correctas: r.correctas, cur: 0, score: 0 };
     html += `<div id="${qid}"></div>`;
     setTimeout(() => renderQuizStep(qid), 20);
-  }
-  else if (a.tipo === 'juego_memory') {
+  } else if (r.tipo === 'juego_memory' || r.tipo === 'juego_memory_avanzado') {
     html += buildMemory();
-  }
-  else if (a.tipo === 'juego_ahorcado') {
+  } else if (r.tipo === 'juego_ahorcado') {
     const ahid = 'ah' + Date.now();
     html += `<div id="${ahid}">${buildAhorcado(ahid)}</div>`;
-  }
-  else if (a.tipo === 'juego_quiz') {
+  } else if (r.tipo === 'juego_quiz') {
     html += buildQuizDiptongos();
   }
-
-  html += '</div>';
   return html;
 }
 
@@ -1010,38 +1038,31 @@ function elegirOpcion(btn, idx, correcta) {
     toast('✅ ¡Correcto!', 'green');
   } else {
     btn.classList.add('incorrecta');
-    btns[correcta].classList.add('correcta');
+    if (btns[correcta]) btns[correcta].classList.add('correcta');
     toast('❌ Incorrecto. La respuesta correcta está marcada.', 'red');
   }
 }
 
 /* ── QUIZ ── */
 function renderQuizStep(qid) {
-  const state = window['_quiz_' + qid];
-  if (!state) return;
-  const container = document.getElementById(qid);
-  if (!container) return;
+  const state = window['_quiz_'+qid]; if (!state) return;
+  const container = document.getElementById(qid); if (!container) return;
   const { preguntas, opciones, correctas, cur, score } = state;
   if (cur >= preguntas.length) {
     container.innerHTML = `<div style="text-align:center;padding:2rem"><div style="font-size:3rem">🏆</div><h3>¡Terminaste!</h3><p style="margin-top:0.5rem">Puntaje: ${score} / ${preguntas.length}</p><button class="btn-card btn-open" style="margin-top:1rem" onclick="window['_quiz_${qid}']={preguntas:window['_quiz_${qid}'].preguntas,opciones:window['_quiz_${qid}'].opciones,correctas:window['_quiz_${qid}'].correctas,cur:0,score:0};renderQuizStep('${qid}')">🔄 Repetir</button></div>`;
     return;
   }
-  const ops = opciones[cur].map((op, j) =>
-    `<button class="opcion-btn" onclick="answerQuiz('${qid}',${j},${correctas[cur]})">${escHtml(op)}</button>`
-  ).join('');
+  const ops = (opciones[cur]||[]).map((op,j) => `<button class="opcion-btn" onclick="answerQuiz('${qid}',${j},${correctas[cur]})">${escHtml(op)}</button>`).join('');
   container.innerHTML = `<div class="pregunta-item"><div class="pregunta-texto">${cur+1}/${preguntas.length}. ${escHtml(preguntas[cur])}</div><div class="opciones-list">${ops}</div><div id="${qid}_fb"></div></div>`;
 }
-
 function answerQuiz(qid, idx, correcta) {
-  const state = window['_quiz_' + qid];
-  if (!state) return;
-  const container = document.getElementById(qid);
+  const state = window['_quiz_'+qid]; if (!state) return;
+  const container = document.getElementById(qid); if (!container) return;
   container.querySelectorAll('.opcion-btn').forEach(b => b.disabled = true);
   const btns = container.querySelectorAll('.opcion-btn');
-  const fb = document.getElementById(qid + '_fb');
+  const fb = document.getElementById(qid+'_fb');
   if (idx === correcta) {
-    btns[idx].classList.add('correcta');
-    state.score++;
+    btns[idx].classList.add('correcta'); state.score++;
     if (fb) fb.innerHTML = '<p style="color:var(--verde);font-weight:700;margin-top:0.5rem">✅ ¡Correcto!</p>';
   } else {
     btns[idx].classList.add('incorrecta');
@@ -1057,21 +1078,16 @@ function buildMemory() {
   const pares = [['bonito','hermoso'],['rápido','veloz'],['triste','melancólico'],['grande','enorme'],['frío','helado'],['alegre','contento']];
   const all = [...pares.flat()].sort(() => Math.random() - 0.5);
   const mid = 'mem' + Date.now();
-  window['_mem_' + mid] = { flipped: [], matched: 0, cards: all, pares };
-  const cells = all.map((w, i) =>
-    `<div class="memory-card" id="${mid}_${i}" onclick="flipMemory('${mid}',${i},'${w}')">?</div>`
-  ).join('');
+  window['_mem_'+mid] = { flipped: [], matched: 0, cards: all, pares };
+  const cells = all.map((w, i) => `<div class="memory-card" id="${mid}_${i}" onclick="flipMemory('${mid}',${i},'${w.replace(/'/g,"\\'")}')">?</div>`).join('');
   return `<p style="text-align:center;color:#7f8c8d;margin-bottom:0.5rem">Encuentra los 6 pares de sinónimos</p><div class="memory-grid">${cells}</div>`;
 }
-
 function flipMemory(mid, idx, word) {
-  const state = window['_mem_' + mid];
-  if (!state) return;
-  const card = document.getElementById(mid + '_' + idx);
+  const state = window['_mem_'+mid]; if (!state) return;
+  const card = document.getElementById(mid+'_'+idx);
   if (!card || card.classList.contains('flipped') || card.classList.contains('matched')) return;
   if (state.flipped.length >= 2) return;
-  card.textContent = word;
-  card.classList.add('flipped');
+  card.textContent = word; card.classList.add('flipped');
   state.flipped.push({ idx, word });
   if (state.flipped.length === 2) {
     const [a, b] = state.flipped;
@@ -1083,10 +1099,10 @@ function flipMemory(mid, idx, word) {
         state.matched++;
         if (state.matched === state.pares.length) toast('🎉 ¡Completaste el Memory!', 'green');
       } else {
-        document.getElementById(mid+'_'+a.idx).textContent = '?';
-        document.getElementById(mid+'_'+b.idx).textContent = '?';
-        document.getElementById(mid+'_'+a.idx).classList.remove('flipped');
-        document.getElementById(mid+'_'+b.idx).classList.remove('flipped');
+        const ca = document.getElementById(mid+'_'+a.idx);
+        const cb = document.getElementById(mid+'_'+b.idx);
+        if(ca){ca.textContent='?';ca.classList.remove('flipped');}
+        if(cb){cb.textContent='?';cb.classList.remove('flipped');}
       }
       state.flipped = [];
     }, 900);
@@ -1097,35 +1113,27 @@ function flipMemory(mid, idx, word) {
 function buildAhorcado(ahid) {
   const palabras = ['CAIMÁN','MANATÍ','DELFÍN','CHIGÜIRO','CÓNDOR','SERPIENTE','JAGUAR','GUACAMAYO','TAPIR','ARMADILLO'];
   const palabra = palabras[Math.floor(Math.random() * palabras.length)];
-  window['_ah_' + ahid] = { palabra, intentos: 0, letras: new Set() };
+  window['_ah_'+ahid] = { palabra, intentos: 0, letras: new Set() };
   const kb = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'.split('').map(l =>
-    `<button class="key" id="${ahid}k${l}" onclick="tryLetra('${ahid}','${l}')">${l}</button>`
-  ).join('');
+    `<button class="key" id="${ahid}k${l}" onclick="tryLetra('${ahid}','${l}')">${l}</button>`).join('');
   return `<div id="${ahid}d" style="font-size:1.8rem;font-weight:800;letter-spacing:8px;text-align:center;margin:1rem 0">${palabra.split('').map(()=>'_').join(' ')}</div>
     <p id="${ahid}m" style="text-align:center;font-weight:700;margin-bottom:0.5rem">Intentos restantes: 7</p>
     <div class="keyboard">${kb}</div>
-    <button class="btn-card btn-open" style="margin-top:1rem" onclick="document.getElementById('${ahid}').innerHTML=buildAhorcado('${ahid}')">🔄 Nueva palabra</button>`;
+    <button class="btn-card btn-open" style="margin-top:1rem" onclick="const d=document.getElementById('${ahid}');d.innerHTML=buildAhorcado('${ahid}')">🔄 Nueva palabra</button>`;
 }
-
 function tryLetra(ahid, l) {
-  const s = window['_ah_' + ahid];
-  if (!s || s.intentos >= 7) return;
+  const s = window['_ah_'+ahid]; if (!s || s.intentos >= 7) return;
   if (s.letras.has(l)) return;
   s.letras.add(l);
-  const kEl = document.getElementById(ahid + 'k' + l);
-  if (kEl) {
-    kEl.style.background = s.palabra.includes(l) ? 'var(--verde-suave)' : '#fdecea';
-    kEl.style.color = s.palabra.includes(l) ? 'var(--verde)' : 'var(--rojo)';
-    kEl.disabled = true;
-  }
+  const kEl = document.getElementById(ahid+'k'+l);
+  if (kEl) { kEl.style.background = s.palabra.includes(l) ? 'var(--verde-suave)' : '#fdecea'; kEl.style.color = s.palabra.includes(l) ? 'var(--verde)' : 'var(--rojo)'; kEl.disabled = true; }
   if (!s.palabra.includes(l)) s.intentos++;
-  const disp = document.getElementById(ahid + 'd');
-  const msg = document.getElementById(ahid + 'm');
+  const disp = document.getElementById(ahid+'d'); const msg = document.getElementById(ahid+'m');
   if (disp) disp.textContent = s.palabra.split('').map(c => s.letras.has(c) ? c : '_').join(' ');
   const ganó = s.palabra.split('').every(c => s.letras.has(c));
-  if (ganó) { if (msg) msg.textContent = '🎉 ¡Excelente! La palabra era: ' + s.palabra; toast('🎉 ¡Ganaste!', 'green'); }
-  else if (s.intentos >= 7) { if (disp) disp.textContent = s.palabra; if (msg) msg.textContent = '❌ Game over. Era: ' + s.palabra; }
-  else { if (msg) msg.textContent = 'Intentos restantes: ' + (7 - s.intentos); }
+  if (ganó) { if(msg) msg.textContent = '🎉 ¡Excelente! La palabra era: '+s.palabra; toast('🎉 ¡Ganaste!','green'); }
+  else if (s.intentos >= 7) { if(disp) disp.textContent=s.palabra; if(msg) msg.textContent='❌ Game over. Era: '+s.palabra; }
+  else { if(msg) msg.textContent='Intentos restantes: '+(7-s.intentos); }
 }
 
 /* ── QUIZ DIPTONGOS ── */
@@ -1137,17 +1145,14 @@ function buildQuizDiptongos() {
     {p:'¿"maíz" tiene diptongo o hiato?',ops:['Diptongo','Hiato'],c:1,exp:'ma-íz → hiato (tilde diacrítica)'},
     {p:'¿Cuántas sílabas tiene "viento"?',ops:['2','3','4'],c:0,exp:'vien-to = 2 sílabas (ie es diptongo)'}
   ];
-  const qid = 'qdip' + Date.now();
-  window['_qdip_' + qid] = { preguntas, cur: 0, score: 0 };
+  const qid = 'qdip'+Date.now();
+  window['_qdip_'+qid] = { preguntas, cur: 0, score: 0 };
   setTimeout(() => renderDiptStep(qid), 20);
   return `<div id="${qid}"></div>`;
 }
-
 function renderDiptStep(qid) {
-  const state = window['_qdip_' + qid];
-  if (!state) return;
-  const el = document.getElementById(qid);
-  if (!el) return;
+  const state = window['_qdip_'+qid]; if (!state) return;
+  const el = document.getElementById(qid); if (!el) return;
   const { preguntas, cur, score } = state;
   if (cur >= preguntas.length) {
     el.innerHTML = `<div style="text-align:center;padding:2rem"><div style="font-size:3rem">🏆</div><h3>¡Terminaste!</h3><p>Puntaje: ${score}/${preguntas.length}</p><button class="btn-card btn-open" style="margin-top:1rem" onclick="window['_qdip_${qid}']={preguntas:window['_qdip_${qid}'].preguntas,cur:0,score:0};renderDiptStep('${qid}')">Jugar de nuevo</button></div>`;
@@ -1155,17 +1160,15 @@ function renderDiptStep(qid) {
   }
   const q = preguntas[cur];
   el.innerHTML = `<div class="pregunta-item"><div class="pregunta-texto">${cur+1}/${preguntas.length}. ${q.p}</div><div class="opciones-list">${
-    q.ops.map((o,i) => `<button class="opcion-btn" onclick="ansDipt('${qid}',${i},${q.c},'${q.exp}')">${o}</button>`).join('')
+    q.ops.map((o,i) => `<button class="opcion-btn" onclick="ansDipt('${qid}',${i},${q.c},'${q.exp.replace(/'/g,"\\'")}'">${o}</button>`).join('')
   }</div><div id="${qid}_fb"></div></div>`;
 }
-
 function ansDipt(qid, idx, correcta, exp) {
-  const state = window['_qdip_' + qid];
-  if (!state) return;
-  const el = document.getElementById(qid);
+  const state = window['_qdip_'+qid]; if (!state) return;
+  const el = document.getElementById(qid); if (!el) return;
   el.querySelectorAll('.opcion-btn').forEach(b => b.disabled = true);
   const btns = el.querySelectorAll('.opcion-btn');
-  const fb = document.getElementById(qid + '_fb');
+  const fb = document.getElementById(qid+'_fb');
   if (idx === correcta) { btns[idx].classList.add('correcta'); state.score++; if(fb) fb.innerHTML=`<p style="color:var(--verde);font-weight:700;margin-top:0.5rem">✅ ¡Correcto! ${exp}</p>`; }
   else { btns[idx].classList.add('incorrecta'); if(btns[correcta]) btns[correcta].classList.add('correcta'); if(fb) fb.innerHTML=`<p style="color:var(--rojo);font-weight:700;margin-top:0.5rem">❌ Incorrecto. ${exp}</p>`; }
   state.cur++;
@@ -1173,60 +1176,580 @@ function ansDipt(qid, idx, correcta, exp) {
 }
 
 /* ══════════════════════════════════════════════
-   ADMIN: USUARIOS
+   ACCIONES DE RECURSOS: COMPARTIR / COPIAR / EXPORTAR
+══════════════════════════════════════════════ */
+function quickShareResource(rid) {
+  openCreatePortalModal();
+  setTimeout(() => {
+    const cb = document.querySelector(`#portalResourcePicker input[value="${rid}"]`);
+    if (cb) cb.checked = true;
+  }, 100);
+}
+
+function copyResourceToPortal(rid) {
+  openCreatePortalModal();
+  setTimeout(() => {
+    const cb = document.querySelector(`#portalResourcePicker input[value="${rid}"]`);
+    if (cb) cb.checked = true;
+    toast('📋 Selecciona o crea un portal para guardar este recurso.', 'blue');
+  }, 100);
+}
+
+function exportRecurso(rid) {
+  const rec = (recursosEditados || recursos).find(r => r.id === rid) || recursos.find(r => r.id === rid);
+  if (!rec) return;
+  const blob = new Blob([JSON.stringify(rec, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `recurso_${rec.id}_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('📥 Recurso exportado correctamente.', 'green');
+}
+
+/* ══════════════════════════════════════════════
+   PORTALES — Supabase + localStorage fallback
+══════════════════════════════════════════════ */
+async function loadPortals() {
+  try {
+    if (supabaseClient) {
+      const { data, error } = await supabaseClient.from('portals').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      allPortals = data || [];
+    } else {
+      allPortals = getLocal('portals', []);
+    }
+    renderPortals();
+    updateStats();
+  } catch(err) {
+    console.error(err);
+    allPortals = getLocal('portals', []);
+    renderPortals();
+    updateStats();
+  }
+}
+
+async function savePortalDB(portal) {
+  if (supabaseClient) {
+    const { error } = await supabaseClient.from('portals').upsert([portal], { onConflict: 'id' });
+    if (error) throw error;
+  } else {
+    const idx = allPortals.findIndex(p => p.id === portal.id);
+    if (idx >= 0) allPortals[idx] = portal; else allPortals.push(portal);
+    setLocal('portals', allPortals);
+  }
+}
+
+async function deletePortalDB(id) {
+  if (supabaseClient) {
+    const { error } = await supabaseClient.from('portals').delete().eq('id', id);
+    if (error) throw error;
+  } else {
+    allPortals = allPortals.filter(p => p.id !== id);
+    setLocal('portals', allPortals);
+  }
+}
+
+function renderPortals() {
+  const grid = document.getElementById('portalGrid'); if (!grid) return;
+  const canManage = currentUser && (currentUser.role === 'admin' || currentUser.role === 'teacher');
+  if (allPortals.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🌐</div><p>Aún no hay portales. ¡Crea el primero!</p></div>';
+    return;
+  }
+  grid.innerHTML = allPortals.map(p => {
+    const isOwner = currentUser && (currentUser.role === 'admin' || (p.owner_id || p.createdBy) === currentUser.id);
+    const date = new Date(p.created_at || p.createdAt || Date.now()).toLocaleDateString('es-CO', { year:'numeric', month:'short', day:'numeric' });
+    const resourceIds = p.resource_ids || p.resources || [];
+    return `<div class="portal-card">
+      ${isOwner ? '<span class="portal-owner-badge">✏️ Mío</span>' : ''}
+      <div class="portal-header">
+        <div class="portal-icon">🌐</div>
+        <div class="portal-info">
+          <h3>${escHtml(p.name)}</h3>
+          <p>${escHtml(p.description || '')}</p>
+        </div>
+      </div>
+      <div class="portal-meta">
+        <span class="portal-tag">🏫 ${escHtml(p.institution || '—')}</span>
+        <span class="portal-tag">📚 ${resourceIds.length} recursos</span>
+        <span class="portal-tag">📋 ${p.clones || 0} copias</span>
+      </div>
+      <p style="font-size:0.75rem;color:#95a5a6;margin-bottom:0.5rem">${escHtml(p.createdByName || p.owner_name || '—')} · ${date}</p>
+      <div class="portal-actions">
+        <button class="btn-view" onclick="viewPortal('${p.id}')">👁️ Ver</button>
+        ${canManage ? `<button class="btn-card btn-copy" onclick="clonePortal('${p.id}')">📋 Copiar</button>` : ''}
+        ${isOwner ? `<button class="btn-edit-portal" onclick="openEditPortal('${p.id}')">✏️ Editar</button>` : ''}
+        ${isOwner ? `<button class="btn-content" onclick="openActivityContentEditor('${p.id}')">📝 Contenido</button>` : ''}
+        ${isOwner ? `<button class="btn-del" onclick="deletePortal('${p.id}')">🗑️</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openCreatePortalModal(editId) {
+  const modal = document.getElementById('createPortalModal');
+  document.getElementById('portalEditId').value = editId || '';
+  document.getElementById('portalModalTitle').textContent = editId ? '✏️ Editar Portal' : '🌐 Crear Portal';
+  const picker = document.getElementById('portalResourcePicker');
+  picker.innerHTML = recursos.map(r =>
+    `<label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 0;">
+      <input type="checkbox" value="${r.id}" style="width:16px;height:16px;">
+      <span>${r.iconEmoji || ''} ${escHtml(r.titulo)}</span>
+    </label>`
+  ).join('');
+  if (editId) {
+    const p = allPortals.find(x => x.id === editId);
+    if (p) {
+      document.getElementById('newPortalName').value = p.name || '';
+      document.getElementById('newPortalDesc').value = p.description || '';
+      document.getElementById('newPortalInst').value = p.institution || '';
+      const rids = p.resource_ids || p.resources || [];
+      picker.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        if (rids.includes(parseInt(cb.value))) cb.checked = true;
+      });
+    }
+  } else {
+    document.getElementById('newPortalName').value = '';
+    document.getElementById('newPortalDesc').value = '';
+    document.getElementById('newPortalInst').value = '';
+  }
+  openModal('createPortalModal');
+}
+
+function openEditPortal(id) { openCreatePortalModal(id); }
+
+async function createOrUpdatePortal() {
+  if (!currentUser) return;
+  const name = document.getElementById('newPortalName').value.trim();
+  const desc = document.getElementById('newPortalDesc').value.trim();
+  const inst = document.getElementById('newPortalInst').value.trim();
+  const selected = [...document.querySelectorAll('#portalResourcePicker input:checked')].map(i => parseInt(i.value));
+  if (!name || !inst) { toast('Nombre e institución son obligatorios.', 'red'); return; }
+  if (selected.length === 0) { toast('Selecciona al menos un recurso.', 'red'); return; }
+  const editId = document.getElementById('portalEditId').value;
+  try {
+    if (editId) {
+      const existing = allPortals.find(p => p.id === editId); if (!existing) return;
+      const updated = { ...existing, name, description: desc, institution: inst, resource_ids: selected, resources: selected, updatedAt: new Date().toISOString() };
+      await savePortalDB(updated);
+      toast('✅ Portal actualizado correctamente.', 'green');
+    } else {
+      const newId = 'p-' + Date.now();
+      const newPortal = { id: newId, name, description: desc, institution: inst, resource_ids: selected, resources: selected,
+        owner_id: currentUser.id, createdBy: currentUser.id, createdByName: currentUser.name, owner_name: currentUser.name,
+        created_at: new Date().toISOString(), createdAt: new Date().toISOString(), clones: 0 };
+      await savePortalDB(newPortal);
+      if (!supabaseClient) allPortals.push(newPortal);
+      toast('✅ Portal publicado con éxito.', 'green');
+    }
+    closeModal('createPortalModal');
+    await loadPortals();
+    renderMyActivities();
+  } catch(err) {
+    toast('Error: ' + err.message, 'red');
+  }
+}
+
+function viewPortal(id) {
+  const p = allPortals.find(x => x.id === id); if (!p) return;
+  const rids = p.resource_ids || p.resources || [];
+  const recs = rids.map(rid => (recursosEditados || recursos).find(r => r.id === rid) || recursos.find(r => r.id === rid)).filter(Boolean);
+  let html = `<div style="background:linear-gradient(135deg,var(--verde),var(--azul));color:white;padding:1.5rem;border-radius:1rem;margin-bottom:1.5rem;">
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:0.3rem">${escHtml(p.name)}</h2>
+    <p style="opacity:0.9">${escHtml(p.description || '')} · 🏫 ${escHtml(p.institution || '')}</p>
+  </div>`;
+  if (recs.length === 0) html += '<p style="text-align:center;color:#95a5a6;padding:2rem">Este portal no tiene recursos asignados.</p>';
+  else {
+    html += '<div class="cards-grid">';
+    recs.forEach(r => {
+      html += `<div class="resource-card" onclick="abrirRecurso(${r.id})">
+        <div class="card-thumb"><span style="font-size:2.5rem">${r.iconEmoji || '📄'}</span></div>
+        <div class="card-body">
+          <span class="card-category">${r.categoria.toUpperCase()}</span>
+          <div class="card-title">${r.titulo}</div>
+          <div class="card-desc">${r.descripcion}</div>
+          <button class="btn-card btn-open">Explorar →</button>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+  document.getElementById('resourceModalTitle').textContent = '🌐 ' + p.name;
+  document.getElementById('resourceModalBody').innerHTML = html;
+  openModal('resourceModal');
+}
+
+async function clonePortal(id) {
+  if (!currentUser) return;
+  const orig = allPortals.find(p => p.id === id); if (!orig) return;
+  const newId = 'p-' + Date.now();
+  const updated = { ...orig, clones: (orig.clones || 0) + 1 };
+  await savePortalDB(updated);
+  const newPortal = { ...orig, id: newId, name: orig.name + ' (copia)', owner_id: currentUser.id, createdBy: currentUser.id,
+    createdByName: currentUser.name, owner_name: currentUser.name, created_at: new Date().toISOString(),
+    createdAt: new Date().toISOString(), clones: 0, clonedFrom: id };
+  await savePortalDB(newPortal);
+  if (!supabaseClient) allPortals.push(newPortal);
+  await loadPortals();
+  renderMyActivities();
+  toast('📋 Portal copiado. Puedes editarlo desde "Mis Actividades".', 'green');
+}
+
+async function deletePortal(id) {
+  if (!confirm('¿Eliminar este portal?')) return;
+  try {
+    await deletePortalDB(id);
+    await loadPortals();
+    renderMyActivities();
+    renderAdminPortalsTable();
+    toast('Portal eliminado.', 'red');
+  } catch(err) { toast('Error: ' + err.message, 'red'); }
+}
+
+/* ─── MIS ACTIVIDADES ─── */
+function renderMyActivities() {
+  const container = document.getElementById('myActivitiesContainer'); if (!container || !currentUser) return;
+  const myPortals = allPortals.filter(p => (p.owner_id || p.createdBy) === currentUser.id);
+  if (myPortals.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div><p>Aún no has creado portales. ¡Crea tu primer portal desde el módulo de Recursos o Portales!</p></div>';
+    return;
+  }
+  container.innerHTML = `<p style="margin-bottom:1rem;color:#7f8c8d;">Has creado <strong>${myPortals.length}</strong> portal(es).</p>` +
+    myPortals.map(p => {
+      const date = new Date(p.created_at || p.createdAt || Date.now()).toLocaleDateString('es-CO');
+      const rids = p.resource_ids || p.resources || [];
+      return `<div class="portal-card" style="border-top-color:var(--morado);margin-bottom:1rem;">
+        <h3 style="margin-bottom:0.3rem">✏️ ${escHtml(p.name)}</h3>
+        <p style="color:#7f8c8d;font-size:0.85rem;margin-bottom:0.8rem">${escHtml(p.institution||'—')} · ${date} · ${rids.length} recursos · ${p.clones||0} copias</p>
+        ${p.clonedFrom ? '<span style="font-size:0.75rem;color:var(--morado);display:block;margin-bottom:0.5rem">📋 Copiado y personalizado</span>' : ''}
+        <div class="portal-actions">
+          <button class="btn-view" onclick="viewPortal('${p.id}')">👁️ Ver</button>
+          <button class="btn-edit-portal" onclick="openEditPortal('${p.id}')">✏️ Editar</button>
+          <button class="btn-content" onclick="openActivityContentEditor('${p.id}')">📝 Editar contenido</button>
+          <button class="btn-del" onclick="deletePortal('${p.id}')">🗑️ Eliminar</button>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   EDITOR DE CONTENIDO DE ACTIVIDAD
+══════════════════════════════════════════════ */
+function openActivityContentEditor(portalId) {
+  const p = allPortals.find(x => x.id === portalId); if (!p) return;
+  const rids = p.resource_ids || p.resources || [];
+  const recs = rids.map(rid => {
+    const base = (recursosEditados || recursos).find(r => r.id === rid) || recursos.find(r => r.id === rid);
+    return base ? JSON.parse(JSON.stringify(base)) : null;
+  }).filter(Boolean);
+  const body = document.getElementById('activityContentBody');
+  body.innerHTML = buildActivityEditor(p, recs);
+  openModal('activityContentModal');
+}
+
+function buildActivityEditor(portal, recs) {
+  let html = `<input type="hidden" id="aed_portalId" value="${portal.id}">`;
+  html += `<div class="editor-section">
+    <h4>📋 Información general</h4>
+    <div class="editor-field"><label>Nombre del portal</label><input type="text" id="aed_name" value="${escHtml(portal.name)}"></div>
+    <div class="editor-field"><label>Descripción</label><input type="text" id="aed_desc" value="${escHtml(portal.description||'')}"></div>
+    <div class="editor-field"><label>Institución</label><input type="text" id="aed_inst" value="${escHtml(portal.institution||'')}"></div>
+  </div>`;
+  html += `<div class="editor-section"><h4>📚 Recursos incluidos (${recs.length})</h4>`;
+  recs.forEach((r, ri) => { html += buildResourceEditor(r, ri); });
+  html += `</div>`;
+  html += `<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:1rem;">
+    <button class="btn-secondary" onclick="closeModal('activityContentModal')">Cancelar</button>
+    <button class="btn-primary" onclick="saveActivityContent()">💾 Guardar cambios</button>
+  </div>`;
+  return html;
+}
+
+function buildResourceEditor(r, ri) {
+  let inner = `<div class="editor-field"><label>Título</label><input type="text" id="aed_r${ri}_titulo" value="${escHtml(r.titulo)}"></div>
+    <div class="editor-field"><label>Descripción</label><input type="text" id="aed_r${ri}_desc" value="${escHtml(r.descripcion||'')}"></div>`;
+  if (r.tipo === 'video') {
+    inner += `<div class="editor-field"><label>URL del video (YouTube)</label><input type="text" id="aed_r${ri}_videoUrl" value="${escHtml(r.videoUrl||'')}"></div>`;
+  }
+  if (r.tipo === 'imagen') {
+    inner += `<div class="editor-field"><label>Texto / leyenda</label><textarea id="aed_r${ri}_leyenda">${escHtml(r.leyenda||'')}</textarea></div>`;
+  }
+  if (r.tipo === 'lectura_multiple') {
+    inner += `<div class="editor-field"><label>Texto de lectura</label><textarea id="aed_r${ri}_texto" rows="5">${escHtml(r.texto||'')}</textarea></div>`;
+    inner += `<div id="aed_r${ri}_preguntas">`;
+    (r.preguntas||[]).forEach((p,pi) => { inner += buildPreguntaEditor(ri, pi, p); });
+    inner += `</div><button class="btn-add-preg" onclick="addPregunta(${ri})">➕ Agregar pregunta</button>`;
+  }
+  if (r.tipo === 'quiz') {
+    inner += `<div id="aed_r${ri}_preguntas">`;
+    (r.preguntas||[]).forEach((p,pi) => { inner += buildQuizEditor(ri, pi, p, r.opciones[pi], r.correctas[pi]); });
+    inner += `</div><button class="btn-add-preg" onclick="addQuizPregunta(${ri})">➕ Agregar pregunta</button>`;
+  }
+  if (r.tipo === 'simple') {
+    inner += `<div class="editor-field"><label>Contenido HTML</label><textarea id="aed_r${ri}_html" rows="6">${escHtml(r.contenidoHtml||'')}</textarea></div>`;
+  }
+  return `<div class="editor-resource-item" id="aed_res_${ri}">
+    <div class="editor-resource-header" onclick="toggleResEditor(${ri})">
+      <h5>${r.iconEmoji||''} ${escHtml(r.titulo)} <small style="color:#7f8c8d;">(${r.tipo})</small></h5>
+      <span id="aed_toggle_${ri}" style="font-size:1.2rem;color:var(--verde);">▼</span>
+    </div>
+    <div class="editor-resource-body" id="aed_resbody_${ri}">
+      <input type="hidden" id="aed_r${ri}_id" value="${r.id}">
+      <input type="hidden" id="aed_r${ri}_tipo" value="${r.tipo}">
+      ${inner}
+    </div>
+  </div>`;
+}
+
+function buildPreguntaEditor(ri, pi, p) {
+  let opts = (p.opciones||[]).map((op,oi) =>
+    `<div class="opcion-row">
+      <input type="text" id="aed_r${ri}_p${pi}_op${oi}" value="${escHtml(op)}" placeholder="Opción ${oi+1}">
+      <button class="opcion-correcta ${p.correcta===oi?'marcada':''}" id="aed_r${ri}_p${pi}_c${oi}" onclick="marcarCorrecta(${ri},${pi},${oi})" title="Marcar como correcta">✓</button>
+    </div>`
+  ).join('');
+  return `<div class="pregunta-editor" id="aed_r${ri}_preg_${pi}">
+    <div class="editor-field"><label>Pregunta ${pi+1}</label><input type="text" id="aed_r${ri}_p${pi}_texto" value="${escHtml(p.pregunta||'')}"></div>
+    <div id="aed_r${ri}_p${pi}_opts">${opts}</div>
+    <button class="btn-add-op" onclick="addOpcion(${ri},${pi})">➕ Opción</button>
+    <input type="hidden" id="aed_r${ri}_p${pi}_correcta" value="${p.correcta||0}">
+    <input type="hidden" id="aed_r${ri}_p${pi}_numops" value="${(p.opciones||[]).length}">
+  </div>`;
+}
+
+function buildQuizEditor(ri, pi, pregunta, opciones, correcta) {
+  let opts = (opciones||[]).map((op,oi) =>
+    `<div class="opcion-row">
+      <input type="text" id="aed_r${ri}_p${pi}_op${oi}" value="${escHtml(op)}" placeholder="Opción ${oi+1}">
+      <button class="opcion-correcta ${correcta===oi?'marcada':''}" id="aed_r${ri}_p${pi}_c${oi}" onclick="marcarCorrecta(${ri},${pi},${oi})" title="Marcar como correcta">✓</button>
+    </div>`
+  ).join('');
+  return `<div class="pregunta-editor" id="aed_r${ri}_preg_${pi}">
+    <div class="editor-field"><label>Pregunta ${pi+1}</label><input type="text" id="aed_r${ri}_p${pi}_texto" value="${escHtml(pregunta||'')}"></div>
+    <div id="aed_r${ri}_p${pi}_opts">${opts}</div>
+    <button class="btn-add-op" onclick="addOpcion(${ri},${pi})">➕ Opción</button>
+    <input type="hidden" id="aed_r${ri}_p${pi}_correcta" value="${correcta||0}">
+    <input type="hidden" id="aed_r${ri}_p${pi}_numops" value="${(opciones||[]).length}">
+  </div>`;
+}
+
+function toggleResEditor(ri) {
+  const item = document.getElementById(`aed_res_${ri}`);
+  const body = document.getElementById(`aed_resbody_${ri}`);
+  const tog = document.getElementById(`aed_toggle_${ri}`);
+  if (!item || !body) return;
+  const open = item.classList.toggle('expanded');
+  body.style.display = open ? 'block' : 'none';
+  if (tog) tog.textContent = open ? '▲' : '▼';
+}
+
+function marcarCorrecta(ri, pi, oi) {
+  const numops = parseInt(document.getElementById(`aed_r${ri}_p${pi}_numops`)?.value||'0');
+  for(let i=0;i<numops;i++) {
+    const btn = document.getElementById(`aed_r${ri}_p${pi}_c${i}`);
+    if (btn) btn.classList.toggle('marcada', i===oi);
+  }
+  const hid = document.getElementById(`aed_r${ri}_p${pi}_correcta`);
+  if (hid) hid.value = oi;
+}
+
+function addOpcion(ri, pi) {
+  const hid = document.getElementById(`aed_r${ri}_p${pi}_numops`); if (!hid) return;
+  const oi = parseInt(hid.value);
+  const container = document.getElementById(`aed_r${ri}_p${pi}_opts`); if (!container) return;
+  const row = document.createElement('div');
+  row.className = 'opcion-row';
+  row.innerHTML = `<input type="text" id="aed_r${ri}_p${pi}_op${oi}" placeholder="Opción ${oi+1}">
+    <button class="opcion-correcta" id="aed_r${ri}_p${pi}_c${oi}" onclick="marcarCorrecta(${ri},${pi},${oi})" title="Marcar como correcta">✓</button>`;
+  container.appendChild(row);
+  hid.value = oi+1;
+}
+
+function addPregunta(ri) {
+  const container = document.getElementById(`aed_r${ri}_preguntas`); if (!container) return;
+  const pi = container.querySelectorAll('.pregunta-editor').length;
+  const div = document.createElement('div');
+  div.innerHTML = buildPreguntaEditor(ri, pi, {pregunta:'', opciones:['',''], correcta:0});
+  container.appendChild(div.firstElementChild);
+}
+
+function addQuizPregunta(ri) {
+  const container = document.getElementById(`aed_r${ri}_preguntas`); if (!container) return;
+  const pi = container.querySelectorAll('.pregunta-editor').length;
+  const div = document.createElement('div');
+  div.innerHTML = buildQuizEditor(ri, pi, '', ['',''], 0);
+  container.appendChild(div.firstElementChild);
+}
+
+async function saveActivityContent() {
+  const portalId = document.getElementById('aed_portalId')?.value; if (!portalId) return;
+  const pidx = allPortals.findIndex(p => p.id === portalId); if (pidx < 0) return;
+  const name = document.getElementById('aed_name')?.value.trim() || allPortals[pidx].name;
+  const desc = document.getElementById('aed_desc')?.value.trim() || '';
+  const inst = document.getElementById('aed_inst')?.value.trim() || allPortals[pidx].institution;
+  const updatedPortal = { ...allPortals[pidx], name, description: desc, institution: inst, updatedAt: new Date().toISOString() };
+  await savePortalDB(updatedPortal);
+  if (!recursosEditados) recursosEditados = JSON.parse(JSON.stringify(recursos));
+  let ri = 0;
+  while (document.getElementById(`aed_r${ri}_id`)) {
+    const rid = parseInt(document.getElementById(`aed_r${ri}_id`).value);
+    const tipo = document.getElementById(`aed_r${ri}_tipo`)?.value;
+    const idx = recursosEditados.findIndex(r => r.id === rid);
+    if (idx >= 0) {
+      recursosEditados[idx].titulo = document.getElementById(`aed_r${ri}_titulo`)?.value || recursosEditados[idx].titulo;
+      recursosEditados[idx].descripcion = document.getElementById(`aed_r${ri}_desc`)?.value || '';
+      if (tipo === 'video') recursosEditados[idx].videoUrl = document.getElementById(`aed_r${ri}_videoUrl`)?.value || recursosEditados[idx].videoUrl;
+      if (tipo === 'imagen') recursosEditados[idx].leyenda = document.getElementById(`aed_r${ri}_leyenda`)?.value || '';
+      if (tipo === 'simple') recursosEditados[idx].contenidoHtml = document.getElementById(`aed_r${ri}_html`)?.value || '';
+      if (tipo === 'lectura_multiple') {
+        recursosEditados[idx].texto = document.getElementById(`aed_r${ri}_texto`)?.value || '';
+        const pregContainer = document.getElementById(`aed_r${ri}_preguntas`);
+        if (pregContainer) {
+          const numPregs = pregContainer.querySelectorAll('.pregunta-editor').length;
+          recursosEditados[idx].preguntas = [];
+          for(let pi=0;pi<numPregs;pi++) {
+            const texto = document.getElementById(`aed_r${ri}_p${pi}_texto`)?.value || '';
+            const numops = parseInt(document.getElementById(`aed_r${ri}_p${pi}_numops`)?.value||'0');
+            const correcta = parseInt(document.getElementById(`aed_r${ri}_p${pi}_correcta`)?.value||'0');
+            const opciones = [];
+            for(let oi=0;oi<numops;oi++) opciones.push(document.getElementById(`aed_r${ri}_p${pi}_op${oi}`)?.value||'');
+            recursosEditados[idx].preguntas.push({pregunta:texto,opciones,correcta});
+          }
+        }
+      }
+      if (tipo === 'quiz') {
+        const pregContainer = document.getElementById(`aed_r${ri}_preguntas`);
+        if (pregContainer) {
+          const numPregs = pregContainer.querySelectorAll('.pregunta-editor').length;
+          recursosEditados[idx].preguntas = []; recursosEditados[idx].opciones = []; recursosEditados[idx].correctas = [];
+          for(let pi=0;pi<numPregs;pi++) {
+            const texto = document.getElementById(`aed_r${ri}_p${pi}_texto`)?.value || '';
+            const numops = parseInt(document.getElementById(`aed_r${ri}_p${pi}_numops`)?.value||'0');
+            const correcta = parseInt(document.getElementById(`aed_r${ri}_p${pi}_correcta`)?.value||'0');
+            const opciones = [];
+            for(let oi=0;oi<numops;oi++) opciones.push(document.getElementById(`aed_r${ri}_p${pi}_op${oi}`)?.value||'');
+            recursosEditados[idx].preguntas.push(texto);
+            recursosEditados[idx].opciones.push(opciones);
+            recursosEditados[idx].correctas.push(correcta);
+          }
+        }
+      }
+    }
+    ri++;
+  }
+  setLocal('recursosEditados', recursosEditados);
+  closeModal('activityContentModal');
+  await loadPortals();
+  renderPortals();
+  renderMyActivities();
+  renderRecursos();
+  toast('✅ Actividad actualizada correctamente.', 'green');
+}
+
+/* ══════════════════════════════════════════════
+   ADMIN — USUARIOS
 ══════════════════════════════════════════════ */
 async function loadAllUsers() {
   try {
-    const { data, error } = await supabaseClient.from('users').select('*').order('created_at', { ascending: false });
-    if (error) throw error;
-    allUsers = data || [];
+    if (supabaseClient) {
+      const { data, error } = await supabaseClient.from('users').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      allUsers = data || [];
+    } else {
+      allUsers = getLocal('users', []);
+    }
     updateStats();
-  } catch(err) { console.error(err); }
+  } catch(err) { console.error(err); allUsers = getLocal('users', []); }
+}
+
+async function loadAllUsersAndRender() {
+  await loadAllUsers();
+  renderAdminUsers();
+  toast('Lista de usuarios actualizada.', 'blue');
 }
 
 function renderAdminUsers() {
-  const tbody = document.getElementById('usersTableBody');
-  if (!tbody) return;
+  const tbody = document.getElementById('usersTableBody'); if (!tbody) return;
   if (allUsers.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#95a5a6;padding:2rem">No hay usuarios registrados.</td></tr>';
-    return;
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#95a5a6;padding:2rem">No hay usuarios registrados.</td></tr>';
+    updateStats(); return;
   }
-  const roleLabels = { admin:'🎓 Admin', teacher:'👩‍🏫 Docente', student:'🎒 Estudiante', pending_teacher:'⏳ Docente pend.', pending_student:'⏳ Estudiante pend.' };
-  const roleCss = { admin:'role-admin', teacher:'role-teacher', student:'role-student', pending_teacher:'role-pending', pending_student:'role-pending' };
   tbody.innerHTML = allUsers.map(u => {
     const isSelf = u.id === currentUser?.id;
+    const date = new Date(u.created_at || u.createdAt || Date.now()).toLocaleDateString('es-CO', {year:'numeric',month:'short',day:'numeric'});
+    const isPending = (u.role||'').startsWith('pending');
+    const roleCss = { admin:'role-admin', teacher:'role-teacher', student:'role-student' }[u.role] || 'role-pending';
     return `<tr>
-      <td><strong>${escHtml(u.name || '—')}</strong></td>
-      <td style="font-size:0.85rem">${escHtml(u.email || '—')}</td>
-      <td style="font-size:0.85rem">${escHtml(u.institution || '—')}</td>
-      <td><span class="role-badge ${roleCss[u.role] || 'role-pending'}">${roleLabels[u.role] || u.role}</span></td>
-      <td style="display:flex;gap:6px;flex-wrap:wrap">
-        ${u.role?.startsWith('pending') ? `<button class="btn-sm btn-approve" onclick="approveUser('${u.id}','${u.role}')">✅ Aprobar</button>` : ''}
-        <button class="btn-sm btn-edit" onclick="openEditUser('${u.id}')">✏️ Editar</button>
+      <td><div style="display:flex;align-items:center;gap:8px;">
+        <div class="user-avatar avatar-${u.role==='admin'?'admin':u.role==='teacher'?'teacher':'student'}" style="width:32px;height:32px;font-size:0.8rem;">${(u.name||'U').charAt(0).toUpperCase()}</div>
+        <strong>${escHtml(u.name||'—')}</strong>${isSelf?'<span style="font-size:0.7rem;color:var(--verde);margin-left:4px">(tú)</span>':''}
+      </div></td>
+      <td style="font-size:0.85rem">${escHtml(u.email||'—')}</td>
+      <td style="font-size:0.85rem">${escHtml(u.institution||u.school||'—')}</td>
+      <td><span class="role-badge ${roleCss}">${roleLabel(u.role)}</span></td>
+      <td>${date}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${isPending ? `<button class="btn-sm btn-approve" onclick="approveUser('${u.id}','${u.role}')">✅ Aprobar</button>` : ''}
+        <button class="btn-sm btn-edit-sm" onclick="openEditUser('${u.id}')">✏️ Editar</button>
         ${!isSelf ? `<button class="btn-sm btn-danger" onclick="deleteUser('${u.id}')">🗑️</button>` : ''}
+      </td>
+    </tr>`;
+  }).join('');
+  updateStats();
+  renderAdminPortalsTable();
+}
+
+function renderAdminPortalsTable() {
+  const tbody = document.getElementById('portalsTableBody'); if (!tbody) return;
+  if (allPortals.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#7f8c8d;padding:2rem;">No hay portales aún.</td></tr>'; return;
+  }
+  tbody.innerHTML = allPortals.map(p => {
+    const date = new Date(p.created_at || p.createdAt || Date.now()).toLocaleDateString('es-CO');
+    const rids = p.resource_ids || p.resources || [];
+    return `<tr>
+      <td><strong>${escHtml(p.name)}</strong><br><small style="color:#7f8c8d;">${escHtml(p.institution||'')}</small></td>
+      <td>${escHtml(p.createdByName||p.owner_name||'—')}</td>
+      <td>${rids.length} recursos · ${p.clones||0} copias</td>
+      <td>${date}</td>
+      <td style="display:flex;gap:6px;">
+        <button class="btn-sm btn-edit-sm" onclick="openEditPortal('${p.id}')">✏️ Editar</button>
+        <button class="btn-sm btn-danger" onclick="deletePortal('${p.id}')">🗑️</button>
       </td>
     </tr>`;
   }).join('');
 }
 
+/* ── APROBAR USUARIOS (fix: funciona con Supabase Y localStorage) ── */
 async function approveUser(id, currentRole) {
+  // El rol aprobado: pending_teacher → teacher, pending_student → student
   const newRole = currentRole === 'pending_teacher' ? 'teacher' : 'student';
   try {
-    const { error } = await supabaseClient.from('users').update({ role: newRole }).eq('id', id);
-    if (error) throw error;
-    await loadAllUsers();
+    if (supabaseClient) {
+      const { error } = await supabaseClient.from('users').update({ role: newRole }).eq('id', id);
+      if (error) throw error;
+    }
+    // Actualizar en memoria y localStorage siempre
+    const idx = allUsers.findIndex(u => u.id === id);
+    if (idx >= 0) {
+      allUsers[idx] = { ...allUsers[idx], role: newRole };
+      setLocal('users', allUsers);
+    }
     renderAdminUsers();
     toast('✅ Usuario aprobado como ' + (newRole === 'teacher' ? 'docente' : 'estudiante'), 'green');
-  } catch(err) { toast('Error: ' + err.message, 'red'); }
+  } catch(err) {
+    toast('Error al aprobar: ' + (err.message || err), 'red');
+  }
 }
 
 function openEditUser(id) {
-  const u = allUsers.find(x => x.id === id);
-  if (!u) return;
+  const u = allUsers.find(x => x.id === id); if (!u) return;
   document.getElementById('editUserId').value = u.id;
   document.getElementById('editUserName').value = u.name || '';
-  document.getElementById('editUserInstitution').value = u.institution || '';
-  document.getElementById('editUserRole').value = u.role || 'student';
+  document.getElementById('editUserInstitution').value = u.institution || u.school || '';
+  // Normalizar el rol para el select (solo admin, teacher, student)
+  const role = (u.role || '').startsWith('pending') ? (u.role.includes('teacher') ? 'teacher' : 'student') : (u.role || 'student');
+  document.getElementById('editUserRole').value = role;
   openModal('editUserModal');
 }
 
@@ -1236,50 +1759,145 @@ async function saveUserEdit() {
   const institution = document.getElementById('editUserInstitution').value.trim();
   const role = document.getElementById('editUserRole').value;
   try {
-    const { error } = await supabaseClient.from('users').update({ name, institution, role }).eq('id', id);
-    if (error) throw error;
+    if (supabaseClient) {
+      const { error } = await supabaseClient.from('users').update({ name, institution, role }).eq('id', id);
+      if (error) throw error;
+    }
+    // Actualizar en memoria siempre
+    const idx = allUsers.findIndex(u => u.id === id);
+    if (idx >= 0) {
+      allUsers[idx] = { ...allUsers[idx], name, institution, role };
+      setLocal('users', allUsers);
+    }
+    // Si es el usuario actual, actualizar sesión
+    if (id === currentUser?.id) {
+      currentUser = { ...currentUser, name, institution, role };
+      try { sessionStorage.setItem('edu_session_v7', JSON.stringify(currentUser)); } catch{}
+      setupUI();
+    }
     closeModal('editUserModal');
-    await loadAllUsers();
     renderAdminUsers();
-    updateStats();
-    toast('💾 Usuario actualizado', 'green');
-  } catch(err) { toast('Error: ' + err.message, 'red'); }
+    toast('✅ Usuario actualizado.', 'green');
+  } catch(err) { toast('Error: ' + (err.message || err), 'red'); }
 }
 
 async function deleteUser(id) {
-  if (!confirm('¿Eliminar este usuario?')) return;
+  if (!confirm('¿Eliminar este usuario? Esta acción no se puede deshacer.')) return;
   try {
-    const { error } = await supabaseClient.from('users').delete().eq('id', id);
-    if (error) throw error;
-    await loadAllUsers();
+    if (supabaseClient) {
+      const { error } = await supabaseClient.from('users').delete().eq('id', id);
+      if (error) throw error;
+    }
+    allUsers = allUsers.filter(u => u.id !== id);
+    setLocal('users', allUsers);
     renderAdminUsers();
-    updateStats();
-    toast('Usuario eliminado', 'blue');
-  } catch(err) { toast('Error: ' + err.message, 'red'); }
+    toast('Usuario eliminado.', 'red');
+  } catch(err) { toast('Error: ' + (err.message || err), 'red'); }
+}
+
+/* ─── PERFIL ─── */
+async function saveProfile() {
+  if (!currentUser) return;
+  const name = document.getElementById('profileNameInput').value.trim();
+  const institution = document.getElementById('profileSchoolInput').value.trim();
+  const pass = document.getElementById('profilePassInput').value;
+  if (pass && pass.length < 6) { toast('La contraseña debe tener al menos 6 caracteres.', 'red'); return; }
+  try {
+    if (supabaseClient) {
+      const updates = { name, institution };
+      const { error } = await supabaseClient.from('users').update(updates).eq('id', currentUser.id);
+      if (error) throw error;
+      if (pass) {
+        const { error: passErr } = await supabaseClient.auth.updateUser({ password: pass });
+        if (passErr) throw passErr;
+      }
+    }
+    currentUser = { ...currentUser, name, institution };
+    try { sessionStorage.setItem('edu_session_v7', JSON.stringify(currentUser)); } catch{}
+    const idx = allUsers.findIndex(u => u.id === currentUser.id);
+    if (idx >= 0) { allUsers[idx] = { ...allUsers[idx], name, institution }; setLocal('users', allUsers); }
+    setupUI();
+    document.getElementById('profilePassInput').value = '';
+    toast('✅ Perfil actualizado.', 'green');
+  } catch(err) { toast('Error al guardar: ' + (err.message || err), 'red'); }
 }
 
 /* ══════════════════════════════════════════════
-   REALTIME
+   EXPORTAR / IMPORTAR / RESETEAR
 ══════════════════════════════════════════════ */
-function setupRealtime() {
-  const ch = supabaseClient.channel('portals-rt')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'portals' }, () => loadPortals())
-    .subscribe();
-  realtimeChannels.push(ch);
-  updateSyncStatus(true);
+function exportarDatos() {
+  const backup = { version: 'v7', fecha: new Date().toISOString(), users: allUsers, portals: allPortals };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `edurepo_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('✅ Datos exportados correctamente.', 'green');
 }
 
-function updateSyncStatus(connected) {
-  const dot = document.getElementById('syncDot');
-  const status = document.getElementById('syncStatus');
-  if (connected) { dot.classList.remove('offline'); status.textContent = 'Conectado'; }
-  else { dot.classList.add('offline'); status.textContent = 'Desconectado'; }
+async function importarDatos(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.users || !Array.isArray(data.users)) { toast('❌ Archivo inválido.', 'red'); return; }
+      if (!confirm(`¿Importar ${data.users.length} usuario(s) y ${(data.portals||[]).length} portal(es)?`)) return;
+      allUsers = data.users; allPortals = data.portals || [];
+      setLocal('users', allUsers); setLocal('portals', allPortals);
+      toast('✅ Datos importados.', 'green');
+      setTimeout(() => location.reload(), 1500);
+    } catch { toast('❌ Archivo corrupto.', 'red'); }
+  };
+  reader.readAsText(file);
+}
+
+async function confirmarReset() {
+  if (!confirm('⚠️ ¿Resetear la base de datos? Se borrarán todos los usuarios y portales.')) return;
+  if (!confirm('Segunda confirmación: ¿Resetear definitivamente?')) return;
+  setLocal('users', []); setLocal('portals', []);
+  allUsers = []; allPortals = [];
+  try { sessionStorage.removeItem('edu_session_v7'); } catch{}
+  toast('Base de datos reseteada. Recargando...', 'red');
+  setTimeout(() => location.reload(), 1500);
+}
+
+/* ══════════════════════════════════════════════
+   REALTIME (Supabase)
+══════════════════════════════════════════════ */
+function setupRealtime() {
+  if (!supabaseClient) {
+    const dot = document.getElementById('syncDot');
+    const status = document.getElementById('syncStatus');
+    if (dot) { dot.classList.add('offline'); }
+    if (status) status.textContent = 'Modo local';
+    return;
+  }
+  try {
+    const ch = supabaseClient.channel('portals-rt')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'portals' }, async () => {
+        await loadPortals();
+      })
+      .subscribe((status) => {
+        const dot = document.getElementById('syncDot');
+        const statusEl = document.getElementById('syncStatus');
+        if (status === 'SUBSCRIBED') {
+          if (dot) dot.classList.remove('offline');
+          if (statusEl) statusEl.textContent = 'Conectado';
+        } else {
+          if (dot) dot.classList.add('offline');
+          if (statusEl) statusEl.textContent = 'Reconectando...';
+        }
+      });
+    realtimeChannels.push(ch);
+  } catch(e) { console.error(e); }
 }
 
 /* ══════════════════════════════════════════════
    UTILIDADES
 ══════════════════════════════════════════════ */
 function extractYouTubeId(url) {
+  if (!url) return null;
   const m = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
   return m ? m[1] : null;
 }
@@ -1288,37 +1906,58 @@ function escHtml(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function openModal(id) { const m = document.getElementById(id); if (m) m.classList.add('show'); }
-function closeModal(id) { const m = document.getElementById(id); if (m) m.classList.remove('show'); }
-function closeModalBack(e, id) { if (e.target === e.currentTarget) closeModal(id); }
-
 function toast(msg, color='blue') {
   const container = document.getElementById('toastContainer');
   const el = document.createElement('div');
   el.className = 'toast ' + color;
   el.textContent = msg;
   container.appendChild(el);
-  setTimeout(() => el.remove(), 3000);
+  setTimeout(() => el.remove(), 3500);
 }
 
 /* ══════════════════════════════════════════════
    INICIALIZACIÓN
 ══════════════════════════════════════════════ */
 async function initApp() {
-  if (!ensureSupabase()) return;
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (session) {
-    await loadUserData(session.user);
-  }
-  supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && session && !currentUser) {
-      loadUserData(session.user);
-    } else if (event === 'SIGNED_OUT') {
-      currentUser = null;
-      document.getElementById('authScreen').style.display = 'flex';
-      document.getElementById('mainApp').style.display = 'none';
+  // Restaurar recursos editados
+  const re = getLocal('recursosEditados', null);
+  if (re) recursosEditados = re;
+
+  if (supabaseClient) {
+    try {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        await loadUserData(session.user);
+      }
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' && session && !currentUser) {
+          loadUserData(session.user);
+        } else if (event === 'SIGNED_OUT') {
+          currentUser = null;
+          document.getElementById('authScreen').style.display = 'flex';
+          document.getElementById('mainApp').style.display = 'none';
+        }
+      });
+    } catch(e) {
+      console.error('Supabase init error:', e);
+      tryRestoreLocalSession();
     }
-  });
+  } else {
+    tryRestoreLocalSession();
+  }
+}
+
+function tryRestoreLocalSession() {
+  try {
+    const saved = sessionStorage.getItem('edu_session_v7');
+    if (saved) {
+      const u = JSON.parse(saved);
+      currentUser = u;
+      allUsers = getLocal('users', []);
+      allPortals = getLocal('portals', []);
+      showMainApp();
+    }
+  } catch{}
 }
 
 window.addEventListener('DOMContentLoaded', initApp);
