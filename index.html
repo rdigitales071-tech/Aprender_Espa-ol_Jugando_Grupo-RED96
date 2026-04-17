@@ -1114,8 +1114,12 @@ function buildAhorcado(ahid) {
   const palabras = ['CAIMÁN','MANATÍ','DELFÍN','CHIGÜIRO','CÓNDOR','SERPIENTE','JAGUAR','GUACAMAYO','TAPIR','ARMADILLO'];
   const palabra = palabras[Math.floor(Math.random() * palabras.length)];
   window['_ah_'+ahid] = { palabra, intentos: 0, letras: new Set() };
-  const kb = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'.split('').map(l =>
-    `<button class="key" id="${ahid}k${l}" onclick="tryLetra('${ahid}','${l}')">${l}</button>`).join('');
+  // Teclado con vocales tildadas para cubrir palabras como CAIMÁN, MANATÍ, etc.
+  const letras = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'.split('').concat(['Á','É','Í','Ó','Ú','Ü']);
+  const kb = letras.map(l => {
+    const lid = l.codePointAt(0).toString(16); // ID seguro para el DOM
+    return `<button class="key" id="${ahid}k${lid}" onclick="tryLetra('${ahid}','${l}')">${l}</button>`;
+  }).join('');
   return `<div id="${ahid}d" style="font-size:1.8rem;font-weight:800;letter-spacing:8px;text-align:center;margin:1rem 0">${palabra.split('').map(()=>'_').join(' ')}</div>
     <p id="${ahid}m" style="text-align:center;font-weight:700;margin-bottom:0.5rem">Intentos restantes: 7</p>
     <div class="keyboard">${kb}</div>
@@ -1125,9 +1129,11 @@ function tryLetra(ahid, l) {
   const s = window['_ah_'+ahid]; if (!s || s.intentos >= 7) return;
   if (s.letras.has(l)) return;
   s.letras.add(l);
-  const kEl = document.getElementById(ahid+'k'+l);
-  if (kEl) { kEl.style.background = s.palabra.includes(l) ? 'var(--verde-suave)' : '#fdecea'; kEl.style.color = s.palabra.includes(l) ? 'var(--verde)' : 'var(--rojo)'; kEl.disabled = true; }
-  if (!s.palabra.includes(l)) s.intentos++;
+  const lid = l.codePointAt(0).toString(16);
+  const kEl = document.getElementById(ahid+'k'+lid);
+  const enPalabra = s.palabra.includes(l);
+  if (kEl) { kEl.style.background = enPalabra ? 'var(--verde-suave)' : '#fdecea'; kEl.style.color = enPalabra ? 'var(--verde)' : 'var(--rojo)'; kEl.disabled = true; }
+  if (!enPalabra) s.intentos++;
   const disp = document.getElementById(ahid+'d'); const msg = document.getElementById(ahid+'m');
   if (disp) disp.textContent = s.palabra.split('').map(c => s.letras.has(c) ? c : '_').join(' ');
   const ganó = s.palabra.split('').every(c => s.letras.has(c));
@@ -1145,7 +1151,8 @@ function buildQuizDiptongos() {
     {p:'¿"maíz" tiene diptongo o hiato?',ops:['Diptongo','Hiato'],c:1,exp:'ma-íz → hiato (tilde diacrítica)'},
     {p:'¿Cuántas sílabas tiene "viento"?',ops:['2','3','4'],c:0,exp:'vien-to = 2 sílabas (ie es diptongo)'}
   ];
-  const qid = 'qdip'+Date.now();
+  // ID corto y seguro para evitar problemas de parsing en atributos HTML
+  const qid = 'qd' + Math.floor(Math.random() * 900000 + 100000);
   window['_qdip_'+qid] = { preguntas, cur: 0, score: 0 };
   setTimeout(() => renderDiptStep(qid), 20);
   return `<div id="${qid}"></div>`;
@@ -1153,14 +1160,16 @@ function buildQuizDiptongos() {
 function renderDiptStep(qid) {
   const state = window['_qdip_'+qid]; if (!state) return;
   const el = document.getElementById(qid); if (!el) return;
-  const { preguntas, cur, score } = state;
+  const cur = state.cur;
+  const { preguntas, score } = state;
   if (cur >= preguntas.length) {
-    el.innerHTML = `<div style="text-align:center;padding:2rem"><div style="font-size:3rem">🏆</div><h3>¡Terminaste!</h3><p>Puntaje: ${score}/${preguntas.length}</p><button class="btn-card btn-open" style="margin-top:1rem" onclick="window['_qdip_${qid}']={preguntas:window['_qdip_${qid}'].preguntas,cur:0,score:0};renderDiptStep('${qid}')">Jugar de nuevo</button></div>`;
+    el.innerHTML = `<div style="text-align:center;padding:2rem"><div style="font-size:3rem">🏆</div><h3>¡Terminaste!</h3><p>Puntaje: ${score}/${preguntas.length}</p><button class="btn-card btn-open" style="margin-top:1rem" onclick="window['_qdip_${qid}'].cur=0;window['_qdip_${qid}'].score=0;renderDiptStep('${qid}')">Jugar de nuevo</button></div>`;
     return;
   }
   const q = preguntas[cur];
+  const expSafe = q.exp.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
   el.innerHTML = `<div class="pregunta-item"><div class="pregunta-texto">${cur+1}/${preguntas.length}. ${q.p}</div><div class="opciones-list">${
-    q.ops.map((o,i) => `<button class="opcion-btn" onclick="ansDipt('${qid}',${i},${q.c},'${q.exp.replace(/'/g,"\\'")}'">${o}</button>`).join('')
+    q.ops.map((o,i) => `<button class="opcion-btn" onclick="ansDipt('${qid}',${i},${q.c},'${expSafe}')">${o}</button>`).join('')
   }</div><div id="${qid}_fb"></div></div>`;
 }
 function ansDipt(qid, idx, correcta, exp) {
@@ -1169,9 +1178,16 @@ function ansDipt(qid, idx, correcta, exp) {
   el.querySelectorAll('.opcion-btn').forEach(b => b.disabled = true);
   const btns = el.querySelectorAll('.opcion-btn');
   const fb = document.getElementById(qid+'_fb');
-  if (idx === correcta) { btns[idx].classList.add('correcta'); state.score++; if(fb) fb.innerHTML=`<p style="color:var(--verde);font-weight:700;margin-top:0.5rem">✅ ¡Correcto! ${exp}</p>`; }
-  else { btns[idx].classList.add('incorrecta'); if(btns[correcta]) btns[correcta].classList.add('correcta'); if(fb) fb.innerHTML=`<p style="color:var(--rojo);font-weight:700;margin-top:0.5rem">❌ Incorrecto. ${exp}</p>`; }
-  state.cur++;
+  if (idx === correcta) {
+    btns[idx].classList.add('correcta');
+    state.score++;
+    if(fb) fb.innerHTML=`<p style="color:var(--verde);font-weight:700;margin-top:0.5rem">✅ ¡Correcto! ${exp}</p>`;
+  } else {
+    btns[idx].classList.add('incorrecta');
+    if(btns[correcta]) btns[correcta].classList.add('correcta');
+    if(fb) fb.innerHTML=`<p style="color:var(--rojo);font-weight:700;margin-top:0.5rem">❌ Incorrecto. ${exp}</p>`;
+  }
+  state.cur++;  // mutación directa sobre el objeto en window
   setTimeout(() => renderDiptStep(qid), 1800);
 }
 
