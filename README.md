@@ -68,7 +68,7 @@ Esto permite que los cambios se sincronicen automáticamente entre todos los usu
 
    **anon public key**:
    ```
-   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ey...
+   eyJhbGciOaaaaaaaaaaaaaaaaaaaaaaaaaa...
    ```
 
 3. Copia estos dos valores (los necesitarás en el siguiente paso)
@@ -87,7 +87,7 @@ const SUPABASE_ANON_KEY = 'TU_SUPABASE_ANON_KEY_AQUI';
 
 ```javascript
 const SUPABASE_URL = 'https://tu-proyecto.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ey...';
+const SUPABASE_ANON_KEY = 'eyJhbGssssssssssssssssssssssssssss...';
 ```
 
 4. Guarda el archivo
